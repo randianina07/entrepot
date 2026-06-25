@@ -12,4 +12,9 @@ public class TestController {
         model.addAttribute("monMessage", "Si tu vois ce message, ton architecture est parfaite !");
         return "test";
     }
+
+    @GetMapping("/showform")
+    public String just2ofus(Model model) {
+        return "search";
+    }
 }
