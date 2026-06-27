@@ -1,10 +1,11 @@
-package entrepot.demo.Model;
+package entrepot.demo.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 
@@ -21,6 +22,11 @@ public class Emplacement {
     @ManyToOne
     @JoinColumn(name = "etage_id")
     Etage etage;
+
+    @OneToMany
+    @JoinColumn(name = "colonne_id")
+    Colonne colonne;
+
     double capacite_volume_m3;
     boolean actif;
     double charge_max;
@@ -36,12 +42,6 @@ public class Emplacement {
     }
     public void setCode(String code) {
         this.code = code;
-    }
-    public long getZone_id() {
-        return zone_id;
-    }
-    public void setZone_id(long zone_id) {
-        this.zone_id = zone_id;
     }
     public double getCapacite_volume_m3() {
         return capacite_volume_m3;
