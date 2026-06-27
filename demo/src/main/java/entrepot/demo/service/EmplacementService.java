@@ -21,7 +21,7 @@ public class EmplacementService {
         Emplacement emp2 = new Emplacement();
         emp2.setCode("ETA-A1-ET1-E2");
         emp2.setCapacite_volume_m3(30.0);
-        emp2.setActif(false); // Assez grand, mais déjà occupé/inactif !
+        emp2.setActif(true); // Assez grand, mais déjà occupé/inactif !
 
         Emplacement emp3 = new Emplacement();
         emp3.setCode("ETA-A1-ET1-E3");

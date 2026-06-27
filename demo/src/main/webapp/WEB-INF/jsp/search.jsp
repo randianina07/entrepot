@@ -8,15 +8,15 @@
 <body>
     <h2>Veuillez remplir les informations ci_dessous : </h2>
     <form action="faire-recherche" method="GET">
-        <label for="typeProduit">Le type de produit </label>
+        <!-- <label for="typeProduit">Le type de produit </label>
             <select name="typeProduit" id="">
                 <option value="produit1">test1</option>
                 <option value="produit1">test2</option>
-            </select><br>
+            </select><br> -->
         <label for="volume">Volume requis</label>
         <input type="number" name="volume"><br>
-        <label for="quantite">Quantite</label>
-        <input type="number" name="quantite"><br>
+        <!-- <label for="quantite">Quantite</label>
+        <input type="number" name="quantite"><br> -->
         <button type="submit">Rechercher</button>
     </form>
 

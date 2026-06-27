@@ -23,7 +23,7 @@ public class Emplacement {
     @JoinColumn(name = "etage_id")
     Etage etage;
 
-    @OneToMany
+    @ManyToOne
     @JoinColumn(name = "colonne_id")
     Colonne colonne;
 

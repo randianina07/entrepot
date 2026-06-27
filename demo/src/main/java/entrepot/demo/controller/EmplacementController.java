@@ -25,10 +25,10 @@ public class EmplacementController {
 
     // URL appelée quand on clique sur le bouton de recherche
     @GetMapping("/faire-recherche")
-    public String executerRecherche(@RequestParam("taille") double taille, Model model) {
+    public String executerRecherche(@RequestParam("volume") double volume, Model model) {
         
         // 1. On appelle l'algorithme du service
-        Emplacement placeTrouvee = emplacementService.trouverPlaceRapide(taille);
+        Emplacement placeTrouvee = emplacementService.trouverPlaceRapide(volume);
         
         // 2. On prépare les données pour la page JSP
         if (placeTrouvee != null) {
