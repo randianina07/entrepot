@@ -22,10 +22,12 @@ public class Emplacement {
     @ManyToOne
     @JoinColumn(name = "etage_id", referencedColumnName = "id")
     Etage etage;
-    
+
     double capacite_volume_m3;
     boolean actif;
     double charge_max;
+
+    int colonne;
 
     public Long getId() {
         return id;
@@ -51,6 +53,24 @@ public class Emplacement {
     }
     public void setActif(boolean actif) {
         this.actif = actif;
+    }
+    public Etage getEtage() {
+        return etage;
+    }
+    public void setEtage(Etage etage) {
+        this.etage = etage;
+    }
+    public double getCharge_max() {
+        return charge_max;
+    }
+    public void setCharge_max(double charge_max) {
+        this.charge_max = charge_max;
+    }
+    public int getColonne() {
+        return colonne;
+    }
+    public void setColonne(int colonne) {
+        this.colonne = colonne;
     }
 
 }

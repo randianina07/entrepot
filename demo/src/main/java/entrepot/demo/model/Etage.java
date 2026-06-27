@@ -16,10 +16,7 @@ public class Etage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String libelle;
-    
-    @ManyToOne
-    @JoinColumn(name = "zone_id", referencedColumnName = "id")
-    Zone zone;
+    int numero_etage;
 
     public Long getId() {
         return id;
@@ -34,11 +31,7 @@ public class Etage {
     public void setLibelle(String libelle) {
         this.libelle = libelle;
     }
-    public Zone getZone() {
-        return zone;
+    public int getNumero_etage() {
+        return numero_etage;
     }
-    public void setZone(Zone zone) {
-        this.zone = zone;
-    }
-
 }

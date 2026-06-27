@@ -25,6 +25,10 @@ public class Stocks_emplacement {
     @JoinColumn(name = "produit_id", referencedColumnName = "id")
     Produits produit;
 
+    @ManyToOne
+    @JoinColumn(name = "zone_id", referencedColumnName = "id")
+    Zone zone;
+
     public long getId() {
         return id;
     }
@@ -55,6 +59,14 @@ public class Stocks_emplacement {
 
     public void setProduit(Produits produit) {
         this.produit = produit;
+    }
+
+    public Zone getZone() {
+        return zone;
+    }
+
+    public void setZone(Zone zone) {
+        this.zone = zone;
     }
     
 }
