@@ -1,4 +1,12 @@
-package main.java.com.example.demo.Model;
+package entrepot.demo.Model;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 
 @Entity
 @Table(name = "emplacement")
@@ -9,7 +17,10 @@ public class Emplacement {
     Long id;
 
     String code;
-    long etage_id;
+    
+    @ManyToOne
+    @JoinColumn(name = "etage_id")
+    Etage etage;
     double capacite_volume_m3;
     boolean actif;
     double charge_max;
