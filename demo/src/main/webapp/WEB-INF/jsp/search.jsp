@@ -7,7 +7,7 @@
 </head>
 <body>
     <h2>Veuillez remplir les informations ci_dessous : </h2>
-    <form action="">
+    <form action="faire-recherche" method="GET">
         <label for="typeProduit">Le type de produit </label>
             <select name="typeProduit" id="">
                 <option value="produit1">test1</option>
@@ -19,5 +19,9 @@
         <input type="number" name="quantite"><br>
         <button type="submit">Rechercher</button>
     </form>
+
+    <hr>
+    <h2>Resultat de la recherche :</h2><br>
+    <p>${resultat}</p>
 </body>
 </html>
