@@ -1,0 +1,22 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Type de Zone</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+
+        <h1>Clique sur un Type de Zone</h1>
+        
+        <div th:each ="type_zone : ${type_zones}">
+
+            <a th:href="@{/type-zone/{id}(id=${type_zone.id})}" th:text="${type_zone.libelle}"></a>
+            
+        </div>
+
+        <script src="" async defer></script>
+    </body>
+</html>
