@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import java.util.List;
 
 @Controller
 public class EmplacementController {
@@ -25,14 +26,14 @@ public class EmplacementController {
 
     // URL appelée quand on clique sur le bouton de recherche
     @GetMapping("/faire-recherche")
-    public String executerRecherche(@RequestParam("volume") double volume, Model model) {
+    public String executerRecherche(@RequestParam("quantite") int quantite ,@RequestParam("volume") double volume, Model model) {
         
         // 1. On appelle l'algorithme du service
-        Emplacement placeTrouvee = emplacementService.trouverPlaceRapide(volume);
+        List<Emplacement> placeTrouvee = emplacementService.trouverPlaceRapide(volume,quantite);
         
         // 2. On prépare les données pour la page JSP
         if (placeTrouvee != null) {
-            model.addAttribute("resultat", placeTrouvee.getCode());
+            model.addAttribute("resultat", placeTrouvee);
         } else {
             model.addAttribute("resultat", "Aucun emplacement disponible pour cette taille.");
         }
