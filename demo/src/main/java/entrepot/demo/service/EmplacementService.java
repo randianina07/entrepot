@@ -48,6 +48,7 @@ public class EmplacementService {
                 if (emp.isActif() && emp.getCapacite_volume_m3() >= tailleProduit) {
                     listeEmplacementsTrouves.add(emp);
                     trouveDansCeTour = true;
+                    count++;
                     
                     if (count == quantite) {
                         break;   
