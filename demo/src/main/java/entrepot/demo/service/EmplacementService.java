@@ -35,16 +35,30 @@ public class EmplacementService {
     }
 
     // Le cœur de ton MVP : l'algorithme de recherche rapide
-    public Emplacement trouverPlaceRapide(double tailleProduit) {
+    public List<Emplacement> trouverPlaceRapide(double tailleProduit, int quantite) {
+        int count = 0;
+        List<Emplacement> listeEmplacementsTrouves = new ArrayList<>();
         List<Emplacement> tousLesEmplacements = genererFauxEmplacements();
 
         // On parcourt la liste (Vô mitady libre ray)
-        for (Emplacement emp : tousLesEmplacements) {
-            // Règle métier : Doit être actif ET assez grand (taille < capacité)
-            if (emp.isActif() && emp.getCapacite_volume_m3() >= tailleProduit) {
-                return emp; // Dès qu'il trouve le premier, il s'arrête et le renvoie !
+        while (count != quantite) {
+            boolean trouveDansCeTour = false;
+            for (Emplacement emp : tousLesEmplacements) {
+                // Règle métier : Doit être actif ET assez grand (taille < capacité)
+                if (emp.isActif() && emp.getCapacite_volume_m3() >= tailleProduit) {
+                    listeEmplacementsTrouves.add(emp);
+                    trouveDansCeTour = true;
+                    
+                    if (count == quantite) {
+                        break;   
+                    }
+                }
+
+                if (trouveDansCeTour) {
+                    break;
+                }
             }
         }
-        return null; // Renvoie null si aucune place ne correspond
+        return listeEmplacementsTrouves; // Renvoie null si aucune place ne correspond
     }
 }
