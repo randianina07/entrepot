@@ -35,7 +35,7 @@
             <c:otherwise>
                 <ul>
                     <c:forEach var="emplacement" items="${resultat}">
-                        <li>Emplacement ID : ${emplacement.id} - Volume : ${emplacement.volume}</li>
+                        <li>Emplacement ID : ${emplacement.id} - Volume : ${emplacement.capacite_volume_m3}</li>
                     </c:forEach>
                 </ul>
             </c:otherwise>
