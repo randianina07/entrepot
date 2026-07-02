@@ -25,9 +25,9 @@
 
     <hr>
     <h2>Resultat de la recherche :</h2><br/>
-    <!-- <p th:if="$(resultat == null)">
-        <p>La liste est vide. </p>
-    </p> -->
+    <div th:if="${erreur != null}">
+        <p th:text="${erreur}">erreur</p>
+    </div>
 
     <ul th:each="res: ${resultat}">
         <li th:text="${res.codes}">code</li>
