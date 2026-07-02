@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -16,20 +17,20 @@
                 <option value="produit1">test2</option>
             </select><br> -->
         <label for="volume">Volume requis</label>
-        <input type="number" name="volume"><br>
+        <input type="number" name="volume" /><br/>
         <label for="quantite">Quantite</label>
-        <input type="number" name="quantite"><br>
+        <input type="number" name="quantite" /><br/>
         <button type="submit">Rechercher</button>
     </form>
 
     <hr>
-    <h2>Resultat de la recherche :</h2><br>
+    <h2>Resultat de la recherche :</h2><br/>
     <!-- <p th:if="$(resultat == null)">
         <p>La liste est vide. </p>
     </p> -->
 
     <ul th:each="res: ${resultat}">
-        <li th:text="${res.code}">code</li>
+        <li th:text="${res.codes}">code</li>
     </ul>
 </body>
 </html>
