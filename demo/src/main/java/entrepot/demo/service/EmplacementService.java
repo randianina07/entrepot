@@ -28,29 +28,26 @@ public class EmplacementService {
         // Liste d'étages
         List<Etage> tousLesEtages = etageRepository.findAll();
         for (Etage etage : tousLesEtages) {
-            List<Emplacement> listeEmplacementsDeEtage = new ArrayList<>();
             // On parcourt la liste (Vô mitady libre ra
             for (Emplacement emp : tousLesEmplacements) {
-                // Quand la liste est égale à la quantite demandé
-                // if (listeEmplacementsTrouves.size() == quantite) {
-                // break;
-                // }
+                if (listeEmplacementsTrouves.size() == quantite) {
+                    break;
+                }
                 if (emp.getEtage() != null && emp.getEtage().getId().equals(etage.getId())) {
                     // Règle métier : Doit être actif ET assez grand (taille < capacité)
                     if (emp.isActif() && emp.getCapacite_volume_m3() >= tailleProduit) {
-                        listeEmplacementsDeEtage.add(emp);
+                        listeEmplacementsTrouves.add(emp);
                     }
                 }
 
             }
-            if (listeEmplacementsDeEtage.size() >= quantite) {
-                for (int i = 0; i < quantite; i++) {
-                    listeEmplacementsTrouves.add(listeEmplacementsDeEtage.get(i));
-                }
+
+            if (listeEmplacementsTrouves.size() == quantite) {
+                break;
             }
         }
 
-        if (listeEmplacementsTrouves.isEmpty()) {
+        if (listeEmplacementsTrouves.size() < quantite) {
             return new ArrayList<>();
         }
         // Si la quantite demandée n'a pas assez de place
