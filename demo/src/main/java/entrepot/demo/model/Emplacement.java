@@ -36,10 +36,10 @@ public class Emplacement {
     public void setId(Long id) {
         this.id = id;
     }
-    public String getCode() {
+    public String getCodes() {
         return codes;
     }
-    public void setCode(String code) {
+    public void setCodes(String code) {
         this.codes = code;
     }
     public double getCapacite_volume_m3() {

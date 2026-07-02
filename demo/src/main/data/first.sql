@@ -32,18 +32,19 @@ CREATE TABLE emplacement (
 INSERT INTO colonne (libelle) VALUES ('Colonne A'), ('Colonne B'), ('Colonne C');
 
 -- Insertion des étages de test
-INSERT INTO etage (libelle) VALUES ('Étage 1'), ('Étage 2'), ('Étage 3');
+INSERT INTO etage (libelle,numero_etage) VALUES ('Étage 1', 1), ('Étage 2', 2), ('Étage 3', 3);
 
 -- Insertion des emplacements (Scénarios de test identiques à tes faux emplacements)
-INSERT INTO emplacement (code, etage_id, colonne_id, capacite_volume_m3, actif, charge_max) VALUES 
+INSERT INTO emplacement (actif, capacite_volume_m3, charge_max, codes, colonne_id, etage_id) VALUES 
 -- emp1 : Trop petit pour une requête de 40 m3
-('ETA-A1-ET1-E1', 1, 1, 10.0, true, 500.0), 
+(true, 10.0, 500.0,'ETA-A1-ET1-E1',1,1);
+ 
 
 -- emp2 : Volume de 30 m3, mais inactif (simule un emplacement occupé ou indisponible)
-('ETA-A1-ET1-E2', 1, 2, 30.0, false, 1000.0), 
+-- ('ETA-A1-ET1-E2', 1, 2, 30.0, false, 1000.0), 
 
--- emp3 : Volume de 35 m3, actif (Parfait si on cherche un volume <= 35)
-('ETA-A1-ET1-E3', 1, 3, 35.0, true, 1200.0),
+-- -- emp3 : Volume de 35 m3, actif (Parfait si on cherche un volume <= 35)
+-- ('ETA-A1-ET1-E3', 1, 3, 35.0, true, 1200.0),
 
--- emp4 : Un très grand emplacement de 50 m3, actif (Idéal pour ton test à 40 m3 !)
-('ETA-A2-ET2-E4', 2, 1, 50.0, true, 2000.0);
+-- -- emp4 : Un très grand emplacement de 50 m3, actif (Idéal pour ton test à 40 m3 !)
+-- ('ETA-A2-ET2-E4', 2, 1, 50.0, true, 2000.0);
