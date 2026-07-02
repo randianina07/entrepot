@@ -1,7 +1,9 @@
 package entrepot.demo.service;
 
 import entrepot.demo.model.Emplacement;
+import entrepot.demo.model.Etage;
 import entrepot.demo.repositories.EmplacementRepository;
+import entrepot.demo.repositories.EtageRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,21 +14,29 @@ import java.util.List;
 public class EmplacementService {
 
     @Autowired
+    private EtageRepository etageRepository;
+
+    @Autowired
     private EmplacementRepository emplacementRepository;
 
     // Le cœur de ton MVP : l'algorithme de recherche rapide
     public List<Emplacement> trouverPlaceRapide(double tailleProduit, int quantite) {
-        List<Emplacement> listeEmplacementsTrouves = new ArrayList<>();
+        // Liste d'emplacements
         List<Emplacement> tousLesEmplacements = emplacementRepository.findAll();
-
+        
+        // Liste d'étages
+        List<Etage> tousLesEtages = etageRepository.findAll();
+        for (Etage etage : tousLesEtages) {
+            List<Emplacement> listeEmplacementsDeEtage = new ArrayList<>();
+        }
         // On parcourt la liste (Vô mitady libre ra
         for (Emplacement emp : tousLesEmplacements) {
             // Quand la liste est égale à la quantite demandé
-            if (listeEmplacementsTrouves.size() == quantite) {
-                break;
-            }
+            // if (listeEmplacementsTrouves.size() == quantite) {
+            //     break;
+            // }
             // Règle métier : Doit être actif ET assez grand (taille < capacité)
-            if (emp.isActif() && emp.getCapacite_volume_m3() >= tailleProduit) {
+            if (emp.emp.isActif() && emp.getCapacite_volume_m3() >= tailleProduit) {
                 listeEmplacementsTrouves.add(emp);
             }
         }

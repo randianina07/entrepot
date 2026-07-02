@@ -54,5 +54,10 @@ public class Emplacement {
     public void setActif(boolean actif) {
         this.actif = actif;
     }
-
+    public Etage getEtage() {
+        return etage;
+    }
+    public void setEtage(Etage etage) {
+        this.etage = etage;
+    }
 }
