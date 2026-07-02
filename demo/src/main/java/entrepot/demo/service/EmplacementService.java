@@ -3,14 +3,15 @@ package entrepot.demo.service;
 import entrepot.demo.model.Emplacement;
 import entrepot.demo.repositories.EmplacementRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
-import entrepot.demo.repositories.EmplacementRepository;
 
 @Service
 public class EmplacementService {
 
+    @Autowired
     private EmplacementRepository emplacementRepository;
 
     // Le cœur de ton MVP : l'algorithme de recherche rapide
