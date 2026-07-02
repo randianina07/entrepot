@@ -9,7 +9,7 @@
 
 <body>
     <h2>Veuillez remplir les informations ci_dessous : </h2>
-    <form action="faire-recherche" method="GET">
+    <form th:action="@{/faire-recherche}" method="GET">
         <!-- <label for="typeProduit">Le type de produit </label>
             <select name="typeProduit" id="">
                 <option value="produit1">test1</option>
@@ -24,24 +24,5 @@
 
     <hr>
     <h2>Resultat de la recherche :</h2><br>
-
-    <c:if test="${not empty resultat}">
-
-        <c:choose>
-            <c:when test="${resultat == 'Aucun emplacement disponible'}">
-                <p>${resultat}</p>
-            </c:when>
-
-            <c:otherwise>
-                <ul>
-                    <c:forEach var="emplacement" items="${resultat}">
-                        <li>Emplacement ID : ${emplacement.id} - Volume : ${emplacement.capacite_volume_m3}</li>
-                    </c:forEach>
-                </ul>
-            </c:otherwise>
-        </c:choose>
-
-    </c:if>
 </body>
-
 </html>
