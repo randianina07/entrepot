@@ -24,5 +24,12 @@
 
     <hr>
     <h2>Resultat de la recherche :</h2><br>
+    <!-- <p th:if="$(resultat == null)">
+        <p>La liste est vide. </p>
+    </p> -->
+
+    <ul th:each="res: ${resultat}">
+        <li th:text="${res.code}">code</li>
+    </ul>
 </body>
 </html>
