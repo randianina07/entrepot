@@ -23,27 +23,37 @@ public class EmplacementService {
     public List<Emplacement> trouverPlaceRapide(double tailleProduit, int quantite) {
         // Liste d'emplacements
         List<Emplacement> tousLesEmplacements = emplacementRepository.findAll();
-        
+        List<Emplacement> listeEmplacementsTrouves = new ArrayList<>();
+
         // Liste d'étages
         List<Etage> tousLesEtages = etageRepository.findAll();
         for (Etage etage : tousLesEtages) {
             List<Emplacement> listeEmplacementsDeEtage = new ArrayList<>();
-        }
-        // On parcourt la liste (Vô mitady libre ra
-        for (Emplacement emp : tousLesEmplacements) {
-            // Quand la liste est égale à la quantite demandé
-            // if (listeEmplacementsTrouves.size() == quantite) {
-            //     break;
-            // }
-            // Règle métier : Doit être actif ET assez grand (taille < capacité)
-            if (emp.emp.isActif() && emp.getCapacite_volume_m3() >= tailleProduit) {
-                listeEmplacementsTrouves.add(emp);
+            // On parcourt la liste (Vô mitady libre ra
+            for (Emplacement emp : tousLesEmplacements) {
+                // Quand la liste est égale à la quantite demandé
+                // if (listeEmplacementsTrouves.size() == quantite) {
+                // break;
+                // }
+                if (emp.getEtage() != null && emp.getEtage().getId().equals(etage.getId())) {
+                    // Règle métier : Doit être actif ET assez grand (taille < capacité)
+                    if (emp.isActif() && emp.getCapacite_volume_m3() >= tailleProduit) {
+                        listeEmplacementsDeEtage.add(emp);
+                    }
+                }
+
+            }
+            if (listeEmplacementsDeEtage.size() >= quantite) {
+                for (int i = 0; i < quantite; i++) {
+                    listeEmplacementsTrouves.add(listeEmplacementsDeEtage.get(i));
+                }
             }
         }
-        // Si la quantite demandée n'a pas assez de place
-        if (listeEmplacementsTrouves.size() < quantite) {
+
+        if (listeEmplacementsTrouves.isEmpty()) {
             return new ArrayList<>();
         }
+        // Si la quantite demandée n'a pas assez de place
         return listeEmplacementsTrouves; // Renvoie null si aucune place ne correspond
     }
 }
