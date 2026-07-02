@@ -32,7 +32,7 @@ public class EmplacementController {
         List<Emplacement> placeTrouvee = emplacementService.trouverPlaceRapide(volume,quantite);
         
         // 2. On prépare les données pour la page JSP
-        if (placeTrouvee != null && placeTrouvee.isEmpty()) {
+        if (placeTrouvee.isEmpty()) {
             model.addAttribute("erreur", "Aucun emplacement disponible pour " + volume + " en m3 , avec " + quantite + " comme quantite" );
         } else {
             model.addAttribute("resultat", placeTrouvee);
