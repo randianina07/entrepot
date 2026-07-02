@@ -29,6 +29,11 @@ public class EmplacementService {
                 if (emp.isActif() && emp.getCapacite_volume_m3() >= tailleProduit) {
                         listeEmplacementsTrouves.add(emp);
                 }
+
+                //Si la quantite demandée n'a pas assez de place 
+                if (listeEmplacementsTrouves.size() <= quantite) {
+                    return new ArrayList<>();
+                }
             }
         return listeEmplacementsTrouves; // Renvoie null si aucune place ne correspond
     }

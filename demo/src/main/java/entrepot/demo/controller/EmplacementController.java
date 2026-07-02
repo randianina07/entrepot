@@ -35,7 +35,7 @@ public class EmplacementController {
         if (placeTrouvee != null) {
             model.addAttribute("resultat", placeTrouvee);
         } else {
-            model.addAttribute("resultat", "Aucun emplacement disponible pour cette taille.");
+            model.addAttribute("erreur", "Aucun emplacement disponible pour " + volume + " en m3 , avec " + quantite + " comme quantite" );
         }
         
         // On renvoie vers la même page pour afficher le résultat en bas
