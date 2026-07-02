@@ -16,7 +16,7 @@ public class Emplacement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    String code;
+    String codes;
     
     @ManyToOne
     @JoinColumn(name = "etage_id")
@@ -37,10 +37,10 @@ public class Emplacement {
         this.id = id;
     }
     public String getCode() {
-        return code;
+        return codes;
     }
     public void setCode(String code) {
-        this.code = code;
+        this.codes = code;
     }
     public double getCapacite_volume_m3() {
         return capacite_volume_m3;
