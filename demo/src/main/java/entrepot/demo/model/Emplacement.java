@@ -26,9 +26,20 @@ public class Emplacement {
     @JoinColumn(name = "colonne_id")
     Colonne colonne;
 
+    @ManyToOne
+    @JoinColumn(name = "allee_id")
+    Allees allee;
+
     double capacite_volume_m3;
     boolean actif;
     double charge_max;
+    
+    public Allees getAllee() {
+        return allee;
+    }
+    public void setAllee(Allees allee) {
+        this.allee = allee;
+    }
 
     public Long getId() {
         return id;
