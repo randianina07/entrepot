@@ -26,12 +26,17 @@ public class EmplacementService {
             for (Emplacement emp : tousLesEmplacements) {
                 // Règle métier : Doit être actif ET assez grand (taille < capacité)
                 if (emp.isActif() && emp.getCapacite_volume_m3() >= tailleProduit) {
-                    listeEmplacementsTrouves.add(emp);
-                    trouveDansCeTour = true;
-                    count++;
-                    
+                    double verifVolum = tailleProduit - emp.getCapacite_volume_m3();
+                    if (verifVolum < 0) {
+                        continue;
+                    } else {
+                        listeEmplacementsTrouves.add(emp);
+                        trouveDansCeTour = true;
+                        count++;
+                    }
+
                     if (count == quantite) {
-                        break;   
+                        break;
                     }
                 }
 
