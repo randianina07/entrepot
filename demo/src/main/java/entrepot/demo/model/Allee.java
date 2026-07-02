@@ -7,8 +7,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 
 @Entity
-@Table(name = "allees")
-public class Allees {
+@Table(name = "allee")
+public class Allee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;

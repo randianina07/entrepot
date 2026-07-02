@@ -28,16 +28,16 @@ public class Emplacement {
 
     @ManyToOne
     @JoinColumn(name = "allee_id")
-    Allees allee;
+    Allee allee;
 
     double capacite_volume_m3;
     boolean actif;
     double charge_max;
     
-    public Allees getAllee() {
+    public Allee getAllee() {
         return allee;
     }
-    public void setAllee(Allees allee) {
+    public void setAllee(Allee allee) {
         this.allee = allee;
     }
 

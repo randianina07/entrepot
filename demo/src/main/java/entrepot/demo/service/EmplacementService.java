@@ -1,6 +1,6 @@
 package entrepot.demo.service;
 
-import entrepot.demo.model.Allees;
+import entrepot.demo.model.Allee;
 import entrepot.demo.model.Emplacement;
 import entrepot.demo.model.Etage;
 import entrepot.demo.repositories.EmplacementRepository;
@@ -31,10 +31,10 @@ public class EmplacementService {
         // Liste d'étages
         List<Etage> tousLesEtages = etageRepository.findAll();
         // Liste d'alleees
-        List<Allees> tousLesAllees = alleeRepository.findAll();
+        List<Allee> tousLesAllees = alleeRepository.findAll();
 
         List<Emplacement> listeEmplacementsTrouves = new ArrayList<>();
-        for (Allees allee : tousLesAllees) {
+        for (Allee allee : tousLesAllees) {
             for (Etage etage : tousLesEtages) {
                 for (Emplacement emp : tousLesEmplacements) {
                     if (listeEmplacementsTrouves.size() == quantite) {
