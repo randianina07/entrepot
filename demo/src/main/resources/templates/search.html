@@ -12,8 +12,10 @@
     <h2>Veuillez remplir les informations ci_dessous : </h2>
     <form th:action="@{/faire-recherche}" method="GET">
         <label for="typeProduit">Le type de produit </label>
-           <select th:each="lz : ${listeZone}" name="typeProduit">
-                <option th:text="${lz.code}">code</option>
+        <select name="typeZoneRequis">
+        <option th:each="lz : ${listeZone}"
+                th:value="${lz.id}" 
+                th:text="${lz.code}">code</option>
             </select><br>
         <label for="volume">Volume requis</label>
         <input type="number" name="volume" /><br/>
