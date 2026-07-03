@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h3>Historique de la vehicule </h3>
+    <table border="1">
+        <tr>
+            <th>Vehicule</th>
+            <th>Mission</th>
+            <th>Date Depart</th>
+            <th>Date Arriver</th>
+            <th>Distance Parcourue</th>
+        </tr>
+
+        <tr th:each="h :${historique}">
+            <td th:text="${h.vehicule.marque}"></td>
+            <td th:text="${h.mission.statutMission.libelle}"></td>
+            <td th:text="${h.date_depart}"></td>
+            <td th:text="${h.date_arrivee}"></td>
+            <td th:text="${h.distance_parcourue}"></td>
+        </tr>
+    </table>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Liste des vehicules</h1>
+    <h3><a th:href="@{/vehicules/save}">Ajouter une vehicule</a></h3>
+    <h3>Historique d' un Vehicule</h3>
+    <form th:action="@{/vehicules/historique_vehicule}" method="get">
+        <select name="id" >
+            <option value="">Choisir la voiture</option>
+            <option 
+                th:each="v :${vehicules}"
+                th:value="${v.id}"
+                th:text="${v.marque}">
+            </option>
+        </select>
+        <input type="submit" value="Voir l'Historique">
+    </form>
+    <a th:href="@{/livraisons/livraison}">Parametrer une Livraison</a>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Immatricule</th>
+            <th>Marque</th>
+            <th>Modele</th>
+            <th>Annee</th>
+            <th>Capacite Volume</th>
+            <th>Capacite kg</th>
+            <th>Kilometrage</th>
+            <th>Type Vehicule</th>
+            <th>Statut</th>
+            <th>Action 1</th>
+            <th>Action 2</th>
+        </tr>
+
+        <tr th:each="v :${vehicules}" >
+            <td th:text="${v.id}"></td>
+            <td th:text="${v.immatriculation}"></td>
+            <td th:text="${v.marque}"></td>
+            <td th:text="${v.modele}"></td>
+            <td th:text="${v.annee}"></td>
+            <td th:text="${v.capaciteVolume}"></td>
+            <td th:text="${v.capaciteChargekg}"></td>
+            <td th:text="${v.kilometrage}"></td>
+            <td th:text="${v.typeVehicule.libelle}"></td>
+            <td th:text="${v.Statut.libelle}"></td>
+
+            <!-- <td th:if="${v.Statut.id != 1}" onclick="alert('cette voiture est en mission')"> <input type="button" value="Non disponible"></td> -->
+            <!-- <td th:if="${v.Statut.id == 1}"> <a th:href="@{/vehicules/livraison}" onclick="return confirm('Vous voulez vraiment faire le livraison')">Faire Livraison</a></td> -->
+            <td><a href="#">Modifier </a></td>
+            <td><a href="#">Supprimer</a></td>
+        </tr>
+    </table>
+    <a th:href="@{/missions/save}">Voir des mission en cours</a>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Mission en cours</h1>
+    <table border="1">
+        <tr>
+            <th>id</th>
+            <th>reference Mission</th>
+            <th>Vehicule</th>
+            <th>Chauffeur</th>
+            <th>Status Mission</th>
+            <th>Action 1</th>
+            <th>Action 2</th>
+        </tr>
+        <tr th:each="m :${missionsEnCours}">
+            <td th:text="${m.id}"></td>
+            <td th:text="${m.referenceMission}"></td>
+            <td th:text="${m.vehicule.marque}"></td>
+            <td th:text="${m.chauffeur.prenom}"></td>
+            <td th:text="${m.statutMission.libelle}"></td>
+            <td th:if="${m.statutMission.id == 1}"> <a href="#">Commencer la Mission</a></td>
+            <td th:if="${m.statutMission.id == 2}"><a href="#">Terminer la mission</a></td>
+            <td><button>Annuler la Mission</button></td>
+        </tr>
+    </table>
+    <h1>Creation Mission</h1>
+
+    <form action="">
+        <p>Date depart prevue</p>
+        <input type="date">
+        <input type="time">
+        <br>
+        <p>Date Arriver prevue</p>
+        <input type="date">
+        <input type="time">
+        <!-- <br>
+        <p>Date depart reel</p>
+        <input type="date">
+        <input type="time">
+        <br>
+        <p>Date arriver reel</p>
+        <input type="date">
+        <input type="time"> -->
+        <br>
+        <br>
+        <select name="" id="">
+            <option value="">Vehicule disponible</option>
+        </select>
+
+        <select name="" id="">
+            <option value="">Chauffeur disponible</option>
+        </select>
+
+        <select name="" id="">
+            <option value="">Statut</option>
+        </select>
+        <br>
+        <h3>Ajouter des Livraison</h3>
+        <input type="submit" value="Creation Mission">
+    </form>
+
+    <h3>Historique des Mission </h3>
+    <table border="1">
+        <tr>
+            <th>id</th>
+            <th>reference Mission</th>
+            <th>Vehicule</th>
+            <th>Chauffeur</th>
+            <th>Status Mission</th>
+            <th>Observation</th>
+            <th>Action</th>
+        </tr>
+        <tr th:each="m :${HistoriqueMissions}">
+            <td th:text="${m.id}"></td>
+            <td th:text="${m.referenceMission}"></td>
+            <td th:text="${m.vehicule.marque}"></td>
+            <td th:text="${m.Chauffeur.prenom}"></td>
+            <td th:text="${m.statutMission.libelle}"></td>
+            <td th:if="${m.statutMission.id == 3}">Mission Terminer</td>
+            <td th:if="${m.statutMission.id == 4}">Mission Annuler</a></td>
+            <td><button>Voir detaille</button></td>
+        </tr>
+    </table>
+</body>
+</html>
