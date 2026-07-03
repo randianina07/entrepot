@@ -55,7 +55,7 @@ Durées de stockage contractuelles
 
 + [] Créer formulaire pour inscrire un client 
     + [] Base : 
-        + [] table utilisateurs, utilisateurs_info
+        + [] table roles, utilisateurs, utilisateurs_info
     + [] classe modele Utilisateurs et Utilisateurs_info
     + [] UtilisateursService : 
         + [] insertion dans la table utilisateurs et utilisateurs_info
