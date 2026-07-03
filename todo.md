@@ -48,3 +48,22 @@ Durées de stockage contractuelles
 + [] Etat de stock
 + [] Nombre de demandes en attentes
 + [] Nombre de contrat + etat de contrat(en cours, expiré,...)
+
+
+## BACK OFFICE
+### CRUD client 
+
++ [] Créer formulaire pour inscrire un client 
+    + [] Base : 
+        + [] table utilisateurs, utilisateurs_info
+    + [] classe modele Utilisateurs et Utilisateurs_info
+    + [] UtilisateursService : 
+        + [] insertion dans la table utilisateurs et utilisateurs_info
+        + [] liste, insertion et modification
+
+### CRUD contrat
++ [] Base 
+*Nous avons modifié les tables : contrats, historique_renouvellement, renouvellements_contrat afin d'éviter des problèmes liés au coté client*
++ [] tables : type_contrat, contrats, renouvellement_contrats
+    
+

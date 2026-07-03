@@ -93,7 +93,7 @@ CREATE TABLE historique_etat_demande (
 
 CREATE TABLE contrats (
     id                  BIGSERIAL PRIMARY KEY,
-    demande_stockage_id BIGINT NOT NULL,
+    -- demande_stockage_id BIGINT NOT NULL,
     utilisateur_id BIGINT NOT NULL,
     type_contrat_id BIGINT NOT NULL,
     date_creation       TIMESTAMP NOT NULL DEFAULT now(),
@@ -101,7 +101,7 @@ CREATE TABLE contrats (
     date_fin            DATE,
     description         TEXT,
     CHECK (date_fin IS NULL OR date_fin >= date_debut),
-    CONSTRAINT fk_contrats_demande_stockage_id FOREIGN KEY (demande_stockage_id) REFERENCES demandes_stockage(id),
+    -- CONSTRAINT fk_contrats_demande_stockage_id FOREIGN KEY (demande_stockage_id) REFERENCES demandes_stockage(id),
     CONSTRAINT fk_contrats_utilisateur_id FOREIGN KEY (utilisateur_id) REFERENCES utilisateurs(id),
     CONSTRAINT fk_contrats_type_contrat_id FOREIGN KEY (type_contrat_id) REFERENCES types_contrat(id)
 );
@@ -122,19 +122,21 @@ CREATE TABLE demandes_renouvellement (
 
 CREATE TABLE historique_renouvellement (
     id                          BIGSERIAL PRIMARY KEY,
-    demande_renouvellement_id BIGINT NOT NULL,
+    -- demande_renouvellement_id BIGINT NOT NULL,
     statut_renouvellement_id BIGINT NOT NULL,
     date_statut                 TIMESTAMP NOT NULL DEFAULT now(),
-    CONSTRAINT fk_historique_renouvellement_demande_renouvellement_id FOREIGN KEY (demande_renouvellement_id) REFERENCES demandes_renouvellement(id),
+    -- CONSTRAINT fk_historique_renouvellement_demande_renouvellement_id FOREIGN KEY (demande_renouvellement_id) REFERENCES demandes_renouvellement(id),
     CONSTRAINT fk_historique_renouvellement_statut_renouvellement_id FOREIGN KEY (statut_renouvellement_id) REFERENCES statuts_renouvellement(id)
 );
 
 CREATE TABLE renouvellements_contrat (
     id                          BIGSERIAL PRIMARY KEY,
-    demande_renouvellement_id BIGINT NOT NULL,
-    date_debut                  DATE NOT NULL,
+    contrat_id BIGINT NOT NULL,
+    -- demande_renouvellement_id BIGINT NOT NULL,
+    date_renouvellement                  DATE NOT NULL,
     date_fin                    DATE,
-    CONSTRAINT fk_renouvellements_contrat_demande_renouvellement_id FOREIGN KEY (demande_renouvellement_id) REFERENCES demandes_renouvellement(id)
+    -- CONSTRAINT fk_renouvellements_contrat_demande_renouvellement_id FOREIGN KEY (demande_renouvellement_id) REFERENCES demandes_renouvellement(id),
+    CONSTRAINT fk_renouvellement_contrat_contrat_id FOREIGN KEY (contrat_id) REFERENCES contrats(id)
 );
 
 -- ----------------------------------------------------------------------------
