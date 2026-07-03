@@ -14,7 +14,6 @@ import entrepot.demo.model.TypeZone;
 @Controller
 public class EmplacementController {
     
-    private TypeZoneService typeZoneService;
     private final EmplacementService emplacementService;
 
     // Spring va injecter automatiquement le service ici
