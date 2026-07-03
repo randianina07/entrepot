@@ -2,6 +2,8 @@ package entrepot.demo.controller;
 
 import entrepot.demo.model.Emplacement;
 import entrepot.demo.service.EmplacementService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +16,9 @@ import entrepot.demo.model.TypeZone;
 @Controller
 public class EmplacementController {
     
+    @Autowired
+    private TypeZoneService typeZoneService;
+    
     private final EmplacementService emplacementService;
 
     // Spring va injecter automatiquement le service ici
@@ -24,7 +29,7 @@ public class EmplacementController {
     // URL pour afficher la page de recherche : http://localhost:8080/recherche
     @GetMapping("/recherche")
     public String afficherPageRecherche(Model model) {
-        TypeZoneService typeZoneService = new TypeZoneService();
+        
         List<TypeZone> listTypeZone = typeZoneService.getAll();
 
         if (listTypeZone != null) {
