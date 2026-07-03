@@ -9,8 +9,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "zone")
-public class Zone {
+@Table(name = "zones")
+public class Zones {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
