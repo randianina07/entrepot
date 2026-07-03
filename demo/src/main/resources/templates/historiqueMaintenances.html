@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historique des maintenances</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<main class="page-shell">
+    <header class="page-header">
+        <div>
+            <p class="eyebrow">Suivi véhicule</p>
+            <h1>Historique des maintenances</h1>
+        </div>
+        <div class="header-actions">
+            <a class="button secondary" th:href="@{/}">Accueil</a>
+            <a class="button" th:href="@{/maintenances/ajouter}">Ajouter une maintenance</a>
+        </div>
+    </header>
+
+    <section class="card table-card">
+        <div class="table-meta">
+            <span th:text="${'Nombre de maintenances : ' + (maintenances != null ? maintenances.size() : 0)}"></span>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                <tr>
+                    <th>Véhicule</th>
+                    <th>Type maintenance</th>
+                    <th>Date maintenance</th>
+                    <th>Kilométrage</th>
+                    <th>Coût</th>
+                    <th>Description</th>
+                    
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${maintenances == null or maintenances.isEmpty()}">
+                    <td colspan="7">
+                        <div class="empty-state">Aucune maintenance enregistrée.</div>
+                    </td>
+                </tr>
+                <tr th:each="maintenance : ${maintenances}">
+                    <td th:text="${maintenance.vehiculeId}"></td>
+                    <td th:text="${maintenance.typeMaintenanceId}"></td>
+                    <td th:text="${maintenance.dateMaintenance}"></td>
+                    <td th:text="${maintenance.kilometrage}"></td>
+                    <td th:text="${maintenance.cout}"></td>
+                    <td th:text="${maintenance.description}"></td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+</body>
+</html>

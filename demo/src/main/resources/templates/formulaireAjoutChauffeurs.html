@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajout d'un chauffeur</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<main class="page-shell narrow-shell">
+    <section class="card">
+        <header class="page-header compact">
+            <div>
+                <p class="eyebrow">Nouveau chauffeur</p>
+                <h1>Ajouter un chauffeur</h1>
+            </div>
+            <a class="button secondary" th:href="@{/chauffeurs}">Retour à la liste</a>
+        </header>
+
+        <form class="form-grid" method="post" th:action="@{/chauffeurs/ajouter}">
+            <div class="field">
+                <label for="nom">Nom</label>
+                <input type="text" id="nom" name="nom" required>
+            </div>
+
+            <div class="field">
+                <label for="prenom">Prénom</label>
+                <input type="text" id="prenom" name="prenom">
+            </div>
+
+            <div class="field">
+                <label for="telephone">Téléphone</label>
+                <input type="text" id="telephone" name="telephone">
+            </div>
+
+            <div class="field">
+                <label for="numeroPermis">Numéro de permis</label>
+                <input type="text" id="numeroPermis" name="numeroPermis" required>
+            </div>
+
+            <div class="field">
+                <label for="dateExpirationPermis">Date d'expiration du permis</label>
+                <input type="date" id="dateExpirationPermis" name="dateExpirationPermis" required>
+            </div>
+
+            <label class="checkbox-line">
+                <input type="checkbox" id="actif" name="actif" checked>
+                <span>Actif</span>
+            </label>
+
+            <div class="form-actions full-span">
+                <button class="button" type="submit">Enregistrer</button>
+                <a class="button ghost" th:href="@{/chauffeurs}">Retour à la liste</a>
+            </div>
+        </form>
+    </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<main class="page-shell hero-shell">
+    <section class="hero-card">
+        <p class="eyebrow">Gestion d'entrepot</p>
+        <h1>Tableau de bord logistique</h1>
+        <p class="lead">Acces rapide aux chauffeurs, aux maintenances et aux operations courantes.</p>
+
+        <div class="action-grid">
+            <a class="action-card" th:href="@{/chauffeurs}">
+                <span>Chauffeurs</span>
+                <strong>Consulter la liste</strong>
+            </a>
+            <a class="action-card" th:href="@{/maintenances}">
+                <span>Maintenances</span>
+                <strong>Voir l'historique</strong>
+            </a>
+            
+        </div>
+    </section>
+</main>
+</body>
+</html>

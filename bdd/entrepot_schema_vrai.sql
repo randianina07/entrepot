@@ -496,7 +496,6 @@ CREATE TABLE facturation_livraison (
 
 CREATE TABLE types_maintenance (
     id      BIGSERIAL PRIMARY KEY,
-    code    VARCHAR(30) NOT NULL UNIQUE,
     libelle VARCHAR(100) NOT NULL
 );
 
@@ -508,7 +507,6 @@ CREATE TABLE maintenances_vehicule (
     kilometrage         NUMERIC(10,2),
     cout                NUMERIC(12,2),
     description         TEXT,
-    prochaine_maintenance DATE,
     CONSTRAINT fk_maintenances_vehicule_vehicule_id FOREIGN KEY (vehicule_id) REFERENCES vehicules(id),
     CONSTRAINT fk_maintenances_vehicule_type_maintenance_id FOREIGN KEY (type_maintenance_id) REFERENCES types_maintenance(id)
 );
