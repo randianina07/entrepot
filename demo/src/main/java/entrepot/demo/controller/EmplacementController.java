@@ -7,10 +7,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
+import java.util.ArrayList;
+import entrepot.demo.service.TypeZoneService;
+import entrepot.demo.model.TypeZone;
 
 @Controller
 public class EmplacementController {
-
+    
+    private TypeZoneService typeZoneService;
     private final EmplacementService emplacementService;
 
     // Spring va injecter automatiquement le service ici
@@ -20,7 +24,16 @@ public class EmplacementController {
 
     // URL pour afficher la page de recherche : http://localhost:8080/recherche
     @GetMapping("/recherche")
-    public String afficherPageRecherche() {
+    public String afficherPageRecherche(Model model) {
+        TypeZoneService typeZoneService = new TypeZoneService();
+        List<TypeZone> listTypeZone = typeZoneService.getAll();
+
+        if (listTypeZone != null) {
+            model.addAttribute("listeZone" , listTypeZone);
+        } else {
+            model.addAttribute("listeZone", new ArrayList<>());
+        }
+
         return "search"; // Va ouvrir search.jsp
     }
 
