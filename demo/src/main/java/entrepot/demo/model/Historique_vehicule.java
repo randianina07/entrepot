@@ -3,6 +3,7 @@ package entrepot.demo.model;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -33,6 +34,7 @@ public class Historique_vehicule {
     Double kilometrage_Depart;
     Double kilometrage_arrivee;
 
+    @Column(name = "distance_parcourue", insertable = false, updatable = false)
     Double distance_parcourue;
 
     public long getId() {

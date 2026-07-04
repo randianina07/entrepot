@@ -1,5 +1,7 @@
 package entrepot.demo.controller;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 // import org.springframework.boot.autoconfigure.task.TaskExecutionProperties.Mode;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import entrepot.demo.model.Livraison;
 import entrepot.demo.service.Livraison_service;
@@ -40,8 +43,14 @@ public class Livraison_controller {
     }
 
     @GetMapping("/config_livraison")
-    public String configurationLivraison(@RequestParam Long id, Model model) {
-        Livraison livraison = livraison_service.findById(id);
+    public String configurationLivraison(@RequestParam Long id, Model model, RedirectAttributes redirectAttributes) {
+        Livraison livraison;
+        try {
+            livraison = livraison_service.findById(id);
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/livraisons/livraison";
+        }
 
         model.addAttribute("mode_calcule" , mode_calcule_livraison_service.modeCalculfindAll());
 
@@ -52,9 +61,21 @@ public class Livraison_controller {
     }
 
     @PostMapping("/config_livraison")
-    public String save_configuration(){
-        
-        return "redirect:/vehicules/liste";
+    public String save_configuration(
+            @RequestParam Long livraisonId,
+            @RequestParam Long tarifId,
+            @RequestParam LocalDate datePrevue,
+            @RequestParam LocalTime heurePrevue,
+            RedirectAttributes redirectAttributes) {
+        try {
+            livraison_service.configurerLivraison(livraisonId, tarifId, datePrevue, heurePrevue);
+            redirectAttributes.addFlashAttribute("successMessage", "Livraison configuree");
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            redirectAttributes.addAttribute("id", livraisonId);
+            return "redirect:/livraisons/config_livraison";
+        }
+        return "redirect:/livraisons/livraison";
     }
 
 }
