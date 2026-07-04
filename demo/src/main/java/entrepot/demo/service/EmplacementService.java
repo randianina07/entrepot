@@ -30,7 +30,7 @@ public class EmplacementService {
     private EmplacementRepository emplacementRepository;
 
     // Le cœur de ton MVP : l'algorithme de recherche rapide
-    public List<Emplacement> trouverPlaceRapide(Long id_zone, double tailleProduit, int quantite, int idTypeZone) {
+    public List<Emplacement> trouverPlaceRapide(Long id_zone, double tailleProduit, int quantite) {
         // Liste d'emplacements
         List<Emplacement> tousLesEmplacements = emplacementRepository.findAll();
         // Liste d'étages
@@ -42,7 +42,7 @@ public class EmplacementService {
 
         List<Emplacement> listeEmplacementsTrouves = new ArrayList<>();
         for (Zones zones : toutesLesZones) {
-            if (zones.getId() != null && zones.getAllee().getId().equals(id_zone)) {
+            if (zones.getId() != null && zones.getId().equals(id_zone)) {
                 Allee alleeDeLaZone = zones.getAllee();
                 if (alleeDeLaZone == null)
                     continue;
