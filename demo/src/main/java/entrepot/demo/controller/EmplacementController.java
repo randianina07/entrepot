@@ -43,10 +43,10 @@ public class EmplacementController {
 
     // URL appelée quand on clique sur le bouton de recherche
     @GetMapping("/faire-recherche")
-    public String executerRecherche(@RequestParam("quantite") int quantite ,@RequestParam("volume") double volume, Model model) {
+    public String executerRecherche(@RequestParam("id") int id , @RequestParam("quantite") int quantite ,@RequestParam("volume") double volume, Model model) {
         
         // 1. On appelle l'algorithme du service
-        List<Emplacement> placeTrouvee = emplacementService.trouverPlaceRapide(volume,quantite);
+        List<Emplacement> placeTrouvee = emplacementService.trouverPlaceRapide(id,volume,quantite);
         
         // 2. On prépare les données pour la page JSP
         if (placeTrouvee.isEmpty()) {

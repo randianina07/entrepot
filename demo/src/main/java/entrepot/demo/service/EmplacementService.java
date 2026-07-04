@@ -30,27 +30,30 @@ public class EmplacementService {
     private EmplacementRepository emplacementRepository;
 
     // Le cœur de ton MVP : l'algorithme de recherche rapide
-    public List<Emplacement> trouverPlaceRapide(double tailleProduit, int quantite, int idTypeZone) {
+    public List<Emplacement> trouverPlaceRapide(Long id_zone, double tailleProduit, int quantite, int idTypeZone) {
         // Liste d'emplacements
         List<Emplacement> tousLesEmplacements = emplacementRepository.findAll();
         // Liste d'étages
         List<Etage> tousLesEtages = etageRepository.findAll();
         // Liste d'alleees
-        List<Allee> tousLesAllees = alleeRepository.findAll();
+        // List<Allee> tousLesAllees = alleeRepository.findAll();
         // Liste des zones
         List<Zones> toutesLesZones = zonesRepository.findAll();
 
         List<Emplacement> listeEmplacementsTrouves = new ArrayList<>();
         for (Zones zones : toutesLesZones) {
+            if (zones.getId() != null && zones.getAllee().getId().equals(id_zone)) {
+                Allee alleeDeLaZone = zones.getAllee();
+                if (alleeDeLaZone == null)
+                    continue;
 
-            for (Allee allee : tousLesAllees) {
                 for (Etage etage : tousLesEtages) {
                     for (Emplacement emp : tousLesEmplacements) {
                         if (listeEmplacementsTrouves.size() == quantite) {
                             break;
                         }
-                        if (allee.getId().equals(emp.getAllee().getId()) && emp.getEtage() != null
-                                && emp.getEtage().getId().equals(etage.getId())) {
+                        if (emp.getAllee() != null && emp.getAllee().getId().equals(alleeDeLaZone.getId()) &&
+                            emp.getEtage() != null && emp.getEtage().getId().equals(etage.getId())) {
                             // Règle métier : Doit être actif ET assez grand (taille < capacité)
                             if (emp.isActif() && emp.getCapacite_volume_m3() >= tailleProduit) {
                                 listeEmplacementsTrouves.add(emp);
@@ -64,6 +67,7 @@ public class EmplacementService {
                     }
                 }
             }
+
         }
 
         if (listeEmplacementsTrouves.size() < quantite) {
