@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.ui.Model;
 import entrepot.demo.model.Mission_logistique;
 import entrepot.demo.service.Chauffeur_service;
+import entrepot.demo.service.Livraison_service;
 import entrepot.demo.service.Mission_logistique_service;
 import entrepot.demo.service.Statuts_mission_service;
 import entrepot.demo.service.Vehicule_service;
@@ -18,12 +19,14 @@ public class Mission_controller {
     private final Vehicule_service vehicule_service;
     private final Statuts_mission_service statuts_mission_service;
     private final Chauffeur_service chauffeur_service;
+    private final Livraison_service livraison_service;
 
-    public Mission_controller(Mission_logistique_service mission_vehicule_service,Vehicule_service vehicule_service , Statuts_mission_service statuts_mission_service , Chauffeur_service chauffeur_service){
+    public Mission_controller(Mission_logistique_service mission_vehicule_service,Vehicule_service vehicule_service , Statuts_mission_service statuts_mission_service , Chauffeur_service chauffeur_service , Livraison_service livraison_service){
         this.mission_vehicule_service = mission_vehicule_service;
         this.chauffeur_service = chauffeur_service;
         this.vehicule_service = vehicule_service;
         this.statuts_mission_service = statuts_mission_service;
+        this.livraison_service = livraison_service;
     }
 
     @GetMapping("/save")
@@ -36,6 +39,7 @@ public class Mission_controller {
         // model.addAttribute("mission_logistique" , mission_vehicule_service.listMission_logistique());
         model.addAttribute("missionsEnCours", mission_vehicule_service.missionsEnCours());
         model.addAttribute("historiqueMissions", mission_vehicule_service.historiqueMissions());
+        model.addAttribute("livraison" , livraison_service.findallLivraisons());
         
         return "missions/save";
     }

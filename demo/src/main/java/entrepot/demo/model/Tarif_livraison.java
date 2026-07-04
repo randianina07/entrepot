@@ -3,6 +3,7 @@ package entrepot.demo.model;
 // import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -32,8 +33,14 @@ public class Tarif_livraison {
 
     Double prixBase;
     Double prixParKg;
+
+    @Column(name = "prix_par_m3")
     Double prixParm;
+
+    @Column(name = "date_debut_validite")
     LocalDateTime debutValidite;
+
+    @Column(name = "date_fin_validite")
     LocalDateTime finValidite;
     public long getId() {
         return id;

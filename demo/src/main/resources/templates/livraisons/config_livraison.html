@@ -17,33 +17,52 @@
     <p>Taille du Colis</p>
     <p th:text="${livraison.volumeTotal}"></p>
 
-    <p>Date de livraison</p>
-    <input type="date" name="dateLivraison">
+    <form th:each="t :${tarif_livraison}" th:if="${t.zoneLivraison.id == livraison.zoneLivraison.id}"
+        th:action="@{/livraisons/config_livraison}" th:object="${object_livraison}" method="post">
 
-    <p>Frais de Livraison </p>
-    <p>Mode de calcule de la livraison</p>
-    <table border="1">
-        <tr>
-            <th>Poids</th>
-            <th>Volume</th>
-            <th>Zone</th>
-            <th>Commune</th>
-            <th>Prix Poids par </th>
-            <th>Prix Volume par </th>
-            <th>Prix Zone par </th>
-            <th>Total</th>
-        </tr>
-        <td th:text="${livraison.poidsTotal}"></td>
-        <td th:text="${livraison.volumeTotal}"></td>
-        <td th:text="${livraison.zoneLivraison.libelle}"></td>
-        <td th:text="${livraison.zoneLivraison.commune}"></td>
-        <!-- <td th:text="${livraison.prixParKg}"></td> -->
+        <p>Date Prevue de la livraison</p>
 
-        <!-- <td th:text="${livraison.zoneLivraison.tarifBase.prixParKg}"></td> -->
-        <!-- <td th:text="${livraison.zoneLivraison.tarifBase.prixParkg}"></td> -->
+        <input type="date" name="dateLivraison">
+        <input type="time" name="dateLivraison">
 
-        <input type="button" value="Valider la Livraison">
-    </table>
+        <p>Mode de calcule de la livraison</p>
+        <select name="mode_calcule_id">
+            <option value="">Choisir</option>
+            <option th:each="m :${mode_calcule}" th:if="${m.id == 4}" th:value="${m.id}" th:text="${m.libelle}">
+            </option>
+        </select>
+        <table border="1">
+            <tr>
+                <th>Poids kg </th>
+                <th>Volume m3</th>
+                <th>Zone</th>
+                <th>Commune</th>
+                <th>Prix Poids </th>
+                <th>Prix Volume </th>
+                <th>Prix de la Livraison</th>
+                <th>Total</th>
+            </tr>
+            <tr>
+                <td th:text="${livraison.poidsTotal}"></td>
+                <td th:text="${livraison.volumeTotal}"></td>
+                <td th:text="${livraison.zoneLivraison.libelle}"></td>
+                <td th:text="${livraison.zoneLivraison.commune}"></td>
+                <td th:text="${t.prixParKg}"></td>
+                <td th:text="${t.prixParm}"></td>
+                <td th:text="${t.zoneLivraison.tarifBase}"></td>
+                <td
+                    th:text="${(livraison.poidsTotal * t.prixParKg) + (livraison.volumeTotal * t.prixParm) + t.zoneLivraison.tarifBase }">
+                </td>
+            </tr>
+        </table>
+
+        <p>Frais de Livraison </p>
+        <p
+            th:text="${(livraison.poidsTotal * t.prixParKg) + (livraison.volumeTotal * t.prixParm) + t.zoneLivraison.tarifBase }">
+        </p>
+        <input type="submit" value="Valider la Livraison">
+    </form>
+
 </body>
 
 </html>

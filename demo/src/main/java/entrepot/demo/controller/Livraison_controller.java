@@ -2,14 +2,18 @@ package entrepot.demo.controller;
 
 import java.util.List;
 
+// import org.springframework.boot.autoconfigure.task.TaskExecutionProperties.Mode;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import entrepot.demo.model.Livraison;
 import entrepot.demo.service.Livraison_service;
+import entrepot.demo.service.Mode_calcule_livraison_service;
+import entrepot.demo.service.Tarif_livraison_service;
 import entrepot.demo.service.Vehicule_service;
 
 @Controller
@@ -17,10 +21,14 @@ import entrepot.demo.service.Vehicule_service;
 public class Livraison_controller {
     private final Vehicule_service vehicule_service;
     private final Livraison_service livraison_service;
+    private final Tarif_livraison_service tarif_livraison_service;
+    private final Mode_calcule_livraison_service mode_calcule_livraison_service;
 
-    public Livraison_controller(Vehicule_service vehicule_service , Livraison_service livraison_service){
+    public Livraison_controller(Vehicule_service vehicule_service , Livraison_service livraison_service , Tarif_livraison_service tarif_livraison_service , Mode_calcule_livraison_service mode_calcule_livraison_service){
         this.vehicule_service = vehicule_service;
         this.livraison_service = livraison_service;
+        this.tarif_livraison_service = tarif_livraison_service;
+        this.mode_calcule_livraison_service = mode_calcule_livraison_service;
     }
 
     @GetMapping("/livraison")
@@ -35,7 +43,18 @@ public class Livraison_controller {
     public String configurationLivraison(@RequestParam Long id, Model model) {
         Livraison livraison = livraison_service.findById(id);
 
+        model.addAttribute("mode_calcule" , mode_calcule_livraison_service.modeCalculfindAll());
+
+        model.addAttribute("object_livraison", livraison);
+        model.addAttribute("tarif_livraison" , tarif_livraison_service.listeTarif());
         model.addAttribute("livraison", livraison);
         return "livraisons/config_livraison";
     }
+
+    @PostMapping("/config_livraison")
+    public String save_configuration(){
+        
+        return "redirect:/vehicules/liste";
+    }
+
 }
