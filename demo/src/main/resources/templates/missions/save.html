@@ -25,6 +25,7 @@
             <td th:text="${m.statutMission.libelle}"></td>
             <td th:if="${m.statutMission.id == 1}"> <a href="#">Commencer la Mission</a></td>
             <td th:if="${m.statutMission.id == 2}"><a href="#">Terminer la mission</a></td>
+            <td><a href="#">Voir details</a></td>
             <td><button>Annuler la Mission</button></td>
         </tr>
     </table>
@@ -61,6 +62,29 @@
         </select>
         <br>
         <h3>Ajouter des Livraison</h3>
+        <table border="1">
+            <tr>
+                <th>id</th>
+                <th>Client</th>
+                <th>Adresse Livraison</th>
+                <th>Zone de livraison</th>
+                <th>Poid total</th>
+                <th>Volume totale</th>
+                <th>Date Livraison</th>
+                <th>Action</th>
+            </tr>
+            <tr th:each="l :${livraison}"
+                th:if="${l.dateLivraison != null}">
+                <td th:text="${l.id}"></td>
+                <td th:text="${l.client.user_email}"></td>
+                <td th:text="${l.adresseLivraison}"></td>
+                <td th:text="${l.zoneLivraison.commune}"></td>
+                <td th:text="${l.poidsTotal}"></td>
+                <td th:text="${l.volumeTotal}"></td>
+                <td th:text="${l.dateLivraison}"></td>
+                <td><a href="#">Ajouter</a></td>
+            </tr>
+        </table>
         <input type="submit" value="Creation Mission">
     </form>
 
