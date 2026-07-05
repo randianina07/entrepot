@@ -50,4 +50,9 @@ public class UtilisateurController {
             return "client/formulaire";
         }
     }
+
+    @GetMapping("/clients")
+    public String listeClients(Model model){
+        model.addAttribute("clients", utilisateurService.listeClients())
+    }
 }

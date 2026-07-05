@@ -2,6 +2,7 @@ package entrepot.demo.service;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,17 +24,16 @@ public class UtilisateurService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
-    private static final String CARACTERES =
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    private static final String CARACTERES = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
             + "abcdefghijklmnopqrstuvwxyz"
             + "0123456789";
 
     private static final SecureRandom RANDOM = new SecureRandom();
 
     public UtilisateurService(UtilisateurRepository utilisateurRepository,
-                              UtilisateurInfoRepository utilisateurInfoRepository,
-                              RoleRepository roleRepository,
-                              PasswordEncoder passwordEncoder) {
+            UtilisateurInfoRepository utilisateurInfoRepository,
+            RoleRepository roleRepository,
+            PasswordEncoder passwordEncoder) {
 
         this.utilisateurRepository = utilisateurRepository;
         this.utilisateurInfoRepository = utilisateurInfoRepository;
@@ -44,7 +44,7 @@ public class UtilisateurService {
     /**
      * Crée un nouveau client.
      *
-     * @param utilisateur informations du compte (email)
+     * @param utilisateur     informations du compte (email)
      * @param utilisateurInfo informations personnelles
      * @return le mot de passe généré automatiquement
      */
@@ -92,6 +92,10 @@ public class UtilisateurService {
         }
 
         return sb.toString();
+    }
+
+    public List<Utilisateur> listeClients() {
+        return utilisateurRepository.findByRole_Code("CLIENT");
     }
 
 }
