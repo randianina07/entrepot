@@ -24,9 +24,22 @@ public class MaintenanceController {
 	}
 
 	@GetMapping({"", "/", "/historique", "/historique/"})
-	public String historiqueMaintenances(Model model) {
-		List<Maintenance> maintenances = maintenanceService.getHistoriqueMaintenances();
+	public String historiqueMaintenances(
+			@RequestParam(required = false) LocalDate dateDebutMaintenance,
+			@RequestParam(required = false) LocalDate dateFinMaintenance,
+			@RequestParam(required = false) Long typeMaintenanceId,
+			Model model
+	) {
+		List<Maintenance> maintenances = maintenanceService.getHistoriqueMaintenances(
+				dateDebutMaintenance,
+				dateFinMaintenance,
+				typeMaintenanceId
+		);
 		model.addAttribute("maintenances", maintenances);
+		model.addAttribute("dateDebutMaintenanceSelectionnee", dateDebutMaintenance);
+		model.addAttribute("dateFinMaintenanceSelectionnee", dateFinMaintenance);
+		model.addAttribute("typeMaintenanceIdSelectionne", typeMaintenanceId);
+		model.addAttribute("typesMaintenances", maintenanceService.getTypesMaintenance());
 		return "historiqueMaintenances";
 	}
 
