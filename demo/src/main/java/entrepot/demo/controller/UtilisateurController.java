@@ -66,4 +66,24 @@ public class UtilisateurController {
 
         return "redirect:/clients";
     }
+
+    @GetMapping("/clients/modifier/{id}")
+    public String afficherModification(@PathVariable Long id, Model model) {
+
+        UtilisateurInfo client = utilisateurService.trouverClient(id);
+
+        model.addAttribute("client", client);
+
+        return "client/modifier";
+    }
+
+    @PostMapping("/clients/modifier/{id}")
+    public String modifierClient(
+            @PathVariable Long id,
+            @ModelAttribute("client") UtilisateurInfo client) {
+
+        utilisateurService.modifierClient(id, client);
+
+        return "redirect:/clients";
+    }
 }

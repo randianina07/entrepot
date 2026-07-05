@@ -106,4 +106,28 @@ public class UtilisateurService {
 
         utilisateurRepository.deleteById(info.getUtilisateur().getId());
     }
+
+    public UtilisateurInfo trouverClient(Long id) {
+
+        return utilisateurInfoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Client introuvable"));
+    }
+
+    @Transactional
+    public void modifierClient(Long id, UtilisateurInfo nouveauClient) {
+
+        UtilisateurInfo ancienClient = utilisateurInfoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Client introuvable"));
+
+        ancienClient.setNom(nouveauClient.getNom());
+        ancienClient.setPrenom(nouveauClient.getPrenom());
+        ancienClient.setNumero(nouveauClient.getNumero());
+        ancienClient.setAdresse(nouveauClient.getAdresse());
+        ancienClient.setSecteur(nouveauClient.getSecteur());
+
+        ancienClient.getUtilisateur().setEmail(
+                nouveauClient.getUtilisateur().getEmail());
+
+        utilisateurInfoRepository.save(ancienClient);
+    }
 }
