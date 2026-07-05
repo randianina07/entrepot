@@ -57,8 +57,7 @@ public class MaintenanceController {
 			@RequestParam LocalDate dateMaintenance,
 			@RequestParam(required = false) BigDecimal kilometrage,
 			@RequestParam(required = false) BigDecimal cout,
-			@RequestParam(required = false) String description,
-			@RequestParam(required = false) LocalDate prochaineMaintenance
+			@RequestParam(required = false) String description;
 	) {
 		Maintenance maintenance = new Maintenance(
 				vehiculeId,
@@ -67,7 +66,7 @@ public class MaintenanceController {
 				kilometrage,
 				cout,
 				description,
-				prochaineMaintenance
+				
 		);
 		maintenanceService.addMaintenance(maintenance);
 		return "redirect:/maintenances";
