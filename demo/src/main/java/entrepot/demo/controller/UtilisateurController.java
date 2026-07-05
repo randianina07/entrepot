@@ -37,7 +37,7 @@ public class UtilisateurController {
             String motDePasse = utilisateurService.creerClient(utilisateur, utilisateurInfo);
 
             model.addAttribute("message", "Le client a été créé avec succès.");
-            model.addAttribute("motDepasse", motDePasse);
+            model.addAttribute("motDePasse", motDePasse);
 
             return "client/succes";
         } catch (Exception e) {
