@@ -3,10 +3,10 @@ package entrepot.demo.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import entrepot.demo.model.Utilisateur;
-import entrepot.demo.model.UtilisateurInfo;
+import entrepot.demo.model.*;
 import entrepot.demo.service.UtilisateurService;
 
 @Controller
@@ -18,7 +18,7 @@ public class UtilisateurController {
     }
 
     @GetMapping("/clients/nouveau")
-    public String afficherFormulaire(Model model){
+    public String afficherFormulaire(Model model) {
         model.addAttribute("utilisateur", new Utilisateur());
         model.addAttribute("utilisateurInfo", new UtilisateurInfo());
 
@@ -26,7 +26,10 @@ public class UtilisateurController {
     }
 
     @PostMapping
-    public String enregistrerClient(Utilisateur utilisateur, UtilisateurInfo utilisateurInfo, Model model){
+    public String enregistrerClient(
+            @ModelAttribute Utilisateur utilisateur,
+            @ModelAttribute UtilisateurInfo utilisateurInfo,
+            Model model) {
         try {
             String motDePasse = utilisateurService.creerClient(utilisateur, utilisateurInfo);
 
