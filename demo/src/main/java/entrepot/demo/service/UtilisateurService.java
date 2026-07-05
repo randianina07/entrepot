@@ -98,4 +98,11 @@ public class UtilisateurService {
         return utilisateurInfoRepository.findAll();
     }
 
+    public void supprimerClient(Long id) {
+
+        UtilisateurInfo info = utilisateurInfoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Client introuvable"));
+
+        utilisateurRepository.delete(info.getUtilisateur());
+    }
 }

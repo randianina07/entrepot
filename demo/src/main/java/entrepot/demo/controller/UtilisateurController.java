@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import entrepot.demo.model.Utilisateur;
@@ -52,9 +53,17 @@ public class UtilisateurController {
     }
 
     @GetMapping("/clients")
-    public String listeClients(Model model){
+    public String listeClients(Model model) {
         model.addAttribute("clients", utilisateurService.listeClients());
 
         return "client/liste";
+    }
+
+    @GetMapping("/clients/supprimer/{id}")
+    public String supprimerClient(@PathVariable Long id) {
+
+        utilisateurService.supprimerClient(id);
+
+        return "redirect:/clients";
     }
 }

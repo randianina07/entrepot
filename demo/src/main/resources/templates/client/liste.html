@@ -35,6 +35,18 @@
 
             <td th:text="${client.utilisateur.email}"></td>
 
+            <td>
+                <a th:href="@{/clients/modifier/{id}(id=${client.id})}">
+                    Modifier
+                </a>
+
+                |
+
+                <a th:href="@{/clients/supprimer/{id}(id=${client.id})}">
+                    Supprimer
+                </a>
+            </td>
+
         </tr>
 
     </table>
