@@ -6,7 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import entrepot.demo.model.*;
+import entrepot.demo.model.Utilisateur;
+import entrepot.demo.model.UtilisateurInfo;
 import entrepot.demo.service.UtilisateurService;
 
 @Controller
@@ -25,11 +26,13 @@ public class UtilisateurController {
         return "client/formulaire";
     }
 
-    @PostMapping
+    @PostMapping("/clients/enregistrer")
     public String enregistrerClient(
             @ModelAttribute Utilisateur utilisateur,
             @ModelAttribute UtilisateurInfo utilisateurInfo,
             Model model) {
+        System.out.println("Le contrôleur a été appelé !");
+        System.out.println(utilisateur.getEmail());
         try {
             String motDePasse = utilisateurService.creerClient(utilisateur, utilisateurInfo);
 
