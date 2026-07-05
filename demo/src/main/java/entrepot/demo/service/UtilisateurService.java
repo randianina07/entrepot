@@ -94,8 +94,8 @@ public class UtilisateurService {
         return sb.toString();
     }
 
-    public List<Utilisateur> listeClients() {
-        return utilisateurRepository.findByRole_Code("CLIENT");
+    public List<UtilisateurInfo> listeClients() {
+        return utilisateurInfoRepository.findAll();
     }
 
 }

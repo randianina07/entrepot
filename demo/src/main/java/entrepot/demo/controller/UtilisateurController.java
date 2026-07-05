@@ -53,6 +53,8 @@ public class UtilisateurController {
 
     @GetMapping("/clients")
     public String listeClients(Model model){
-        model.addAttribute("clients", utilisateurService.listeClients())
+        model.addAttribute("clients", utilisateurService.listeClients());
+
+        return "client/liste";
     }
 }

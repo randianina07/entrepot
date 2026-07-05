@@ -20,11 +20,10 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/clients/**").permitAll()
-                .anyRequest().authenticated()
-            )
-            .formLogin(Customizer.withDefaults());
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .anyRequest().permitAll())
+                .formLogin(form -> form.disable());
 
         return http.build();
     }
