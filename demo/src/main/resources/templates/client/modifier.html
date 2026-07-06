@@ -1,46 +1,50 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Modifier un client</title>
 </head>
+
 <body>
 
-<h1>Modifier un client</h1>
+    <h1>Modifier un client</h1>
 
-<form th:action="@{/clients/modifier/{id}(id=${client.id})}"
-      th:object="${client}"
-      method="post">
+    <form th:action="@{/clients/modifier/{id}(id=${client.id})}" th:object="${client}" method="post">
 
-    Nom :
-    <input type="text" th:field="*{nom}">
-    <br><br>
+        <input type="hidden" th:field="*{id}">
+        <input type="hidden" th:field="*{utilisateur.id}">
 
-    Prénom :
-    <input type="text" th:field="*{prenom}">
-    <br><br>
+        Nom :
+        <input type="text" th:field="*{nom}">
+        <br><br>
 
-    Téléphone :
-    <input type="text" th:field="*{numero}">
-    <br><br>
+        Prénom :
+        <input type="text" th:field="*{prenom}">
+        <br><br>
 
-    Adresse :
-    <input type="text" th:field="*{adresse}">
-    <br><br>
+        Téléphone :
+        <input type="text" th:field="*{numero}">
+        <br><br>
 
-    Secteur :
-    <input type="text" th:field="*{secteur}">
-    <br><br>
+        Adresse :
+        <input type="text" th:field="*{adresse}">
+        <br><br>
 
-    Email :
-    <input type="email" th:field="*{utilisateur.email}">
-    <br><br>
+        Secteur :
+        <input type="text" th:field="*{secteur}">
+        <br><br>
 
-    <button type="submit">
-        Enregistrer les modifications
-    </button>
+        Email :
+        <input type="email" th:field="*{utilisateur.email}">
+        <br><br>
 
-</form>
+        <button type="submit">
+            Enregistrer les modifications
+        </button>
+
+    </form>
 
 </body>
+
 </html>
