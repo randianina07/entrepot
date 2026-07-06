@@ -104,7 +104,11 @@ public class UtilisateurService {
         UtilisateurInfo info = utilisateurInfoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Client introuvable"));
 
+        utilisateurInfoRepository.delete(info);
+        utilisateurInfoRepository.flush();
+
         utilisateurRepository.deleteById(info.getUtilisateur().getId());
+        utilisateurRepository.flush();
     }
 
     public UtilisateurInfo trouverClient(Long id) {
