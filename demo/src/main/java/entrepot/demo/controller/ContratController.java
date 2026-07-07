@@ -37,9 +37,9 @@ public class ContratController {
     @GetMapping("/create")
     public String create(
             @RequestParam(required = false) Long clientId,
-            Model model) {        
+            Model model) {
         List<Utilisateur> clients = utilisateurService.listeClientsUtilisateur();
-                
+
         model.addAttribute("contrat", new Contrat());
         model.addAttribute("clients", clients);
         model.addAttribute("typesContrat", typeContratService.findAll()

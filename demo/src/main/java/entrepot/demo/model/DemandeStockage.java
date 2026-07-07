@@ -2,29 +2,25 @@ package entrepot.demo.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "contrats")
-public class Contrat {
+@Table(name = "demandes_stockage")
+public class DemandeStockage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // NOTE : demande_stockage_id est NOT NULL dans la nouvelle table "contrats",
-    // mais tu ne m'as pas fourni d'entite DemandeStockage : je laisse donc
-    // simplement l'id brut en attendant que tu crees cette entite.
-    @Column(name = "demande_stockage_id", nullable = false)
-    private Long demandeStockageId;
-
     @ManyToOne
     @JoinColumn(name = "utilisateur_id", nullable = false)
     private Utilisateur utilisateur;
 
-    // NOTE : idem pour type_zone_id, pas d'entite TypeZone fournie pour le moment.
+    // NOTE : type_zone_id est NOT NULL dans la table, mais la table
+    // "types_zone" n'a pas ete fournie dans le schema que tu m'as donne
+    // (seule la contrainte FK vers types_zone(id) apparait). Je laisse donc
+    // l'id brut en attendant que tu me donnes le CREATE TABLE types_zone.
     @Column(name = "type_zone_id", nullable = false)
     private Long typeZoneId;
 
@@ -35,19 +31,13 @@ public class Contrat {
     @Column(name = "volume_espace_m3", nullable = false, precision = 10, scale = 3)
     private BigDecimal volumeEspaceM3;
 
-    @Column(name = "date_creation", nullable = false)
-    private LocalDateTime dateCreation;
-
     @Column(name = "date_debut", nullable = false)
     private LocalDate dateDebut;
 
     @Column(name = "date_fin")
     private LocalDate dateFin;
 
-    @Column(columnDefinition = "TEXT")
-    private String description;
-
-    public Contrat() {
+    public DemandeStockage() {
     }
 
     public Long getId() {
@@ -56,14 +46,6 @@ public class Contrat {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getDemandeStockageId() {
-        return demandeStockageId;
-    }
-
-    public void setDemandeStockageId(Long demandeStockageId) {
-        this.demandeStockageId = demandeStockageId;
     }
 
     public Utilisateur getUtilisateur() {
@@ -98,14 +80,6 @@ public class Contrat {
         this.volumeEspaceM3 = volumeEspaceM3;
     }
 
-    public LocalDateTime getDateCreation() {
-        return dateCreation;
-    }
-
-    public void setDateCreation(LocalDateTime dateCreation) {
-        this.dateCreation = dateCreation;
-    }
-
     public LocalDate getDateDebut() {
         return dateDebut;
     }
@@ -120,13 +94,5 @@ public class Contrat {
 
     public void setDateFin(LocalDate dateFin) {
         this.dateFin = dateFin;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 }

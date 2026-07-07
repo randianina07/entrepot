@@ -14,15 +14,19 @@ public class UtilisateurInfo {
     @JoinColumn(name = "utilisateur_id", nullable = false, unique = true)
     private Utilisateur utilisateur;
 
-    @Column(nullable = false)
+    @Column(name = "nom", nullable = false, length = 100)
     private String nom;
 
+    @Column(name = "prenom", length = 100)
     private String prenom;
 
+    @Column(name = "numero", length = 30)
     private String numero;
 
+    @Column(name = "adresse", length = 255)
     private String adresse;
 
+    @Column(name = "secteur", length = 100)
     private String secteur;
 
     public UtilisateurInfo() {
@@ -32,16 +36,16 @@ public class UtilisateurInfo {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Utilisateur getUtilisateur() {
         return utilisateur;
     }
 
     public void setUtilisateur(Utilisateur utilisateur) {
         this.utilisateur = utilisateur;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getNom() {
