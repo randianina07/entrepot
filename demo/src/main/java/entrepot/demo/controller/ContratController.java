@@ -1,5 +1,6 @@
 package entrepot.demo.controller;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -8,16 +9,22 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import entrepot.demo.model.Contrat;
+import entrepot.demo.model.DemandeRenouvellement;
 import entrepot.demo.model.DemandeStockage;
 import entrepot.demo.model.HistoriqueEtatDemande;
+import entrepot.demo.model.HistoriqueRenouvellement;
 import entrepot.demo.model.StatutDemandeStockage;
+import entrepot.demo.model.StatutRenouvellement;
 import entrepot.demo.model.TypeContrat;
 import entrepot.demo.model.TypeZone;
 import entrepot.demo.model.Utilisateur;
 import entrepot.demo.service.ContratService;
+import entrepot.demo.service.DemandeRenouvellementService;
 import entrepot.demo.service.DemandeStockageService;
 import entrepot.demo.service.HistoriqueEtatDemandeService;
+import entrepot.demo.service.HistoriqueRenouvellementService;
 import entrepot.demo.service.StatutDemandeStockageService;
+import entrepot.demo.service.StatutRenouvellementService;
 import entrepot.demo.service.TypeContratService;
 import entrepot.demo.service.TypeZoneService;
 import entrepot.demo.service.UtilisateurService;
@@ -33,6 +40,9 @@ public class ContratController {
     private final TypeZoneService typeZoneService;
     private final StatutDemandeStockageService statutDemandeStockageService;
     private final HistoriqueEtatDemandeService historiqueEtatDemandeService;
+    private final DemandeRenouvellementService demandeRenouvellementService;
+    private final StatutRenouvellementService statutRenouvellementService;
+    private final HistoriqueRenouvellementService historiqueRenouvellementService;
 
     public ContratController(
             ContratService contratService,
@@ -41,7 +51,10 @@ public class ContratController {
             DemandeStockageService demandeStockageService,
             TypeZoneService typeZoneService,
             StatutDemandeStockageService statutDemandeStockageService,
-            HistoriqueEtatDemandeService historiqueEtatDemandeService) {
+            HistoriqueEtatDemandeService historiqueEtatDemandeService,
+            DemandeRenouvellementService demandeRenouvellementService,
+            StatutRenouvellementService statutRenouvellementService,
+            HistoriqueRenouvellementService historiqueRenouvellementService) {
 
         this.contratService = contratService;
         this.typeContratService = typeContratService;
@@ -50,6 +63,9 @@ public class ContratController {
         this.typeZoneService = typeZoneService;
         this.statutDemandeStockageService = statutDemandeStockageService;
         this.historiqueEtatDemandeService = historiqueEtatDemandeService;
+        this.demandeRenouvellementService = demandeRenouvellementService;
+        this.statutRenouvellementService = statutRenouvellementService;
+        this.historiqueRenouvellementService = historiqueRenouvellementService;
     }
 
     @GetMapping("/create")
@@ -156,5 +172,43 @@ public class ContratController {
 
         historiqueEtatDemandeService.save(historique);
         return "redirect:/contrats/demandes";
+    }
+
+    @GetMapping("/renouvellement")
+    public String afficherDemandeRenouvellement(Model model) {
+
+        // TODO : remplacer par les contrats du client connecté
+        Utilisateur client = utilisateurService.findById(1L);
+        List<Contrat> contrats = contratService.findByUtilisateur(client);
+
+        model.addAttribute("demande", new DemandeRenouvellement());
+        model.addAttribute("contrats", contrats);
+
+        return "contrats/renouvellement";
+    }
+
+    @PostMapping("/renouvellement")
+    public String enregistrerDemandeRenouvellement(
+            @ModelAttribute DemandeRenouvellement demande,
+            @RequestParam Long contratId) {
+
+        Contrat contrat = contratService.findById(contratId).orElseThrow();
+
+        demande.setContrat(contrat);
+        demande.setDateDemande(LocalDate.now());
+
+        DemandeRenouvellement demandeSauvee = demandeRenouvellementService.save(demande);
+
+        StatutRenouvellement enAttente = statutRenouvellementService.findByCode("EN_ATTENTE").orElseThrow();
+
+        HistoriqueRenouvellement historique = new HistoriqueRenouvellement();
+
+        historique.setDemandeRenouvellement(demandeSauvee);
+        historique.setStatutRenouvellement(enAttente);
+        historique.setDateStatut(LocalDateTime.now());
+
+        historiqueRenouvellementService.save(historique);
+
+        return "redirect:/contrats/renouvellement?success";
     }
 }
