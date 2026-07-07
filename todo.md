@@ -15,7 +15,7 @@ Durées de stockage contractuelles
 
 + [] UtilisateursService: 
     + [] gestion login 
-        + [] si role = client => dasboard
+        + [] si role = client => dashboard
         + [] gestion de mot de passe
 
 + [] UtilisateursController

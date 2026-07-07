@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Succès</title>
+</head>
+<body>
+
+<h1>Client créé avec succès</h1>
+
+<p th:text="${message}"></p>
+
+<p>
+    Mot de passe généré :
+    <strong th:text="${motDePasse}"></strong>
+</p>
+
+<a th:href="@{/clients/nouveau}">
+    Créer un autre client
+</a>
+
+<a th:href="@{/clients}">
+    Voir liste client
+</a>
+
+</body>
+</html>
