@@ -13,12 +13,9 @@ public class TarifZone {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // NOTE : type_zone_id est NOT NULL dans la table, mais la table
-    // "types_zone" n'a pas ete fournie dans le schema que tu m'as donne
-    // (seule la contrainte FK vers types_zone(id) apparait). Je laisse donc
-    // l'id brut en attendant que tu me donnes le CREATE TABLE types_zone.
-    @Column(name = "type_zone_id", nullable = false)
-    private Long typeZoneId;
+    @ManyToOne
+    @JoinColumn(name = "type_zone_id", nullable = false)
+    private TypeZone typeZone;
 
     @ManyToOne
     @JoinColumn(name = "unite_duree_id", nullable = false)
@@ -44,12 +41,12 @@ public class TarifZone {
         this.id = id;
     }
 
-    public Long getTypeZoneId() {
-        return typeZoneId;
+    public TypeZone getTypeZone() {
+        return typeZone;
     }
 
-    public void setTypeZoneId(Long typeZoneId) {
-        this.typeZoneId = typeZoneId;
+    public void setTypeZone(TypeZone typeZone) {
+        this.typeZone = typeZone;
     }
 
     public UniteDuree getUniteDuree() {
