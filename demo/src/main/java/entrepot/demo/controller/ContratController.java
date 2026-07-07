@@ -11,7 +11,11 @@ import entrepot.demo.model.Contrat;
 import entrepot.demo.model.TypeContrat;
 import entrepot.demo.model.Utilisateur;
 import entrepot.demo.service.ContratService;
+import entrepot.demo.service.DemandeStockageService;
+import entrepot.demo.service.HistoriqueEtatDemandeService;
+import entrepot.demo.service.StatutDemandeStockageService;
 import entrepot.demo.service.TypeContratService;
+import entrepot.demo.service.TypeZoneService;
 import entrepot.demo.service.UtilisateurService;
 
 @Controller
@@ -21,16 +25,27 @@ public class ContratController {
     private final ContratService contratService;
     private final TypeContratService typeContratService;
     private final UtilisateurService utilisateurService;
-
+    private final DemandeStockageService demandeStockageService;
+    private final TypeZoneService typeZoneService;
+    private final StatutDemandeStockageService statutDemandeStockageService;
+    private final HistoriqueEtatDemandeService historiqueEtatDemandeService;
 
     public ContratController(
             ContratService contratService,
             TypeContratService typeContratService,
-            UtilisateurService utilisateurService) {
+            UtilisateurService utilisateurService,
+            DemandeStockageService demandeStockageService,
+            TypeZoneService typeZoneService,
+            StatutDemandeStockageService statutDemandeStockageService,
+            HistoriqueEtatDemandeService historiqueEtatDemandeService) {
 
         this.contratService = contratService;
         this.typeContratService = typeContratService;
         this.utilisateurService = utilisateurService;
+        this.demandeStockageService = demandeStockageService;
+        this.typeZoneService = typeZoneService;
+        this.statutDemandeStockageService = statutDemandeStockageService;
+        this.historiqueEtatDemandeService = historiqueEtatDemandeService;
     }
 
 
