@@ -10,5 +10,5 @@ import entrepot.demo.model.HistoriqueRenouvellement;
 public interface HistoriqueRenouvellementRepository extends JpaRepository<HistoriqueRenouvellement, Long> {
 
     List<HistoriqueRenouvellement> findByDemandeRenouvellement(DemandeRenouvellement demandeRenouvellement);
-
+     HistoriqueRenouvellement findFirstByDemandeRenouvellementOrderByDateStatutDesc(DemandeRenouvellement demande);
 }

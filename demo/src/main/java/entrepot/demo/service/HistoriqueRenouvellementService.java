@@ -37,4 +37,8 @@ public class HistoriqueRenouvellementService {
     public void deleteById(Long id) {
         historiqueRenouvellementRepository.deleteById(id);
     }
+
+    public HistoriqueRenouvellement dernierStatut(DemandeRenouvellement demande) {
+        return historiqueRenouvellementRepository.findFirstByDemandeRenouvellementOrderByDateStatutDesc(demande);
+    }
 }

@@ -16,11 +16,9 @@ public class RenouvellementContrat {
     @JoinColumn(name = "contrat_id", nullable = false)
     private Contrat contrat;
 
-    // NOTE : demande_renouvellement_id est NOT NULL dans le nouveau schema,
-    // mais tu ne m'as pas fourni d'entite DemandeRenouvellement : je laisse
-    // donc l'id brut en attendant que tu crees cette entite.
-    @Column(name = "demande_renouvellement_id", nullable = false)
-    private Long demandeRenouvellementId;
+    @ManyToOne
+    @JoinColumn(name = "demande_renouvellement_id", nullable = false)
+    private DemandeRenouvellement demandeRenouvellement;
 
     @Column(name = "date_renouvellement", nullable = false)
     private LocalDate dateRenouvellement;
@@ -47,12 +45,12 @@ public class RenouvellementContrat {
         this.contrat = contrat;
     }
 
-    public Long getDemandeRenouvellementId() {
-        return demandeRenouvellementId;
+    public DemandeRenouvellement getDemandeRenouvellement() {
+        return demandeRenouvellement;
     }
 
-    public void setDemandeRenouvellementId(Long demandeRenouvellementId) {
-        this.demandeRenouvellementId = demandeRenouvellementId;
+    public void setDemandeRenouvellement(DemandeRenouvellement demandeRenouvellement) {
+        this.demandeRenouvellement = demandeRenouvellement;
     }
 
     public LocalDate getDateRenouvellement() {

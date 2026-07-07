@@ -211,4 +211,47 @@ public class ContratController {
 
         return "redirect:/contrats/renouvellement?success";
     }
+    
+    @GetMapping("/renouvellements")
+    public String listeDemandesRenouvellement(Model model) {
+
+        List<DemandeRenouvellement> demandes = demandeRenouvellementService.findAll();
+
+        List<DemandeRenouvellement> attente = demandes.stream()
+            .filter(d -> historiqueRenouvellementService
+                .dernierStatut(d)
+                .getStatutRenouvellement()
+                .getCode()
+                .equals("EN_ATTENTE")
+            ).toList();
+        model.addAttribute("demandes", attente);
+
+        return "contrats/renouvellements";
+    }
+
+    @GetMapping("/renouvellement/accepter/{id}")
+    public String accepterRenouvellement(
+            @PathVariable Long id) {
+
+        contratService.accepterRenouvellement(id);
+
+        return "redirect:/contrats/renouvellements";
+    }
+
+    @GetMapping("/renouvellement/refuser/{id}")
+    public String refuserRenouvellement(
+            @PathVariable Long id) {
+
+        DemandeRenouvellement demande = demandeRenouvellementService.findById(id) .orElseThrow();
+        StatutRenouvellement refuse = statutRenouvellementService.findByCode("REFUSEE").orElseThrow();
+        HistoriqueRenouvellement historique = new HistoriqueRenouvellement();
+
+        historique.setDemandeRenouvellement(demande);
+        historique.setStatutRenouvellement(refuse);
+        historique.setDateStatut(LocalDateTime.now());
+
+        historiqueRenouvellementService.save(historique);
+
+        return "redirect:/contrats/renouvellements";
+    }
 }
