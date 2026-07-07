@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Nouveau contrat</title>
+</head>
+
+<body>
+
+<h1>Créer un contrat</h1>
+
+<form th:action="@{/contrats/create}" method="post" th:object="${contrat}">
+
+    <h3>Type de contrat</h3>
+
+    <div th:each="type : ${typesContrat}">
+        <input
+                type="radio"
+                name="typeContrat"
+                th:value="${type.id}"
+                required>
+
+        <span th:text="${type.libelle}"></span>
+    </div>
+
+    <br>
+
+    <label>Date de début</label><br>
+    <input type="date" th:field="*{dateDebut}" required>
+
+    <br><br>
+
+    <label>Date de fin</label><br>
+    <input type="date" th:field="*{dateFin}">
+
+    <br><br>
+
+    <label>Description</label><br>
+
+    <textarea
+            th:field="*{description}"
+            rows="6"
+            cols="60"></textarea>
+
+    <br><br>
+
+    <button type="submit">
+        Enregistrer
+    </button>
+
+</form>
+
+</body>
+
+</html>
