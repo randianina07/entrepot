@@ -1,6 +1,7 @@
 package entrepot.demo.controller;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +22,7 @@ public class ContratController {
     private final TypeContratService typeContratService;
     private final UtilisateurService utilisateurService;
 
+
     public ContratController(
             ContratService contratService,
             TypeContratService typeContratService,
@@ -31,22 +33,35 @@ public class ContratController {
         this.utilisateurService = utilisateurService;
     }
 
+
     @GetMapping("/create")
-    public String create(Model model) {
-
+    public String create(
+            @RequestParam(required = false) Long clientId,
+            Model model) {        
+        List<Utilisateur> clients = utilisateurService.listeClientsUtilisateur();
+                
         model.addAttribute("contrat", new Contrat());
-        model.addAttribute("typesContrat", typeContratService.findAll());
+        model.addAttribute("clients", clients);
+        model.addAttribute("typesContrat", typeContratService.findAll()
+        );
 
+        if(clientId != null){
+            Utilisateur client = utilisateurService.findById(clientId);
+            model.addAttribute("clientSelectionne", client);
+        }
         return "contrats/create";
     }
+
+
 
     @PostMapping("/create")
     public String create(
             @ModelAttribute Contrat contrat,
-            @RequestParam("typeContrat") Long typeContratId) {
+            @RequestParam Long utilisateurId,
+            @RequestParam Long typeContratId) {
 
-        Utilisateur utilisateur = utilisateurService.findById(1L).orElseThrow();
 
+        Utilisateur utilisateur = utilisateurService.findById(utilisateurId);
         TypeContrat typeContrat = typeContratService.findById(typeContratId).orElseThrow();
 
         contrat.setUtilisateur(utilisateur);
@@ -56,6 +71,7 @@ public class ContratController {
         contratService.save(contrat);
 
         return "redirect:/contrats/create";
+
     }
 
 }

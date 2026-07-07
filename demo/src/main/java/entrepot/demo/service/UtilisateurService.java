@@ -134,4 +134,13 @@ public class UtilisateurService {
 
         utilisateurInfoRepository.save(ancienClient);
     }
+
+    public Utilisateur findById(Long id) {
+        return utilisateurRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Utilisateur introuvable"));
+    }
+
+    public List<Utilisateur> listeClientsUtilisateur() {
+        return utilisateurRepository.findByRoleCode("CLIENT");
+    }
 }

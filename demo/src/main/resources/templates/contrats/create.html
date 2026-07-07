@@ -7,50 +7,59 @@
 </head>
 
 <body>
+    <h1>Créer un contrat</h1>
 
-<h1>Créer un contrat</h1>
+    <form th:action="@{/contrats/create}" method="post" th:object="${contrat}">
+        <h3>Contrat avec :</h3>
 
-<form th:action="@{/contrats/create}" method="post" th:object="${contrat}">
+        <select name="utilisateurId" required>
+            <option value="">
+                -- Choisir un client --
+            </option>
+            <option th:each="client : ${clients}" th:value="${client.id}" th:text="${client.email}" th:selected="${clientSelectionne != null 
+                    and client.id == clientSelectionne.id}">
+            </option>
+        </select>
 
-    <h3>Type de contrat</h3>
+        <br><br>
 
-    <div th:each="type : ${typesContrat}">
-        <input
-                type="radio"
-                name="typeContrat"
-                th:value="${type.id}"
-                required>
+        <h3>Type de contrat</h3>
 
-        <span th:text="${type.libelle}"></span>
-    </div>
+        <div th:each="type : ${typesContrat}">
+            <input type="radio" name="typeContratId" th:value="${type.id}" required>
+            <span th:text="${type.libelle}"></span>
+        </div>
 
-    <br>
+        <br>
 
-    <label>Date de début</label><br>
-    <input type="date" th:field="*{dateDebut}" required>
+        <label>Date début</label>
 
-    <br><br>
+        <br>
 
-    <label>Date de fin</label><br>
-    <input type="date" th:field="*{dateFin}">
+        <input type="date" th:field="*{dateDebut}" required>
 
-    <br><br>
+        <br><br>
 
-    <label>Description</label><br>
+        <label>Date fin</label>
 
-    <textarea
-            th:field="*{description}"
-            rows="6"
-            cols="60"></textarea>
+        <br>
 
-    <br><br>
+        <input type="date" th:field="*{dateFin}">
 
-    <button type="submit">
-        Enregistrer
-    </button>
+        <br><br>
 
-</form>
+        <label>Description</label>
 
+        <br>
+
+        <textarea th:field="*{description}" rows="5" cols="50"></textarea>
+
+        <br><br>
+
+        <button type="submit">
+            Créer le contrat
+        </button>
+    </form>
 </body>
 
 </html>

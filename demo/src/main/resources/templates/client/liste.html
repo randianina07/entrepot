@@ -46,8 +46,13 @@
                 <a th:href="@{/clients/supprimer/{id}(id=${client.id})}">
                     Supprimer
                 </a>
-            </td>
 
+                |
+
+                <a th:href="@{/contrats/create(clientId=${client.utilisateur.id})}">
+                    Créer un contrat
+                </a>
+            </td>
         </tr>
 
     </table>
