@@ -136,15 +136,9 @@ public class ContratController {
     public String accepter(
             @PathVariable Long id
     ) {
-        DemandeStockage demande = demandeStockageService.findById(id).orElseThrow();
-        StatutDemandeStockage statut = statutDemandeStockageService.findByCode("ACCEPTEE").orElseThrow();
-        HistoriqueEtatDemande historique = new HistoriqueEtatDemande();
 
-        historique.setDemandeStockage(demande);
-        historique.setStatut(statut);
-        historique.setDateStatut(LocalDateTime.now());
+        contratService.accepterDemande(id);
 
-        historiqueEtatDemandeService.save(historique);
         return "redirect:/contrats/demandes";
     }
 
