@@ -55,12 +55,6 @@ CREATE TABLE types_contrat (
     libelle VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE modes_paiement (
-    id      BIGSERIAL PRIMARY KEY,
-    code    VARCHAR(20) NOT NULL UNIQUE,  -- ESPECES | MOBILE_MONEY | VIREMENT | CHEQUE
-    libelle VARCHAR(100) NOT NULL
-);
-
 CREATE TABLE statuts_demande_stockage (
     id      BIGSERIAL PRIMARY KEY,
     code    VARCHAR(20) NOT NULL UNIQUE,  -- EN_ATTENTE | ACCEPTEE | REFUSEE
@@ -93,17 +87,20 @@ CREATE TABLE historique_etat_demande (
 
 CREATE TABLE contrats (
     id                  BIGSERIAL PRIMARY KEY,
-    -- demande_stockage_id BIGINT NOT NULL,
+    demande_stockage_id BIGINT NOT NULL,
     utilisateur_id BIGINT NOT NULL,
+    type_zone_id BIGINT NOT NULL,
     type_contrat_id BIGINT NOT NULL,
+    volume_espace_m3 NUMERIC(10,3) NOT NULL CHECK (volume_espace_m3 > 0),
     date_creation       TIMESTAMP NOT NULL DEFAULT now(),
     date_debut          DATE NOT NULL,
     date_fin            DATE,
     description         TEXT,
     CHECK (date_fin IS NULL OR date_fin >= date_debut),
-    -- CONSTRAINT fk_contrats_demande_stockage_id FOREIGN KEY (demande_stockage_id) REFERENCES demandes_stockage(id),
+    CONSTRAINT fk_contrats_demande_stockage_id FOREIGN KEY (demande_stockage_id) REFERENCES demandes_stockage(id),
     CONSTRAINT fk_contrats_utilisateur_id FOREIGN KEY (utilisateur_id) REFERENCES utilisateurs(id),
-    CONSTRAINT fk_contrats_type_contrat_id FOREIGN KEY (type_contrat_id) REFERENCES types_contrat(id)
+    CONSTRAINT fk_contrats_type_contrat_id FOREIGN KEY (type_contrat_id) REFERENCES types_contrat(id),
+    CONSTRAINT fk_demandes_stockage_type_contrat_id FOREIGN KEY (type_contrat_id) REFERENCES types_contrat(id)
 );
 
 CREATE TABLE statuts_renouvellement (
@@ -115,27 +112,27 @@ CREATE TABLE statuts_renouvellement (
 CREATE TABLE demandes_renouvellement (
     id          BIGSERIAL PRIMARY KEY,
     contrat_id BIGINT NOT NULL,
-    date_debut  DATE NOT NULL,
+    date_demande  DATE NOT NULL,
     date_fin    DATE,
     CONSTRAINT fk_demandes_renouvellement_contrat_id FOREIGN KEY (contrat_id) REFERENCES contrats(id)
 );
 
 CREATE TABLE historique_renouvellement (
     id                          BIGSERIAL PRIMARY KEY,
-    -- demande_renouvellement_id BIGINT NOT NULL,
+    demande_renouvellement_id BIGINT NOT NULL,
     statut_renouvellement_id BIGINT NOT NULL,
     date_statut                 TIMESTAMP NOT NULL DEFAULT now(),
-    -- CONSTRAINT fk_historique_renouvellement_demande_renouvellement_id FOREIGN KEY (demande_renouvellement_id) REFERENCES demandes_renouvellement(id),
+    CONSTRAINT fk_historique_renouvellement_demande_renouvellement_id FOREIGN KEY (demande_renouvellement_id) REFERENCES demandes_renouvellement(id),
     CONSTRAINT fk_historique_renouvellement_statut_renouvellement_id FOREIGN KEY (statut_renouvellement_id) REFERENCES statuts_renouvellement(id)
 );
 
 CREATE TABLE renouvellements_contrat (
     id                          BIGSERIAL PRIMARY KEY,
     contrat_id BIGINT NOT NULL,
-    -- demande_renouvellement_id BIGINT NOT NULL,
+    demande_renouvellement_id BIGINT NOT NULL,
     date_renouvellement                  DATE NOT NULL,
     date_fin                    DATE,
-    -- CONSTRAINT fk_renouvellements_contrat_demande_renouvellement_id FOREIGN KEY (demande_renouvellement_id) REFERENCES demandes_renouvellement(id),
+    CONSTRAINT fk_renouvellements_contrat_demande_renouvellement_id FOREIGN KEY (demande_renouvellement_id) REFERENCES demandes_renouvellement(id),
     CONSTRAINT fk_renouvellement_contrat_contrat_id FOREIGN KEY (contrat_id) REFERENCES contrats(id)
 );
 
@@ -145,7 +142,7 @@ CREATE TABLE renouvellements_contrat (
 
 CREATE TABLE unites_duree (
     id      BIGSERIAL PRIMARY KEY,
-    code    VARCHAR(20) NOT NULL UNIQUE,  -- JOUR | SEMAINE | MOIS
+    code    VARCHAR(20) NOT NULL UNIQUE,  -- JOUR | MOIS
     libelle VARCHAR(50) NOT NULL
 );
 
@@ -171,7 +168,6 @@ CREATE TABLE tarifs_zone (
 CREATE TABLE factures (
     id              BIGSERIAL PRIMARY KEY,
     contrat_id BIGINT NOT NULL,
-    mode_paiement_id BIGINT,
     volume_espace_m3 NUMERIC(10,3) NOT NULL CHECK (volume_espace_m3 > 0),
     prix_facture    NUMERIC(14,2) NOT NULL CHECK (prix_facture >= 0),
     date_emission   DATE NOT NULL DEFAULT CURRENT_DATE,
