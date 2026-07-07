@@ -52,7 +52,6 @@ public class ContratController {
         this.historiqueEtatDemandeService = historiqueEtatDemandeService;
     }
 
-
     @GetMapping("/create")
     public String create(
             @RequestParam(required = false) Long clientId,
@@ -61,24 +60,20 @@ public class ContratController {
 
         model.addAttribute("contrat", new Contrat());
         model.addAttribute("clients", clients);
-        model.addAttribute("typesContrat", typeContratService.findAll()
-        );
+        model.addAttribute("typesContrat", typeContratService.findAll());
 
-        if(clientId != null){
+        if (clientId != null) {
             Utilisateur client = utilisateurService.findById(clientId);
             model.addAttribute("clientSelectionne", client);
         }
         return "contrats/create";
     }
 
-
-
     @PostMapping("/create")
     public String create(
             @ModelAttribute Contrat contrat,
             @RequestParam Long utilisateurId,
             @RequestParam Long typeContratId) {
-
 
         Utilisateur utilisateur = utilisateurService.findById(utilisateurId);
         TypeContrat typeContrat = typeContratService.findById(typeContratId).orElseThrow();
@@ -91,7 +86,7 @@ public class ContratController {
 
         return "redirect:/contrats/create";
     }
-    
+
     @GetMapping("/demande")
     public String afficherDemandeStockage(Model model) {
         model.addAttribute("demande", new DemandeStockage());
@@ -104,8 +99,7 @@ public class ContratController {
     public String enregistrerDemande(
             @ModelAttribute DemandeStockage demande,
             @RequestParam Long typeZoneId,
-            @RequestParam Long typeContratId
-    ) {
+            @RequestParam Long typeContratId) {
         // indice 1 lony fa refaveo atao contexte
         Utilisateur client = utilisateurService.findById(1L);
         TypeZone typeZone = typeZoneService.findById(typeZoneId).orElseThrow();
@@ -128,5 +122,45 @@ public class ContratController {
         return "redirect:/contrats/demande?success";
     }
 
+    @GetMapping("/demandes")
+    public String listeDemandes(Model model) {
+        List<DemandeStockage> demandes = demandeStockageService.findAll();
+        List<DemandeStockage> attente = demandes.stream().filter(d -> historiqueEtatDemandeService
+            .dernierStatut(d).getStatut().getCode().equals("EN_ATTENTE")).toList();
 
+        model.addAttribute("demandes", attente);
+        return "contrats/demandes";
+    }
+
+    @GetMapping("/demande/accepter/{id}")
+    public String accepter(
+            @PathVariable Long id
+    ) {
+        DemandeStockage demande = demandeStockageService.findById(id).orElseThrow();
+        StatutDemandeStockage statut = statutDemandeStockageService.findByCode("ACCEPTEE").orElseThrow();
+        HistoriqueEtatDemande historique = new HistoriqueEtatDemande();
+
+        historique.setDemandeStockage(demande);
+        historique.setStatut(statut);
+        historique.setDateStatut(LocalDateTime.now());
+
+        historiqueEtatDemandeService.save(historique);
+        return "redirect:/contrats/demandes";
+    }
+
+    @GetMapping("/demande/refuser/{id}")
+    public String refuser(
+            @PathVariable Long id
+    ) {
+        DemandeStockage demande = demandeStockageService.findById(id).orElseThrow();
+        StatutDemandeStockage statut =statutDemandeStockageService.findByCode("REFUSEE").orElseThrow();
+        HistoriqueEtatDemande historique = new HistoriqueEtatDemande();
+
+        historique.setDemandeStockage(demande);
+        historique.setStatut(statut);
+        historique.setDateStatut(LocalDateTime.now());
+
+        historiqueEtatDemandeService.save(historique);
+        return "redirect:/contrats/demandes";
+    }
 }

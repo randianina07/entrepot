@@ -10,5 +10,7 @@ import entrepot.demo.model.HistoriqueEtatDemande;
 public interface HistoriqueEtatDemandeRepository extends JpaRepository<HistoriqueEtatDemande, Long> {
 
     List<HistoriqueEtatDemande> findByDemandeStockage(DemandeStockage demandeStockage);
-
+    List<HistoriqueEtatDemande> findByDemandeStockageOrderByDateStatutDesc(
+            DemandeStockage demandeStockage
+    );
 }

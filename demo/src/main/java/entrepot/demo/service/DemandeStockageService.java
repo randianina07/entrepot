@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import entrepot.demo.model.DemandeStockage;
+import entrepot.demo.model.HistoriqueEtatDemande;
 import entrepot.demo.model.Utilisateur;
 import entrepot.demo.repository.DemandeStockageRepository;
 
@@ -36,5 +37,16 @@ public class DemandeStockageService {
 
     public void deleteById(Long id) {
         demandeStockageRepository.deleteById(id);
+    }
+
+    public List<DemandeStockage> demandesEnAttente(
+            List<DemandeStockage> demandes,
+            HistoriqueEtatDemandeService historiqueService
+    ) {
+
+        return demandes.stream().filter(demande -> {
+            HistoriqueEtatDemande h = historiqueService.dernierStatut(demande);
+            return h != null && h.getStatut().getCode().equals("EN_ATTENTE");
+        }).toList();
     }
 }

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Demandes de stockage</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #eeeeee;
+        }
+
+        a {
+            text-decoration: none;
+            padding: 5px 10px;
+        }
+
+        .accept {
+            color: green;
+        }
+
+        .refuse {
+            color: red;
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <h1>Demandes de stockage en attente</h1>
+
+
+    <table>
+
+        <thead>
+
+            <tr>
+                <th>Client</th>
+                <th>Email</th>
+                <th>Zone</th>
+                <th>Type contrat</th>
+                <th>Volume (m³)</th>
+                <th>Date début</th>
+                <th>Date fin</th>
+                <th>Actions</th>
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+
+            <tr th:each="demande : ${demandes}">
+
+
+                <td th:text="${demande.utilisateur.email}">
+                </td>
+
+
+                <td th:text="${demande.utilisateur.email}">
+                </td>
+
+
+                <td th:text="${demande.typeZone.libelle}">
+                </td>
+
+
+                <td th:text="${demande.typeContrat.libelle}">
+                </td>
+
+
+                <td th:text="${demande.volumeEspaceM3}">
+                </td>
+
+
+                <td th:text="${demande.dateDebut}">
+                </td>
+
+
+                <td th:text="${demande.dateFin}">
+                </td>
+
+
+                <td>
+
+                    <a class="accept" th:href="@{/contrats/demande/accepter/{id}(id=${demande.id})}">
+                        Accepter
+                    </a>
+
+
+                    |
+
+
+                    <a class="refuse" th:href="@{/contrats/demande/refuser/{id}(id=${demande.id})}">
+                        Refuser
+                    </a>
+
+                </td>
+
+
+            </tr>
+
+
+        </tbody>
+
+
+    </table>
+
+
+</body>
+
+</html>
