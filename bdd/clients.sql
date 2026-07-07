@@ -1,6 +1,14 @@
 -- ============================================================================
 -- 1. REFERENTIELS GENERIQUES : ROLES, UTILISATEURS (internes + clients)
 -- ============================================================================
+
+CREATE TABLE types_produits (
+    id      BIGSERIAL PRIMARY KEY,
+    code    VARCHAR(40) NOT NULL UNIQUE,   -- ALIMENTAIRE | INDUSTRIEL | SENSIBLE | VALEUR ...
+    libelle VARCHAR(150) NOT NULL
+);
+
+
 CREATE TABLE types_zone (
     id                     BIGSERIAL PRIMARY KEY,
     code                   VARCHAR(20) NOT NULL UNIQUE,  -- ETA | CHF | SEC | SOL
@@ -194,6 +202,5 @@ CREATE TABLE factures (
     prix_facture    NUMERIC(14,2) NOT NULL CHECK (prix_facture >= 0),
     date_emission   DATE NOT NULL DEFAULT CURRENT_DATE,
     date_paiement   DATE,
-    CONSTRAINT fk_factures_contrat_id FOREIGN KEY (contrat_id) REFERENCES contrats(id),
-    CONSTRAINT fk_factures_mode_paiement_id FOREIGN KEY (mode_paiement_id) REFERENCES modes_paiement(id)
+    CONSTRAINT fk_factures_contrat_id FOREIGN KEY (contrat_id) REFERENCES contrats(id)
 );

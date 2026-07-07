@@ -29,13 +29,6 @@ public class Facture {
     @Column(name = "date_paiement")
     private LocalDate datePaiement;
 
-    // NOTE : ta table "factures" a une contrainte
-    // fk_factures_mode_paiement_id -> modes_paiement(id), mais la colonne
-    // mode_paiement_id n'est pas declaree dans la liste des colonnes de
-    // "factures" dans le schema que tu m'as donne (et la table
-    // "modes_paiement" elle-meme n'est pas fournie non plus). Je n'ai donc
-    // rien mappe pour cette colonne : verifie ton CREATE TABLE factures.
-
     public Facture() {
     }
 
