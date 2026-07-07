@@ -1,6 +1,28 @@
 -- ============================================================================
 -- 1. REFERENTIELS GENERIQUES : ROLES, UTILISATEURS (internes + clients)
 -- ============================================================================
+CREATE TABLE types_zone (
+    id                     BIGSERIAL PRIMARY KEY,
+    code                   VARCHAR(20) NOT NULL UNIQUE,  -- ETA | CHF | SEC | SOL
+    libelle                VARCHAR(100) NOT NULL,        -- Etagere classique, Frigo/Chambre froide, Zone securisee, Zone au sol
+    type_produit_id BIGINT,
+    controle_temperature   BOOLEAN NOT NULL DEFAULT FALSE,
+    acces_restreint        BOOLEAN NOT NULL DEFAULT FALSE,
+    journalisation_acces   BOOLEAN NOT NULL DEFAULT FALSE,
+    charge_lourde_possible BOOLEAN NOT NULL DEFAULT FALSE,
+    CONSTRAINT fk_types_zone_type_produit_id FOREIGN KEY (type_produit_id) REFERENCES types_produits(id)
+);
+
+-- Niveau 2 : la zone / allee (ex: "A1")
+CREATE TABLE zones (
+    id             BIGSERIAL PRIMARY KEY,
+    code           VARCHAR(20) NOT NULL UNIQUE,  -- ex: A1
+    libelle        VARCHAR(150),
+    type_zone_id BIGINT NOT NULL,
+    volume_total_m3 NUMERIC(12,3) NOT NULL CHECK (volume_total_m3 >= 0),
+    CONSTRAINT fk_zones_type_zone_id FOREIGN KEY (type_zone_id) REFERENCES types_zone(id)
+);
+
 
 CREATE TABLE roles (
     id      BIGSERIAL PRIMARY KEY,
