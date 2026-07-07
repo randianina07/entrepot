@@ -104,3 +104,29 @@ INSERT INTO tarifs_zone (
 
 (4, 1, 80.00, CURRENT_DATE),
 (4, 2, 2000.00, CURRENT_DATE);
+
+INSERT INTO utilisateurs (
+    email,
+    mot_de_passe_hash,
+    role_id
+) VALUES (
+    'client.test@gmail.com',
+    '$2y$10$OGe7J71Snqmk9tpKua5KPuaeR9RqlD2JfDyEwW.w4BMV//XxPFPY2',
+    5
+);
+
+INSERT INTO utilisateurs_info (
+    utilisateur_id,
+    nom,
+    prenom,
+    numero,
+    adresse,
+    secteur
+) VALUES (
+    1,
+    'Rakoto',
+    'Jean',
+    '+261341234567',
+    'Antananarivo',
+    'Commerce'
+);
