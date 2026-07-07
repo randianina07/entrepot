@@ -8,7 +8,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import entrepot.demo.model.Contrat;
+import entrepot.demo.model.DemandeStockage;
+import entrepot.demo.model.HistoriqueEtatDemande;
+import entrepot.demo.model.StatutDemandeStockage;
 import entrepot.demo.model.TypeContrat;
+import entrepot.demo.model.TypeZone;
 import entrepot.demo.model.Utilisateur;
 import entrepot.demo.service.ContratService;
 import entrepot.demo.service.DemandeStockageService;
@@ -86,7 +90,43 @@ public class ContratController {
         contratService.save(contrat);
 
         return "redirect:/contrats/create";
-
     }
+    
+    @GetMapping("/demande")
+    public String afficherDemandeStockage(Model model) {
+        model.addAttribute("demande", new DemandeStockage());
+        model.addAttribute("typesZone", typeZoneService.findAll());
+        model.addAttribute("typesContrat", typeContratService.findAll());
+        return "contrats/demande";
+    }
+
+    @PostMapping("/demande")
+    public String enregistrerDemande(
+            @ModelAttribute DemandeStockage demande,
+            @RequestParam Long typeZoneId,
+            @RequestParam Long typeContratId
+    ) {
+        // indice 1 lony fa refaveo atao contexte
+        Utilisateur client = utilisateurService.findById(1L);
+        TypeZone typeZone = typeZoneService.findById(typeZoneId).orElseThrow();
+        TypeContrat typeContrat = typeContratService.findById(typeContratId).orElseThrow();
+
+        demande.setUtilisateur(client);
+        demande.setTypeZone(typeZone);
+        demande.setTypeContrat(typeContrat);
+
+        DemandeStockage demandeSauvee = demandeStockageService.save(demande);
+        StatutDemandeStockage enAttente = statutDemandeStockageService.findByCode("EN_ATTENTE").orElseThrow();
+        HistoriqueEtatDemande historique = new HistoriqueEtatDemande();
+
+        historique.setDemandeStockage(demandeSauvee);
+        historique.setStatut(enAttente);
+        historique.setDateStatut(LocalDateTime.now());
+
+        historiqueEtatDemandeService.save(historique);
+
+        return "redirect:/contrats/demande?success";
+    }
+
 
 }
