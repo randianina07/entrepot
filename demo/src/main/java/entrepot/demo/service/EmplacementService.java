@@ -52,7 +52,11 @@ public class EmplacementService {
                             emp.getEtage() != null && emp.getEtage().getId().equals(etage.getId())) {
                             // Règle métier : Doit être actif ET assez grand (taille < capacité)
                             if (emp.isActif() && emp.getCapacite_volume_m3() >= tailleProduit) {
-                                listeEmplacementsTrouves.add(emp);
+                                double volumeMitokana = emp.getCapacite_volume_m3();
+                                while (quantite > 1 && volumeMitokana > 0) {
+                                    volumeMitokana -= quantite;
+                                    listeEmplacementsTrouves.add(emp);
+                                }
                             }
                         }
 
