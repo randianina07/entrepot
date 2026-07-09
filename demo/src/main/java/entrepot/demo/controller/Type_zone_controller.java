@@ -21,7 +21,7 @@ public class Type_zone_controller {
     @Autowired
     Type_zone_service type_zone_service;
 
-    @GetMapping("/")
+    @GetMapping("/choose-type_zones")
     public String choose_type_zone(Model model) {
         
         List<Type_zone> type_zones = type_zone_service.getAllTypeZones();
@@ -29,6 +29,14 @@ public class Type_zone_controller {
         
         return "Emplacement/Choose_type_zone";
     }
+
+    @GetMapping("/")
+    public String Espace_stockage() {
+
+        return "Emplacement/accueil";
+
+    }
+    
         
 
 }
