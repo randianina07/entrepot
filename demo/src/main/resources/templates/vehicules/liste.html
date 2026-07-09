@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Liste des vehicules</h1>
+    <h3><a th:href="@{/vehicules/save}">Ajouter une vehicule</a></h3>
+    <h3>Filtres</h3>
+    <form th:action="@{/vehicules/liste}" method="get">
+        <p><input type="number" name="id" th:value="${id}" placeholder="ID"></p>
+        <p><input type="text" name="immatriculation" th:value="${immatriculation}" placeholder="Immatriculation"></p>
+        <p><input type="text" name="marque" th:value="${marque}" placeholder="Marque"></p>
+        <p><input type="text" name="modele" th:value="${modele}" placeholder="Modele"></p>
+        <p><input type="number" name="annee" th:value="${annee}" placeholder="Annee"></p>
+        <p><input type="number" step="0.01" name="capaciteVolume" th:value="${capaciteVolume}" placeholder="Capacite Volume"></p>
+        <p><input type="number" step="0.01" name="capaciteChargekg" th:value="${capaciteChargekg}" placeholder="Capacite Charge kg"></p>
+        <p><input type="number" step="0.01" name="kilometrage" th:value="${kilometrage}" placeholder="Kilometrage"></p>
+        <p>
+            <select name="typeVehiculeId">
+                <option value="">Type vehicule</option>
+                <option th:each="t : ${typesVehicule}"
+                        th:value="${t.id}"
+                        th:text="${t.libelle}"
+                        th:selected="${typeVehiculeId != null and typeVehiculeId.equals(t.id.toString())}"></option>
+            </select>
+        </p>
+        <p>
+            <select name="statutId">
+                <option value="">Statut vehicule</option>
+                <option th:each="s : ${statutVehicule}"
+                        th:value="${s.id}"
+                        th:text="${s.libelle}"
+                        th:selected="${statutId != null and statutId.equals(s.id.toString())}"></option>
+            </select>
+        </p>
+        <input type="submit" value="Filtrer">
+        <a th:href="@{/vehicules/liste}">Reinitialiser</a>
+    </form>
+    <h3>Historique d' un Vehicule</h3>
+    <form th:action="@{/vehicules/historique_vehicule}" method="get">
+        <select name="id" >
+            <option value="">Choisir la voiture</option>
+            <option 
+                th:each="v :${vehicules}"
+                th:value="${v.id}"
+                th:text="${v.marque}">
+            </option>
+        </select>
+        <input type="submit" value="Voir l'Historique">
+    </form>
+    <a th:href="@{/livraisons/livraison}">Parametrer une Livraison</a>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Immatricule</th>
+            <th>Marque</th>
+            <th>Modele</th>
+            <th>Annee</th>
+            <th>Capacite Volume</th>
+            <th>Capacite kg</th>
+            <th>Kilometrage</th>
+            <th>Type Vehicule</th>
+            <th>Statut</th>
+            <th>Action 1</th>
+            <th>Action 2</th>
+        </tr>
+
+        <tr th:each="v :${vehicules}" >
+            <td th:text="${v.id}"></td>
+            <td th:text="${v.immatriculation}"></td>
+            <td th:text="${v.marque}"></td>
+            <td th:text="${v.modele}"></td>
+            <td th:text="${v.annee}"></td>
+            <td th:text="${v.capaciteVolume}"></td>
+            <td th:text="${v.capaciteChargekg}"></td>
+            <td th:text="${v.kilometrage}"></td>
+            <td th:text="${v.typeVehicule.libelle}"></td>
+            <td th:text="${v.Statut.libelle}"></td>
+
+            <!-- <td th:if="${v.Statut.id != 1}" onclick="alert('cette voiture est en mission')"> <input type="button" value="Non disponible"></td> -->
+            <!-- <td th:if="${v.Statut.id == 1}"> <a th:href="@{/vehicules/livraison}" onclick="return confirm('Vous voulez vraiment faire le livraison')">Faire Livraison</a></td> -->
+            <td><a th:href="@{/vehicules/modifier/{id}(id=${v.id})}">Modifier</a></td>
+            <td><a th:href="@{/vehicules/supprimer/{id}(id=${v.id})}" onclick="return confirm('Voulez-vous vraiment supprimer ce vehicule ?')">Supprimer</a></td>
+        </tr>
+    </table>
+    <a th:href="@{/missions/save}">Voir des mission en cours</a>
+</body>
+</html>

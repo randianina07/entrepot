@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire de maintenance</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<main class="page-shell narrow-shell">
+    <section class="card">
+        <header class="page-header compact">
+            <div>
+                <p class="eyebrow">Maintenance véhicule</p>
+                <h1>Formulaire de maintenance</h1>
+            </div>
+            <a class="button secondary" th:href="@{/maintenances}">Retour à l'historique</a>
+        </header>
+
+        <form class="form-grid maintenance-grid" method="post" th:action="@{/maintenances/ajouter}">
+            <div class="field">
+                <label for="vehiculeId">Véhicule</label>
+                <select id="vehiculeId" name="vehiculeId" required>
+                    <option value="">Sélectionner un véhicule</option>
+                    <option th:each="vehicule : ${vehicules}"
+                            th:value="${vehicule.id}"
+                            th:text="${vehicule.libelleAffichage}"></option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="typeMaintenanceId">Type maintenance</label>
+                <select id="typeMaintenanceId" name="typeMaintenanceId" required>
+                    <option value="">Sélectionner un type</option>
+                    <option th:each="typeMaintenance : ${typesMaintenances}"
+                            th:value="${typeMaintenance.id}"
+                            th:text="${typeMaintenance.libelleAffichage}"></option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="dateMaintenance">Date maintenance</label>
+                <input type="date" id="dateMaintenance" name="dateMaintenance" required>
+            </div>
+
+            <div class="field">
+                <label for="cout">Coût</label>
+                <input type="number" id="cout" name="cout" step="0.01" min="0">
+            </div>
+
+            <div class="field full-span">
+                <label for="kilometrage">Kilométrage</label>
+                <input type="number" id="kilometrage" name="kilometrage" step="0.01" min="0">
+            </div>
+
+            <div class="field full-span">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" rows="5" placeholder="Décrire l'opération effectuée"></textarea>
+            </div>
+
+
+            <div class="form-actions full-span">
+                <button class="button" type="submit">Enregistrer</button>
+                <a class="button ghost" th:href="@{/maintenances}">Annuler</a>
+            </div>
+        </form>
+    </section>
+</main>
+</body>
+</html>
