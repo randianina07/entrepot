@@ -20,15 +20,15 @@ public class UtilisateurController {
         this.utilisateurService = utilisateurService;
     }
 
-    @GetMapping("/nouveau")
+    @GetMapping("/utilisateurs/nouveau")
     public String afficherFormulaire(Model model) {
         model.addAttribute("utilisateur", new Utilisateur());
         model.addAttribute("utilisateurInfo", new UtilisateurInfo());
 
-        return "/formulaire";
+        return "utilisateur/formulaire";
     }
 
-    @PostMapping("/enregistrer")
+    @PostMapping("/utilisateurs/enregistrer")
     public String enregistrerClient(
             @ModelAttribute Utilisateur utilisateur,
             @ModelAttribute UtilisateurInfo utilisateurInfo,
@@ -55,7 +55,7 @@ public class UtilisateurController {
             model.addAttribute("erreur",
                     e.getMessage());
 
-            return "/formulaire";
+            return "utilisateur/formulaire";
         }
     }
 
