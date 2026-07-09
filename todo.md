@@ -65,5 +65,7 @@ Durées de stockage contractuelles
 + [] Base 
 *Nous avons modifié les tables : contrats, historique_renouvellement, renouvellements_contrat afin d'éviter des problèmes liés au coté client*
 + [] tables : type_contrat, contrats, renouvellement_contrats
+
+
     
 
