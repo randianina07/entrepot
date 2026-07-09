@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des clients</title>
+</head>
+
+<body>
+
+    <h1>Liste des clients</h1>
+
+    <table border="1">
+
+        <tr>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Numero</th>
+            <th>Adresse</th>
+            <th>Secteur</th>
+            <th>Email</th>
+            <th>Actions</th>
+        </tr>
+
+        <tr th:each="client : ${clients}">
+
+            <td th:text="${client.nom}"></td>
+
+            <td th:text="${client.prenom}"></td>
+
+            <td th:text="${client.numero}"></td>
+
+            <td th:text="${client.adresse}"></td>
+
+            <td th:text="${client.secteur}"></td>
+
+            <td th:text="${client.utilisateur.email}"></td>
+
+            <td>
+                <a th:href="@{/clients/modifier/{id}(id=${client.id})}">
+                    Modifier
+                </a>
+
+                |
+
+                <a th:href="@{/clients/supprimer/{id}(id=${client.id})}">
+                    Supprimer
+                </a>
+
+                |
+
+                <a th:href="@{/contrats/create(clientId=${client.utilisateur.id})}">
+                    Créer un contrat
+                </a>
+            </td>
+        </tr>
+
+    </table>
+
+</body>
+
+</html>
