@@ -48,35 +48,53 @@ public class UtilisateurService {
      * @param utilisateurInfo informations personnelles
      * @return le mot de passe généré automatiquement
      */
-    public String creerClient(Utilisateur utilisateur, UtilisateurInfo utilisateurInfo) {
+    public String creerUtilisateur(
+            Utilisateur utilisateur,
+            UtilisateurInfo utilisateurInfo,
+            String roleCode) {
 
-        // Vérification de l'email
-        if (utilisateurRepository.findByEmail(utilisateur.getEmail()).isPresent()) {
-            throw new RuntimeException("Cet email est déjà utilisé.");
+        // Vérification email
+
+        if (utilisateurRepository
+                .findByEmail(utilisateur.getEmail())
+                .isPresent()) {
+
+            throw new RuntimeException(
+                    "Cet email existe déjà.");
         }
 
-        // Récupération du rôle CLIENT
-        Role role = roleRepository.findByCode("CLIENT")
-                .orElseThrow(() -> new RuntimeException("Le rôle CLIENT n'existe pas."));
+        // Recherche du rôle choisi
 
-        // Génération du mot de passe
+        Role role = roleRepository
+                .findByCode(roleCode)
+                .orElseThrow(() -> new RuntimeException(
+                        "Rôle inexistant"));
+
+        // Génération mot de passe
+
         String motDePasse = genererMotDePasse(10);
 
-        // Initialisation de l'utilisateur
-        utilisateur.setRole(role);
-        utilisateur.setDateCreation(LocalDateTime.now());
-        utilisateur.setMotDePasseHash(passwordEncoder.encode(motDePasse));
+        // Configuration utilisateur
 
-        // Sauvegarde utilisateur
+        utilisateur.setRole(role);
+
+        utilisateur.setDateCreation(
+                LocalDateTime.now());
+
+        utilisateur.setMotDePasseHash(
+                passwordEncoder.encode(motDePasse));
+
+        // Sauvegarde compte
+
         utilisateur = utilisateurRepository.save(utilisateur);
 
-        // Association des informations
+        // Association profil
+
         utilisateurInfo.setUtilisateur(utilisateur);
 
-        // Sauvegarde informations
-        utilisateurInfoRepository.save(utilisateurInfo);
+        utilisateurInfoRepository.save(
+                utilisateurInfo);
 
-        // Retour du mot de passe en clair
         return motDePasse;
     }
 

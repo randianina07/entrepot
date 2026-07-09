@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import entrepot.demo.model.Utilisateur;
 import entrepot.demo.model.UtilisateurInfo;
@@ -27,28 +28,34 @@ public class UtilisateurController {
         return "/formulaire";
     }
 
-    @PostMapping("/clients/enregistrer")
+    @PostMapping("/enregistrer")
     public String enregistrerClient(
             @ModelAttribute Utilisateur utilisateur,
             @ModelAttribute UtilisateurInfo utilisateurInfo,
+            @RequestParam String roleCode,
             Model model) {
-        System.out.println("Le contrôleur a été appelé !");
-        System.out.println(utilisateur.getEmail());
-        try {
-            String motDePasse = utilisateurService.creerClient(utilisateur, utilisateurInfo);
 
-            model.addAttribute("message", "Le client a été créé avec succès.");
-            model.addAttribute("motDePasse", motDePasse);
+        try {
+
+            String motDePasse = utilisateurService.creerUtilisateur(
+                    utilisateur,
+                    utilisateurInfo,
+                    roleCode);
+
+            model.addAttribute("message",
+                    "Utilisateur créé avec succès.");
+
+            model.addAttribute("motDePasse",
+                    motDePasse);
 
             return "client/succes";
+
         } catch (Exception e) {
-            // TODO: handle exception
-            model.addAttribute("erreur", e.getMessage());
 
-            model.addAttribute("utilisateur", utilisateur);
-            model.addAttribute("utilisateurInfo", utilisateurInfo);
+            model.addAttribute("erreur",
+                    e.getMessage());
 
-            return "client/formulaire";
+            return "/formulaire";
         }
     }
 
