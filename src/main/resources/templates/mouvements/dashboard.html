@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/navbar :: head}"></head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+    <div class="container mt-4">
+        <div th:replace="~{fragments/alerts :: alerts}"></div>
+        
+        <h1 class="mb-4"><i class="bi bi-speedometer2"></i> Tableau de Bord</h1>
+        
+        <!-- Widgets statistiques -->
+        <div class="row mb-5">
+            <div class="col-md-4 mb-3 mb-md-0">
+                <div class="card stat-card stat-card-success">
+                    <div class="card-body">
+                        <div class="content">
+                            <h6><i class="bi bi-arrow-down-circle me-1"></i> Entrées aujourd'hui</h6>
+                            <div class="display-4" th:text="${entreesAujourdhui}">0</div>
+                        </div>
+                        <div class="icon-wrapper">
+                            <i class="bi bi-box-seam"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3 mb-md-0">
+                <div class="card stat-card stat-card-danger">
+                    <div class="card-body">
+                        <div class="content">
+                            <h6><i class="bi bi-arrow-up-circle me-1"></i> Sorties aujourd'hui</h6>
+                            <div class="display-4" th:text="${sortiesAujourdhui}">0</div>
+                        </div>
+                        <div class="icon-wrapper">
+                            <i class="bi bi-box-seam"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card stat-card stat-card-warning">
+                    <div class="card-body">
+                        <div class="content">
+                            <h6><i class="bi bi-clock-history me-1"></i> En attente de validation</h6>
+                            <div class="display-4" th:text="${enAttenteValidation}">0</div>
+                        </div>
+                        <div class="icon-wrapper">
+                            <i class="bi bi-hourglass-split"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Alertes stock bas -->
+        <div th:if="${alertesStock != null && !#lists.isEmpty(alertesStock)}" class="alert alert-danger mb-4">
+            <h5><i class="bi bi-exclamation-triangle-fill"></i> Alertes de stock bas</h5>
+            <ul class="mb-0">
+                <li th:each="alerte : ${alertesStock}">
+                    <strong th:text="${alerte.emplacement}">Zone A-01</strong>: 
+                    Stock à <span th:text="${alerte.pourcentage}">10</span>% de la capacité totale 
+                    (<span th:text="${alerte.stockActuel}">50</span> / <span th:text="${alerte.capacite}">500</span> m³)
+                </li>
+            </ul>
+        </div>
+        
+        <!-- 5 derniers mouvements -->
+        <div class="card">
+            <div class="card-header">
+                <div><i class="bi bi-list"></i> 5 derniers mouvements</div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Code</th>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Statut</th>
+                                <th>Client</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:if="${derniersMouvements == null || #lists.isEmpty(derniersMouvements)}">
+                                <td colspan="6" class="text-center text-muted">
+                                    Aucun mouvement recent
+                                </td>
+                            </tr>
+                            <tr th:each="mvt : ${derniersMouvements}">
+                                <td th:text="${mvt.code}">MVT-001</td>
+                                <td th:text="${#temporals.format(mvt.dateMouvement, 'dd/MM/yyyy HH:mm')}">01/01/2026 10:00</td>
+                                <td th:text="${mvt.typeMouvement}">ENTREE</td>
+                                <td>
+                                    <span class="badge" 
+                                          th:classappend="${mvt.statutMouvement == 'BROUILLON' ? 'badge-secondary' : 
+                                                         mvt.statutMouvement == 'VALIDE' ? 'badge-success' : 'badge-danger'}"
+                                          th:text="${mvt.statutMouvement}">BROUILLON</span>
+                                </td>
+                                <td th:text="${mvt.client}">Client ABC</td>
+                                <td>
+                                    <a th:href="@{/mouvements/{id}/detail(id=${mvt.id})}" 
+                                       class="btn btn-sm btn-info" title="Voir detail">
+                                        <i class="bi bi-eye"></i> Voir
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="text-center mt-3">
+                    <a href="/mouvements/liste" class="btn btn-outline-primary">
+                        <i class="bi bi-list-ul"></i> Voir tous les mouvements
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Actions rapides -->
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title"><i class="bi bi-plus-circle"></i> Actions rapides</h5>
+                        <div class="d-flex justify-content-center gap-3 mt-3">
+                            <a href="/mouvements/nouveau/entree" class="btn btn-success">
+                                <i class="bi bi-arrow-down-circle"></i> Nouvelle Entree
+                            </a>
+                            <a href="/mouvements/nouveau/sortie" class="btn btn-danger">
+                                <i class="bi bi-arrow-up-circle"></i> Nouvelle Sortie
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title"><i class="bi bi-file-earmark-pdf"></i> Export</h5>
+                        <div class="d-flex justify-content-center gap-3 mt-3">
+                            <a href="/mouvements/export/pdf" class="btn btn-outline-danger">
+                                <i class="bi bi-download"></i> Exporter PDF
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+</body>
+</html>
