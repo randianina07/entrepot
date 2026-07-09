@@ -145,8 +145,9 @@ public class MouvementService {
         }
         
         BigDecimal volumeTotal = volumeOccupe.add(volumeAjoute);
+        BigDecimal capaciteVM3 = BigDecimal.valueOf(emplacement.getCapacite_volume_m3());
         
-        if (volumeTotal.compareTo(emplacement.getCapaciteVolumeM3()) > 0) {
+        if (volumeTotal.compareTo(capaciteVM3) > 0) {
             throw new RuntimeException("Capacité de l'emplacement dépassée");
         }
     }
