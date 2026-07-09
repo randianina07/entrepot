@@ -23,6 +23,18 @@ public class Emplacement {
     @JoinColumn(name = "etage_id", referencedColumnName = "id")
     Etage etage;
 
+
+
+    @ManyToOne
+    @JoinColumn(name = "allee_id", referencedColumnName = "id")
+    Allee allee;
+
+    public Allee getAllee() {
+        return allee;
+    }
+    public void setAllee(Allee allee) {
+        this.allee = allee;
+    }
     double capacite_volume_m3;
     boolean actif;
     double charge_max;
