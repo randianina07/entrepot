@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.stereotype.Controller;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -57,7 +56,7 @@ public class MaintenanceController {
 			@RequestParam LocalDate dateMaintenance,
 			@RequestParam(required = false) BigDecimal kilometrage,
 			@RequestParam(required = false) BigDecimal cout,
-			@RequestParam(required = false) String description;
+			@RequestParam(required = false) String description
 	) {
 		Maintenance maintenance = new Maintenance(
 				vehiculeId,
@@ -66,6 +65,7 @@ public class MaintenanceController {
 				kilometrage,
 				cout,
 				description,
+				null
 				
 		);
 		maintenanceService.addMaintenance(maintenance);
