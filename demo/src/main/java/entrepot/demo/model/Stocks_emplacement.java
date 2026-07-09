@@ -29,6 +29,16 @@ public class Stocks_emplacement {
     @JoinColumn(name = "zone_id", referencedColumnName = "id")
     Zone zone;
 
+    boolean actif;
+
+    public boolean isActif() {
+        return actif;
+    }
+
+    public void setActif(boolean actif) {
+        this.actif = actif;
+    }
+
     public long getId() {
         return id;
     }
