@@ -1,8 +1,8 @@
-package entrepot.demo.repository;
+package com.entrepot.gestion.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import entrepot.demo.model.Emplacement;
+import com.entrepot.gestion.model.Emplacement;
 
 public interface Emplacement_repository extends JpaRepository<Emplacement, Long> {
     

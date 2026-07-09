@@ -1,13 +1,12 @@
-package entrepot.demo.service;
+package com.entrepot.gestion.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import entrepot.demo.model.Stocks_emplacement;
-import entrepot.demo.repository.Stocks_emplacement_repository;
+import com.entrepot.gestion.model.Stocks_emplacement;
+import com.entrepot.gestion.repository.Stocks_emplacement_repository;
 
 @Service
 public class Stocks_emplacement_service {

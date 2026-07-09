@@ -1,11 +1,11 @@
-package entrepot.demo.repository;
+package com.entrepot.gestion.repository;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import entrepot.demo.model.Stocks_emplacement;
+import com.entrepot.gestion.model.Stocks_emplacement;
 
 public interface Stocks_emplacement_repository extends JpaRepository<Stocks_emplacement, Long> {
     

@@ -1,4 +1,4 @@
-package entrepot.demo.controller;
+package com.entrepot.gestion.controller;
 
 import org.springframework.stereotype.Controller;
 

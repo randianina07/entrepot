@@ -5,7 +5,7 @@ truncate table utilisateurs;
 truncate table utilisateurs_info;
 truncate table types_produits;
 truncate table produits;
-truncate table types_zone;
+truncate table type_zone;
 truncate table zones;
 truncate table emplacements;
 
@@ -42,9 +42,9 @@ INSERT INTO produits (code, nom, description, type_produit_id, volume_unitaire_m
     ('PROD001', 'Produit A', 'Description produit A', 1, 0.5, 10.0, true),
     ('PROD002', 'Produit B', 'Description produit B', 2, 1.0, 20.0, true);
 
-INSERT INTO types_zone (code, libelle, controle_temperature, acces_restreint) VALUES
-    ('ETA', 'Etagere', false, false),
-    ('CHF', 'Chambre Froide', true, true);
+INSERT INTO type_zone (code, libelle, type_produit_id) VALUES
+    ('ETA', 'Etagere', 1),
+    ('CHF', 'Chambre Froide', 2);
 
 INSERT INTO zones (code, libelle, type_zone_id, volume_total_m3) VALUES
     ('A1', 'Allee A1', 1, 100.0),

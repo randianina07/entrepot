@@ -1,4 +1,4 @@
-package entrepot.demo.model;
+package com.entrepot.gestion.model;
 
 import jakarta.persistence.Table;
 

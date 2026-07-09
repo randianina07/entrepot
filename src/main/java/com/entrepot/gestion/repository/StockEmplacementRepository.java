@@ -2,6 +2,7 @@ package com.entrepot.gestion.repository;
 
 import com.entrepot.gestion.model.StockEmplacement;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.jpa.repository.Query;
 
 import java.math.BigDecimal;
@@ -13,10 +14,10 @@ public interface StockEmplacementRepository extends JpaRepository<StockEmplaceme
     
     @Query("SELECT SUM(se.quantite * p.volumeUnitaireM3) FROM StockEmplacement se " +
            "JOIN se.produit p WHERE se.emplacement.id = :emplacementId")
-    BigDecimal sumVolumeByEmplacementId(Long emplacementId);
+    BigDecimal sumVolumeByEmplacementId(@Param("emplacementId") Long emplacementId);
     
     @Query("SELECT SUM(se.quantite * p.volumeUnitaireM3) FROM StockEmplacement se " +
-           "JOIN se.produit p JOIN se.emplacement e JOIN e.zone z " +
+           "JOIN se.produit p " +
            "WHERE 1=0") // TODO: Implement proper client volume calculation when Contrat entity is available
-    BigDecimal sumVolumeByClientId(Long clientId);
+    BigDecimal sumVolumeByClientId(@Param("clientId") Long clientId);
 }

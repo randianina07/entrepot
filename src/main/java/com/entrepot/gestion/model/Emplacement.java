@@ -9,6 +9,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "emplacement")
 public class Emplacement {
@@ -81,6 +83,10 @@ public class Emplacement {
     }
     public void setColonne(int colonne) {
         this.colonne = colonne;
+    }
+
+    public BigDecimal getCapaciteVolumeM3() {
+        return BigDecimal.valueOf(capacite_volume_m3);
     }
 
 }

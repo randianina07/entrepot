@@ -1,26 +1,26 @@
-package entrepot.demo.service;
+package com.entrepot.gestion.service;
 
-import entrepot.demo.model.Allee;
-import entrepot.demo.model.Emplacement;
-import entrepot.demo.model.Etage;
-import entrepot.demo.repositories.EmplacementRepository;
-import entrepot.demo.repositories.EtageRepository;
-import entrepot.demo.repositories.ZonesRepository;
-import entrepot.demo.model.Zones;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
-import java.util.List;
+
+import com.entrepot.gestion.model.Emplacement;
+import com.entrepot.gestion.model.Etage;
+import com.entrepot.gestion.model.Zone;
+import com.entrepot.gestion.repository.EmplacementRepository;
+import com.entrepot.gestion.repository.Etage_repository;
+import com.entrepot.gestion.repository.Zone_repository;
 
 @Service
 public class EmplacementService {
 
     @Autowired
-    private ZonesRepository zonesRepository;
+    private Zone_repository zoneRepository;
 
     @Autowired
-    private EtageRepository etageRepository;
+    private Etage_repository etageRepository;
 
     @Autowired
     private EmplacementRepository emplacementRepository;
@@ -34,22 +34,23 @@ public class EmplacementService {
         // Liste d'alleees
         // List<Allee> tousLesAllees = alleeRepository.findAll();
         // Liste des zones
-        List<Zones> toutesLesZones = zonesRepository.findAll();
+        List<Zone> toutesLesZones = zoneRepository.findAll();
 
         List<Emplacement> listeEmplacementsTrouves = new ArrayList<>();
-        for (Zones zones : toutesLesZones) {
-            if (zones.getId() != null && zones.getId() == id_zone ) {
-                Allee alleeDeLaZone = zones.getAllee();
-                if (alleeDeLaZone == null)
+        for (Zone zone : toutesLesZones) {
+            if (zone.getId() != null && zone.getId().equals(id_zone)) {
+                Long alleeIdDeLaZone = zone.getAllees() != null ? zone.getAllees().getId() : null;
+                if (alleeIdDeLaZone == null) {
                     continue;
+                }
 
                 for (Etage etage : tousLesEtages) {
                     for (Emplacement emp : tousLesEmplacements) {
                         if (listeEmplacementsTrouves.size() == quantite) {
                             break;
                         }
-                        if (emp.getAllee() != null && emp.getAllee().getId() == alleeDeLaZone.getId() &&
-                            emp.getEtage() != null && emp.getEtage().getId() == etage.getId()) {
+                        if (emp.getAllee() != null && emp.getAllee().getId().equals(alleeIdDeLaZone) &&
+                            emp.getEtage() != null && emp.getEtage().getId().equals(etage.getId())) {
                             // Règle métier : Doit être actif ET assez grand (taille < capacité)
                             if (!emp.isActif() && emp.getCapacite_volume_m3() >= tailleProduit) {
                                 listeEmplacementsTrouves.add(emp);

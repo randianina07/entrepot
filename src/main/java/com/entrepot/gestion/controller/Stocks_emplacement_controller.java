@@ -1,4 +1,4 @@
-package entrepot.demo.controller;
+package com.entrepot.gestion.controller;
 
 import java.util.List;
 
@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import entrepot.demo.model.Stocks_emplacement;
-import entrepot.demo.service.Stocks_emplacement_service;
+import com.entrepot.gestion.model.Stocks_emplacement;
+import com.entrepot.gestion.service.Stocks_emplacement_service;
 
 @RestController
 public class Stocks_emplacement_controller {

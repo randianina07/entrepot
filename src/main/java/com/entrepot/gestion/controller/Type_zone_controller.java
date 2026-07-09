@@ -1,17 +1,14 @@
-package entrepot.demo.controller;
+package com.entrepot.gestion.controller;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-
-import entrepot.demo.service.Type_zone_service;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
-import entrepot.demo.model.Type_zone;
-import org.springframework.web.bind.annotation.RequestParam;
+import com.entrepot.gestion.model.Type_zone;
+import com.entrepot.gestion.service.Type_zone_service;
 
 
 
@@ -30,7 +27,7 @@ public class Type_zone_controller {
         return "Emplacement/Choose_type_zone";
     }
 
-    @GetMapping("/")
+    @GetMapping("/accueil")
     public String Espace_stockage() {
 
         return "Emplacement/accueil";

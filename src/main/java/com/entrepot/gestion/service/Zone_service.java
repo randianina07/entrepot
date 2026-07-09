@@ -1,12 +1,12 @@
-package entrepot.demo.service;
+package com.entrepot.gestion.service;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import entrepot.demo.model.Zone;
-import entrepot.demo.repository.Zone_repository;
+import com.entrepot.gestion.model.Zone;
+import com.entrepot.gestion.repository.Zone_repository;
 
 @Service
 public class Zone_service {

@@ -1,8 +1,8 @@
-package entrepot.demo.repository;
+package com.entrepot.gestion.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import entrepot.demo.model.Etage;
+import com.entrepot.gestion.model.Etage;
 
 public interface Etage_repository extends JpaRepository<Etage, Long> {
     

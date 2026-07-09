@@ -1,4 +1,4 @@
-package entrepot.demo.controller;
+package com.entrepot.gestion.controller;
 
 import java.util.List;
 
@@ -8,8 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import entrepot.demo.model.Zone;
-import entrepot.demo.service.Zone_service;
+import com.entrepot.gestion.model.Zone;
+import com.entrepot.gestion.service.Zone_service;
 
 
 @Controller

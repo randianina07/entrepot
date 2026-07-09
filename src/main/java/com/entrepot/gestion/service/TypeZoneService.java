@@ -1,25 +1,22 @@
-package entrepot.demo.service;
+package com.entrepot.gestion.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.ArrayList;
-import entrepot.demo.repositories.TypeZoneRepository;
-import entrepot.demo.model.TypeZone;
+
+import org.springframework.stereotype.Service;
+
+import com.entrepot.gestion.model.TypeZone;
+import com.entrepot.gestion.repository.TypeZoneRepository;
 
 @Service
 public class TypeZoneService {
-    
-    @Autowired
-    private TypeZoneRepository typeZoneRepository;
+
+    private final TypeZoneRepository typeZoneRepository;
+
+    public TypeZoneService(TypeZoneRepository typeZoneRepository) {
+        this.typeZoneRepository = typeZoneRepository;
+    }
 
     public List<TypeZone> getAll() {
-        List<TypeZone> listeTypeZone = new ArrayList<>();
-        listeTypeZone = typeZoneRepository.findAll();
-        if (listeTypeZone != null) {
-            return listeTypeZone;
-        } else {
-            return new ArrayList<>();
-        }
+        return typeZoneRepository.findAll();
     }
 }

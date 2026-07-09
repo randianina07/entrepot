@@ -1,4 +1,4 @@
-package entrepot.demo.service;
+package com.entrepot.gestion.service;
 
 import org.springframework.stereotype.Service;
 

@@ -1,8 +1,8 @@
-package entrepot.demo.repository;
+package com.entrepot.gestion.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import entrepot.demo.model.Type_zone;
+import com.entrepot.gestion.model.Type_zone;
 
 public interface Type_zone_repository  extends JpaRepository<Type_zone, Long> {
     
