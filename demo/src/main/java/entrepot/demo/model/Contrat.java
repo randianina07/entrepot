@@ -12,118 +12,129 @@ public class Contrat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    // NOTE : demande_stockage_id est NOT NULL dans la nouvelle table "contrats",
-    // mais tu ne m'as pas fourni d'entite DemandeStockage : je laisse donc
-    // simplement l'id brut en attendant que tu crees cette entite.
-    @Column(name = "demande_stockage_id", nullable = false)
-    private Long demandeStockageId;
+
+    @ManyToOne
+    @JoinColumn(name = "demande_stockage_id", nullable = false)
+    private DemandeStockage demandeStockage;
+
 
     @ManyToOne
     @JoinColumn(name = "utilisateur_id", nullable = false)
     private Utilisateur utilisateur;
 
-    // NOTE : idem pour type_zone_id, pas d'entite TypeZone fournie pour le moment.
-    @Column(name = "type_zone_id", nullable = false)
-    private Long typeZoneId;
+
+    @ManyToOne
+    @JoinColumn(name = "type_zone_id", nullable = false)
+    private TypeZone typeZone;
+
 
     @ManyToOne
     @JoinColumn(name = "type_contrat_id", nullable = false)
     private TypeContrat typeContrat;
 
+
     @Column(name = "volume_espace_m3", nullable = false, precision = 10, scale = 3)
     private BigDecimal volumeEspaceM3;
+
 
     @Column(name = "date_creation", nullable = false)
     private LocalDateTime dateCreation;
 
+
     @Column(name = "date_debut", nullable = false)
     private LocalDate dateDebut;
+
 
     @Column(name = "date_fin")
     private LocalDate dateFin;
 
-    @Column(columnDefinition = "TEXT")
+
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
+
 
     public Contrat() {
     }
+
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getDemandeStockageId() {
-        return demandeStockageId;
-    }
-
-    public void setDemandeStockageId(Long demandeStockageId) {
-        this.demandeStockageId = demandeStockageId;
+    public DemandeStockage getDemandeStockage() {
+        return demandeStockage;
     }
 
     public Utilisateur getUtilisateur() {
         return utilisateur;
     }
 
-    public void setUtilisateur(Utilisateur utilisateur) {
-        this.utilisateur = utilisateur;
-    }
-
-    public Long getTypeZoneId() {
-        return typeZoneId;
-    }
-
-    public void setTypeZoneId(Long typeZoneId) {
-        this.typeZoneId = typeZoneId;
+    public TypeZone getTypeZone() {
+        return typeZone;
     }
 
     public TypeContrat getTypeContrat() {
         return typeContrat;
     }
 
-    public void setTypeContrat(TypeContrat typeContrat) {
-        this.typeContrat = typeContrat;
-    }
-
     public BigDecimal getVolumeEspaceM3() {
         return volumeEspaceM3;
-    }
-
-    public void setVolumeEspaceM3(BigDecimal volumeEspaceM3) {
-        this.volumeEspaceM3 = volumeEspaceM3;
     }
 
     public LocalDateTime getDateCreation() {
         return dateCreation;
     }
 
-    public void setDateCreation(LocalDateTime dateCreation) {
-        this.dateCreation = dateCreation;
-    }
-
     public LocalDate getDateDebut() {
         return dateDebut;
-    }
-
-    public void setDateDebut(LocalDate dateDebut) {
-        this.dateDebut = dateDebut;
     }
 
     public LocalDate getDateFin() {
         return dateFin;
     }
 
-    public void setDateFin(LocalDate dateFin) {
-        this.dateFin = dateFin;
-    }
-
     public String getDescription() {
         return description;
+    }
+
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setDemandeStockage(DemandeStockage demandeStockage) {
+        this.demandeStockage = demandeStockage;
+    }
+
+    public void setUtilisateur(Utilisateur utilisateur) {
+        this.utilisateur = utilisateur;
+    }
+
+    public void setTypeZone(TypeZone typeZone) {
+        this.typeZone = typeZone;
+    }
+
+    public void setTypeContrat(TypeContrat typeContrat) {
+        this.typeContrat = typeContrat;
+    }
+
+    public void setVolumeEspaceM3(BigDecimal volumeEspaceM3) {
+        this.volumeEspaceM3 = volumeEspaceM3;
+    }
+
+    public void setDateCreation(LocalDateTime dateCreation) {
+        this.dateCreation = dateCreation;
+    }
+
+    public void setDateDebut(LocalDate dateDebut) {
+        this.dateDebut = dateDebut;
+    }
+
+    public void setDateFin(LocalDate dateFin) {
+        this.dateFin = dateFin;
     }
 
     public void setDescription(String description) {

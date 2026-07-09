@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Demandes de renouvellement</title>
+
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 90%;
+            margin: 20px auto;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        a {
+            text-decoration: none;
+            padding: 5px 10px;
+        }
+
+        .accept {
+            color: green;
+        }
+
+        .refuse {
+            color: red;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <h2>Demandes de renouvellement en attente</h2>
+
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>ID Demande</th>
+                <th>ID Contrat</th>
+                <th>Client</th>
+                <th>Date demande</th>
+                <th>Ancienne date fin</th>
+                <th>Nouvelle date fin</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+
+        <tbody>
+
+            <tr th:each="demande : ${demandes}">
+
+                <td th:text="${demande.id}">
+                </td>
+
+
+                <td th:text="${demande.contrat.id}">
+                </td>
+
+
+                <td th:text="${demande.contrat.utilisateur.email}">
+                </td>
+
+
+                <td th:text="${demande.dateDemande}">
+                </td>
+
+
+                <td th:text="${demande.contrat.dateFin}">
+                </td>
+
+
+                <td th:text="${demande.dateFin}">
+                </td>
+
+
+                <td>
+
+                    <a class="accept" th:href="@{/contrats/renouvellement/accepter/{id}(id=${demande.id})}">
+                        Accepter
+                    </a>
+
+
+                    <a class="refuse" th:href="@{/contrats/renouvellement/refuser/{id}(id=${demande.id})}">
+                        Refuser
+                    </a>
+
+                </td>
+
+            </tr>
+
+
+        </tbody>
+
+
+    </table>
+
+
+</body>
+
+</html>

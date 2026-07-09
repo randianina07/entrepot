@@ -37,4 +37,13 @@ public class HistoriqueEtatDemandeService {
     public void deleteById(Long id) {
         historiqueEtatDemandeRepository.deleteById(id);
     }
+
+    public List<HistoriqueEtatDemande> findByDemandeStockageOrderByDateStatutDesc(DemandeStockage demande) {
+        return historiqueEtatDemandeRepository.findByDemandeStockageOrderByDateStatutDesc(demande);
+    }
+
+
+    public HistoriqueEtatDemande dernierStatut(DemandeStockage demande) {
+        return findByDemandeStockageOrderByDateStatutDesc(demande).stream().findFirst().orElse(null);
+    }
 }
