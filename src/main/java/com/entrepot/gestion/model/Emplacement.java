@@ -23,8 +23,6 @@ public class Emplacement {
     @JoinColumn(name = "etage_id", referencedColumnName = "id")
     Etage etage;
 
-
-
     @ManyToOne
     @JoinColumn(name = "allee_id", referencedColumnName = "id")
     Allee allee;
