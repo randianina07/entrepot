@@ -69,12 +69,12 @@
             </div>
         </div>
         
-        <!-- Bouton export CSV -->
+        <!-- Bouton export PDF -->
         <div class="mb-3">
-            <a th:href="@{/mouvements/export/csv(type=${filtre?.type}, statut=${filtre?.statut}, 
+            <a th:href="@{/mouvements/export/pdf(type=${filtre?.type}, statut=${filtre?.statut}, 
                clientId=${filtre?.clientId}, dateDebut=${filtre?.dateDebut}, dateFin=${filtre?.dateFin})}" 
-               class="btn btn-outline-success">
-                <i class="bi bi-file-earmark-excel"></i> Exporter CSV
+               class="btn btn-outline-danger">
+                <i class="bi bi-file-earmark-pdf"></i> Exporter PDF
             </a>
         </div>
         
@@ -107,8 +107,8 @@
                                 <td th:text="${mvt.typeMouvement}">ENTREE</td>
                                 <td>
                                     <span class="badge" 
-                                          th:classappend="${mvt.statutMouvement == 'BROUILLON' ? 'bg-secondary' : 
-                                                         mvt.statutMouvement == 'VALIDE' ? 'bg-success' : 'bg-danger'}"
+                                          th:classappend="${mvt.statutMouvement == 'BROUILLON' ? 'badge-secondary' : 
+                                                         mvt.statutMouvement == 'VALIDE' ? 'badge-success' : 'badge-danger'}"
                                           th:text="${mvt.statutMouvement}">BROUILLON</span>
                                 </td>
                                 <td th:text="${mvt.client}">Client ABC</td>

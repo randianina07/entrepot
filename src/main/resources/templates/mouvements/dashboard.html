@@ -10,48 +10,42 @@
         <h1 class="mb-4"><i class="bi bi-speedometer2"></i> Tableau de Bord</h1>
         
         <!-- Widgets statistiques -->
-        <div class="row mb-4">
-            <div class="col-md-4">
-                <div class="card stat-card bg-success">
+        <div class="row mb-5">
+            <div class="col-md-4 mb-3 mb-md-0">
+                <div class="card stat-card stat-card-success">
                     <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h5 class="card-title"><i class="bi bi-arrow-down-circle"></i> Entrees aujourd'hui</h5>
-                                <h2 class="display-4" th:text="${entreesAujourdhui}">0</h2>
-                            </div>
-                            <div class="fs-1">
-                                <i class="bi bi-box-seam"></i>
-                            </div>
+                        <div class="content">
+                            <h6><i class="bi bi-arrow-down-circle me-1"></i> Entrées aujourd'hui</h6>
+                            <div class="display-4" th:text="${entreesAujourdhui}">0</div>
+                        </div>
+                        <div class="icon-wrapper">
+                            <i class="bi bi-box-seam"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3 mb-md-0">
+                <div class="card stat-card stat-card-danger">
+                    <div class="card-body">
+                        <div class="content">
+                            <h6><i class="bi bi-arrow-up-circle me-1"></i> Sorties aujourd'hui</h6>
+                            <div class="display-4" th:text="${sortiesAujourdhui}">0</div>
+                        </div>
+                        <div class="icon-wrapper">
+                            <i class="bi bi-box-seam"></i>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card stat-card bg-danger">
+                <div class="card stat-card stat-card-warning">
                     <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h5 class="card-title"><i class="bi bi-arrow-up-circle"></i> Sorties aujourd'hui</h5>
-                                <h2 class="display-4" th:text="${sortiesAujourdhui}">0</h2>
-                            </div>
-                            <div class="fs-1">
-                                <i class="bi bi-box-seam"></i>
-                            </div>
+                        <div class="content">
+                            <h6><i class="bi bi-clock-history me-1"></i> En attente de validation</h6>
+                            <div class="display-4" th:text="${enAttenteValidation}">0</div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card stat-card bg-warning">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h5 class="card-title"><i class="bi bi-clock-history"></i> En attente de validation</h5>
-                                <h2 class="display-4" th:text="${enAttenteValidation}">0</h2>
-                            </div>
-                            <div class="fs-1">
-                                <i class="bi bi-hourglass-split"></i>
-                            </div>
+                        <div class="icon-wrapper">
+                            <i class="bi bi-hourglass-split"></i>
                         </div>
                     </div>
                 </div>
@@ -100,8 +94,8 @@
                                 <td th:text="${mvt.typeMouvement}">ENTREE</td>
                                 <td>
                                     <span class="badge" 
-                                          th:classappend="${mvt.statutMouvement == 'BROUILLON' ? 'bg-secondary' : 
-                                                         mvt.statutMouvement == 'VALIDE' ? 'bg-success' : 'bg-danger'}"
+                                          th:classappend="${mvt.statutMouvement == 'BROUILLON' ? 'badge-secondary' : 
+                                                         mvt.statutMouvement == 'VALIDE' ? 'badge-success' : 'badge-danger'}"
                                           th:text="${mvt.statutMouvement}">BROUILLON</span>
                                 </td>
                                 <td th:text="${mvt.client}">Client ABC</td>
@@ -143,10 +137,10 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-body text-center">
-                        <h5 class="card-title"><i class="bi bi-file-earmark-excel"></i> Export</h5>
+                        <h5 class="card-title"><i class="bi bi-file-earmark-pdf"></i> Export</h5>
                         <div class="d-flex justify-content-center gap-3 mt-3">
-                            <a href="/mouvements/export/csv" class="btn btn-outline-success">
-                                <i class="bi bi-download"></i> Exporter CSV
+                            <a href="/mouvements/export/pdf" class="btn btn-outline-danger">
+                                <i class="bi bi-download"></i> Exporter PDF
                             </a>
                         </div>
                     </div>

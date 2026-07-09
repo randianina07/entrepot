@@ -1,20 +1,47 @@
 package com.entrepot.gestion.service;
 
-import com.entrepot.gestion.dto.*;
-import com.entrepot.gestion.model.*;
-import com.entrepot.gestion.repository.*;
-import jakarta.transaction.Transactional;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import com.entrepot.gestion.dto.AlerteStockEmplacementDTO;
+import com.entrepot.gestion.dto.LigneMouvementDTO;
+import com.entrepot.gestion.dto.LigneMouvementResponseDTO;
+import com.entrepot.gestion.dto.MouvementCreateDTO;
+import com.entrepot.gestion.dto.MouvementDetailDTO;
+import com.entrepot.gestion.dto.MouvementFiltreDTO;
+import com.entrepot.gestion.dto.MouvementListDTO;
+import com.entrepot.gestion.model.Emplacement;
+import com.entrepot.gestion.model.FluxEntreesSorties;
+import com.entrepot.gestion.model.LigneMouvement;
+import com.entrepot.gestion.model.Mouvement;
+import com.entrepot.gestion.model.Produit;
+import com.entrepot.gestion.model.StatsClient;
+import com.entrepot.gestion.model.StatutMouvement;
+import com.entrepot.gestion.model.StockEmplacement;
+import com.entrepot.gestion.model.TopProduit;
+import com.entrepot.gestion.model.TypeMouvement;
+import com.entrepot.gestion.model.Utilisateur;
+import com.entrepot.gestion.repository.EmplacementRepository;
+import com.entrepot.gestion.repository.FluxEntreesSortiesRepository;
+import com.entrepot.gestion.repository.LigneMouvementRepository;
+import com.entrepot.gestion.repository.MouvementRepository;
+import com.entrepot.gestion.repository.ProduitRepository;
+import com.entrepot.gestion.repository.StatsClientRepository;
+import com.entrepot.gestion.repository.StatutMouvementRepository;
+import com.entrepot.gestion.repository.StockEmplacementRepository;
+import com.entrepot.gestion.repository.TopProduitRepository;
+import com.entrepot.gestion.repository.TypeMouvementRepository;
+import com.entrepot.gestion.repository.UtilisateurRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class MouvementService {
@@ -197,14 +224,15 @@ public class MouvementService {
         
         if (stock == null) {
             stock = new StockEmplacement();
+            stock.setId(null);
             stock.setEmplacement(ligne.getEmplacementDest());
             stock.setProduit(ligne.getProduit());
             stock.setQuantite(ligne.getQuantite());
+            stock = stockEmplacementRepository.saveAndFlush(stock);
         } else {
             stock.setQuantite(stock.getQuantite().add(ligne.getQuantite()));
+            stockEmplacementRepository.saveAndFlush(stock);
         }
-        
-        stockEmplacementRepository.save(stock);
     }
     
     @Transactional
@@ -342,9 +370,10 @@ public class MouvementService {
     @Transactional
     public void mettreAJourTopProduits() {
         LocalDate today = LocalDate.now();
+        LocalDateTime startOfDay = today.atStartOfDay();
         
         List<Object[]> results = ligneMouvementRepository
-            .sumQuantiteByProduitGroupedByProduit(today);
+            .sumQuantiteByProduitGroupedByProduit(startOfDay);
         
         for (int i = 0; i < results.size(); i++) {
             Object[] row = results.get(i);
@@ -371,9 +400,19 @@ public class MouvementService {
     public List<MouvementListDTO> listerMouvements(MouvementFiltreDTO filtre) {
         List<Mouvement> mouvements;
         
-        if (filtre != null && filtre.getType() != null) {
+        // Convertir les dates en String vers LocalDateTime si nécessaire
+        if (filtre != null) {
+            if (filtre.getDateDebutStr() != null && !filtre.getDateDebutStr().isEmpty() && filtre.getDateDebut() == null) {
+                filtre.setDateDebut(java.time.LocalDate.parse(filtre.getDateDebutStr()).atStartOfDay());
+            }
+            if (filtre.getDateFinStr() != null && !filtre.getDateFinStr().isEmpty() && filtre.getDateFin() == null) {
+                filtre.setDateFin(java.time.LocalDate.parse(filtre.getDateFinStr()).atTime(23, 59, 59));
+            }
+        }
+        
+        if (filtre != null && filtre.getType() != null && !filtre.getType().isEmpty()) {
             mouvements = mouvementRepository.findByTypeMouvement_Sens(filtre.getType());
-        } else if (filtre != null && filtre.getStatut() != null) {
+        } else if (filtre != null && filtre.getStatut() != null && !filtre.getStatut().isEmpty()) {
             mouvements = mouvementRepository.findByStatutMouvement_Code(filtre.getStatut());
         } else if (filtre != null && filtre.getClientId() != null) {
             mouvements = mouvementRepository.findByClient_Id(filtre.getClientId());
@@ -480,6 +519,16 @@ public class MouvementService {
     
     public Page<MouvementListDTO> rechercherMouvements(MouvementFiltreDTO filtre, Pageable pageable) {
         List<Mouvement> mouvements;
+        
+        // Convertir les dates en String vers LocalDateTime si nécessaire
+        if (filtre != null) {
+            if (filtre.getDateDebutStr() != null && !filtre.getDateDebutStr().isEmpty() && filtre.getDateDebut() == null) {
+                filtre.setDateDebut(java.time.LocalDate.parse(filtre.getDateDebutStr()).atStartOfDay());
+            }
+            if (filtre.getDateFinStr() != null && !filtre.getDateFinStr().isEmpty() && filtre.getDateFin() == null) {
+                filtre.setDateFin(java.time.LocalDate.parse(filtre.getDateFinStr()).atTime(23, 59, 59));
+            }
+        }
         
         if (filtre != null && filtre.getType() != null && !filtre.getType().isEmpty()) {
             mouvements = mouvementRepository.findByTypeMouvement_Code(filtre.getType());

@@ -3,6 +3,7 @@ package com.entrepot.gestion.controller;
 import com.entrepot.gestion.dto.*;
 import com.entrepot.gestion.model.*;
 import com.entrepot.gestion.service.MouvementService;
+import com.entrepot.gestion.service.PDFService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,8 +18,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -29,6 +28,9 @@ public class MouvementViewController {
 
     @Autowired
     private MouvementService mouvementService;
+    
+    @Autowired
+    private PDFService pdfService;
 
     @GetMapping("/liste")
     public String listeMouvements(
@@ -158,46 +160,33 @@ public class MouvementViewController {
         return "redirect:/mouvements/" + id + "/detail";
     }
 
-    @GetMapping("/export/csv")
-    public ResponseEntity<String> exporterCSV(
+    @GetMapping("/export/pdf")
+    public ResponseEntity<byte[]> exporterPDF(
             @RequestParam(required = false) String type,
             @RequestParam(required = false) String statut,
             @RequestParam(required = false) Long clientId,
             @RequestParam(required = false) String dateDebut,
             @RequestParam(required = false) String dateFin) {
 
-        MouvementFiltreDTO filtre = new MouvementFiltreDTO();
-        filtre.setType(type);
-        filtre.setStatut(statut);
-        filtre.setClientId(clientId);
-        filtre.setDateDebutStr(dateDebut);
-        filtre.setDateFinStr(dateFin);
+        try {
+            MouvementFiltreDTO filtre = new MouvementFiltreDTO();
+            filtre.setType(type);
+            filtre.setStatut(statut);
+            filtre.setClientId(clientId);
+            filtre.setDateDebutStr(dateDebut);
+            filtre.setDateFinStr(dateFin);
 
-        List<MouvementListDTO> mouvements = mouvementService.exporterMouvements(filtre);
+            List<MouvementListDTO> mouvements = mouvementService.exporterMouvements(filtre);
 
-        String csv = generateCSV(mouvements);
+            byte[] pdf = pdfService.generateMouvementsPDF(mouvements);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.TEXT_PLAIN);
-        headers.setContentDispositionFormData("attachment", "mouvements_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")) + ".csv");
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData("attachment", "mouvements_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")) + ".pdf");
 
-        return new ResponseEntity<>(csv, headers, HttpStatus.OK);
-    }
-
-    private String generateCSV(List<MouvementListDTO> mouvements) {
-        StringBuilder csv = new StringBuilder();
-        csv.append("Code;Date;Type;Statut;Client;Nb Lignes;Operateur\n");
-
-        for (MouvementListDTO mvt : mouvements) {
-            csv.append(mvt.getCode()).append(";");
-            csv.append(mvt.getDateMouvement() != null ? mvt.getDateMouvement().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) : "").append(";");
-            csv.append(mvt.getTypeMouvement()).append(";");
-            csv.append(mvt.getStatutMouvement()).append(";");
-            csv.append(mvt.getClient()).append(";");
-            csv.append(mvt.getNbLignes()).append(";");
-            csv.append(mvt.getOperateur()).append("\n");
+            return new ResponseEntity<>(pdf, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        return csv.toString();
     }
 }

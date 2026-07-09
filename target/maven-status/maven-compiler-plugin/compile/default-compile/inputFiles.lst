@@ -9,6 +9,7 @@
 /home/sanda/Documents/entrepot/src/main/java/com/entrepot/gestion/service/MouvementService.java
 /home/sanda/Documents/entrepot/src/main/java/com/entrepot/gestion/dto/LigneMouvementResponseDTO.java
 /home/sanda/Documents/entrepot/src/main/java/com/entrepot/gestion/controller/MouvementController.java
+/home/sanda/Documents/entrepot/src/main/java/com/entrepot/gestion/service/PDFService.java
 /home/sanda/Documents/entrepot/src/main/java/com/entrepot/gestion/repository/ProduitRepository.java
 /home/sanda/Documents/entrepot/src/main/java/com/entrepot/gestion/repository/EmplacementRepository.java
 /home/sanda/Documents/entrepot/src/main/java/com/entrepot/gestion/model/StatsClient.java
