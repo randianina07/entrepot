@@ -51,11 +51,11 @@ public class EmplacementService {
                         if (emp.getAllee() != null && emp.getAllee().getId().equals(alleeDeLaZone.getId()) &&
                             emp.getEtage() != null && emp.getEtage().getId().equals(etage.getId())) {
                             // Règle métier : Doit être actif ET assez grand (taille < capacité)
-                            if (emp.isActif() && emp.getCapacite_volume_m3() >= tailleProduit) {
-                                double volumeMitokana = emp.getCapacite_volume_m3();
-                                while (quantite > 1 && volumeMitokana > 0) {
-                                    volumeMitokana -= quantite;
+                            double volumeRestant = emp.getCapacite_volume_m3();
+                            if (emp.isActif() && volumeRestant >= tailleProduit) {
+                                while (listeEmplacementsTrouves.size() < quantite && volumeRestant >= tailleProduit) {
                                     listeEmplacementsTrouves.add(emp);
+                                    volumeRestant -= tailleProduit;
                                 }
                             }
                         }
