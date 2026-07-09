@@ -1,101 +1,88 @@
 package entrepot.demo.model;
 
-import jakarta.persistence.*;
-import java.math.BigDecimal;
-import java.util.Objects;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "emplacements")
+@Table(name = "emplacement")
 public class Emplacement {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    
-    @Column(nullable = false, unique = true, length = 40)
-    private String code;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "zone_id", nullable = false)
-    private Zone zone;
-    
-    @Column(name = "capacite_volume_m3", nullable = false, precision = 10, scale = 3)
-    private BigDecimal capaciteVolumeM3;
-    
-    @Column(nullable = false)
-    private Boolean actif = true;
-    
-    public Emplacement() {
+    Long id;
+
+    String code;
+
+    @ManyToOne
+    @JoinColumn(name = "etage_id", referencedColumnName = "id")
+    Etage etage;
+
+
+
+    @ManyToOne
+    @JoinColumn(name = "allee_id", referencedColumnName = "id")
+    Allee allee;
+
+    public Allee getAllee() {
+        return allee;
     }
-    
-    public Emplacement(Long id, String code, Zone zone, BigDecimal capaciteVolumeM3, Boolean actif) {
-        this.id = id;
-        this.code = code;
-        this.zone = zone;
-        this.capaciteVolumeM3 = capaciteVolumeM3;
-        this.actif = actif;
+    public void setAllee(Allee allee) {
+        this.allee = allee;
     }
-    
+    double capacite_volume_m3;
+    boolean actif;
+    double charge_max;
+
+    int colonne;
+
     public Long getId() {
         return id;
     }
-    
     public void setId(Long id) {
         this.id = id;
     }
-    
     public String getCode() {
         return code;
     }
-    
     public void setCode(String code) {
         this.code = code;
     }
-    
-    public Zone getZone() {
-        return zone;
+
+    public double getCapacite_volume_m3() {
+        return capacite_volume_m3;
     }
-    
-    public void setZone(Zone zone) {
-        this.zone = zone;
+    public void setCapacite_volume_m3(double capacite_volume_m3) {
+        this.capacite_volume_m3 = capacite_volume_m3;
     }
-    
-    public BigDecimal getCapaciteVolumeM3() {
-        return capaciteVolumeM3;
-    }
-    
-    public void setCapaciteVolumeM3(BigDecimal capaciteVolumeM3) {
-        this.capaciteVolumeM3 = capaciteVolumeM3;
-    }
-    
-    public Boolean getActif() {
+    public boolean isActif() {
         return actif;
     }
-    
-    public void setActif(Boolean actif) {
+    public void setActif(boolean actif) {
         this.actif = actif;
     }
-    
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Emplacement that = (Emplacement) o;
-        return Objects.equals(id, that.id) && Objects.equals(code, that.code);
+    public Etage getEtage() {
+        return etage;
     }
-    
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, code);
+    public void setEtage(Etage etage) {
+        this.etage = etage;
     }
-    
-    @Override
-    public String toString() {
-        return "Emplacement{" +
-                "id=" + id +
-                ", code='" + code + '\'' +
-                ", capaciteVolumeM3=" + capaciteVolumeM3 +
-                ", actif=" + actif +
-                '}';
+    public double getCharge_max() {
+        return charge_max;
     }
+    public void setCharge_max(double charge_max) {
+        this.charge_max = charge_max;
+    }
+    public int getColonne() {
+        return colonne;
+    }
+    public void setColonne(int colonne) {
+        this.colonne = colonne;
+    }
+
 }
