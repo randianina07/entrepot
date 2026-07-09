@@ -43,12 +43,18 @@ public class UtilisateurController {
                     roleCode);
 
             model.addAttribute("message",
-                    "Utilisateur créé avec succès.");
+                    "L'utilisateur a été créé avec succès.");
 
             model.addAttribute("motDePasse",
                     motDePasse);
 
-            return "client/succes";
+            model.addAttribute("email",
+                    utilisateur.getEmail());
+
+            model.addAttribute("role",
+                    roleCode);
+
+            return "utilisateur/succes";
 
         } catch (Exception e) {
 
