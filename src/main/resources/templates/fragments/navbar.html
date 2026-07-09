@@ -20,11 +20,16 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link" th:classappend="${#execInfo.templateName == 'mouvements/dashboard' ? 'active' : ''}" 
-                       href="/mouvements/tableau-de-bord">
-                        <i class="bi bi-speedometer2"></i> Statistiques
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle"
+                       th:classappend="${#execInfo.templateName == 'mouvements/dashboard' or #execInfo.templateName == 'dashboard/stats' ? 'active' : ''}"
+                       href="#" id="dashboardDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-speedometer2"></i> Tableau de bord
                     </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/mouvements/tableau-de-bord"><i class="bi bi-activity"></i> Vue d'ensemble</a></li>
+                        <li><a class="dropdown-item" href="/dashboard/stats"><i class="bi bi-bar-chart"></i> Statistiques BI</a></li>
+                    </ul>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle"
@@ -36,17 +41,22 @@
                         <li><a class="dropdown-item" href="/mouvements/liste"><i class="bi bi-list-ul"></i> Liste</a></li>
                         <li><a class="dropdown-item" href="/mouvements/nouveau/entree"><i class="bi bi-arrow-down-circle"></i> Nouvelle entrée</a></li>
                         <li><a class="dropdown-item" href="/mouvements/nouveau/sortie"><i class="bi bi-arrow-up-circle"></i> Nouvelle sortie</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="/mouvements/export/pdf"><i class="bi bi-file-earmark-pdf"></i> Export PDF</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
-                          <a class="nav-link dropdown-toggle"
-                              th:classappend="${#execInfo.templateName == 'mouvements/dashboard' ? 'active' : ''}"
-                       href="#" id="dashboardDropdown" role="button" data-bs-toggle="dropdown">
-                        <i class="bi bi-bar-chart"></i> Tableau de bord
+                    <a class="nav-link dropdown-toggle"
+                       th:classappend="${#execInfo.templateName == 'chauffeurs' or #execInfo.templateName == 'formulaireAjoutChauffeurs' or #strings.startsWith(#execInfo.templateName, 'vehicules/') or #execInfo.templateName == 'livraisons/livraison' or #execInfo.templateName == 'livraisons/config_livraison' or #execInfo.templateName == 'missions/save' or #execInfo.templateName == 'historiqueMaintenances' or #execInfo.templateName == 'formulaireAjoutMaintenances' ? 'active' : ''}"
+                       href="#" id="logistiqueDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-truck"></i> Logistique
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/mouvements/tableau-de-bord"><i class="bi bi-speedometer2"></i> Vue d'ensemble</a></li>
-                        <li><a class="dropdown-item" href="/mouvements/export/pdf"><i class="bi bi-file-earmark-pdf"></i> Export PDF</a></li>
+                        <li><a class="dropdown-item" href="/chauffeurs"><i class="bi bi-person-badge"></i> Chauffeurs</a></li>
+                        <li><a class="dropdown-item" href="/vehicules/liste"><i class="bi bi-truck-front"></i> Véhicules</a></li>
+                        <li><a class="dropdown-item" href="/livraisons/livraison"><i class="bi bi-box-arrow-up-right"></i> Livraisons</a></li>
+                        <li><a class="dropdown-item" href="/missions/save"><i class="bi bi-diagram-3"></i> Missions</a></li>
+                        <li><a class="dropdown-item" href="/maintenances"><i class="bi bi-tools"></i> Maintenances</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -57,10 +67,10 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="/accueil">
-                            <i class="bi bi-house-door"></i> Accueil
+                            <i class="bi bi-house-door"></i> Accueil stockages
                         </a></li>
                         <li><a class="dropdown-item" href="/choose-type_zones">
-                            <i class="bi bi-grid-3x3-gap"></i> Visualisation
+                            <i class="bi bi-grid-3x3-gap"></i> Visualisation zones
                         </a></li>
                         <li><a class="dropdown-item" href="/recherche">
                             <i class="bi bi-search"></i> Recherche rapide

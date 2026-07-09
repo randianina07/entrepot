@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title != null ? title + ' - Gestion Entrepôt' : 'Gestion Entrepôt'}">Gestion Entrepôt</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <th:block th:if="${extraStyles != null}">
+        <th:block th:each="style : ${extraStyles}">
+            <link rel="stylesheet" th:href="${style}">
+        </th:block>
+    </th:block>
+</head>
+<body th:class="${bodyClass != null ? bodyClass : 'storage-page'}">
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+    <div class="container py-4">
+        <div th:replace="~{fragments/alerts :: alerts}"></div>
+        
+        <th:block th:replace="${content}"></th:block>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <th:block th:if="${extraScripts != null}">
+        <th:block th:each="script : ${extraScripts}">
+            <script th:src="${script}"></script>
+        </th:block>
+    </th:block>
+</body>
+</html>

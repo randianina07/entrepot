@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:demo/src/main/java/com/gestion/entrepot/dto/MouvementListDTO.java
 package com.gestion.entrepot.dto;
-========
-package com.entrepot.gestion.dto;
->>>>>>>> 679f4dd59ceb46a21b28b61111443acba658d085:src/main/java/com/entrepot/gestion/dto/MouvementListDTO.java
 
 import java.time.LocalDateTime;
 
@@ -17,13 +13,6 @@ public class MouvementListDTO {
     private String statutMouvementLibelle;
     private String clientEmail;
     private String utilisateurEmail;
-    
-    // Additional fields for template compatibility
-    private String typeMouvement;
-    private String statutMouvement;
-    private String client;
-    private Integer nbLignes;
-    private String operateur;
     
     public MouvementListDTO() {
     }
@@ -110,45 +99,5 @@ public class MouvementListDTO {
     
     public void setUtilisateurEmail(String utilisateurEmail) {
         this.utilisateurEmail = utilisateurEmail;
-    }
-    
-    public String getTypeMouvement() {
-        return typeMouvement;
-    }
-    
-    public void setTypeMouvement(String typeMouvement) {
-        this.typeMouvement = typeMouvement;
-    }
-    
-    public String getStatutMouvement() {
-        return statutMouvement;
-    }
-    
-    public void setStatutMouvement(String statutMouvement) {
-        this.statutMouvement = statutMouvement;
-    }
-    
-    public String getClient() {
-        return client;
-    }
-    
-    public void setClient(String client) {
-        this.client = client;
-    }
-    
-    public Integer getNbLignes() {
-        return nbLignes;
-    }
-    
-    public void setNbLignes(Integer nbLignes) {
-        this.nbLignes = nbLignes;
-    }
-    
-    public String getOperateur() {
-        return operateur;
-    }
-    
-    public void setOperateur(String operateur) {
-        this.operateur = operateur;
     }
 }

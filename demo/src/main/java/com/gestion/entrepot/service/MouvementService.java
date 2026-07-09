@@ -1,4 +1,3 @@
-<<<<<<<< HEAD:demo/src/main/java/com/gestion/entrepot/service/MouvementService.java
 package com.gestion.entrepot.service;
 
 import com.gestion.entrepot.dto.*;
@@ -6,52 +5,14 @@ import com.gestion.entrepot.model.*;
 import com.gestion.entrepot.repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-========
-package com.entrepot.gestion.service;
->>>>>>>> 679f4dd59ceb46a21b28b61111443acba658d085:src/main/java/com/entrepot/gestion/service/MouvementService.java
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
-import com.entrepot.gestion.dto.AlerteStockEmplacementDTO;
-import com.entrepot.gestion.dto.LigneMouvementDTO;
-import com.entrepot.gestion.dto.LigneMouvementResponseDTO;
-import com.entrepot.gestion.dto.MouvementCreateDTO;
-import com.entrepot.gestion.dto.MouvementDetailDTO;
-import com.entrepot.gestion.dto.MouvementFiltreDTO;
-import com.entrepot.gestion.dto.MouvementListDTO;
-import com.entrepot.gestion.model.Emplacement;
-import com.entrepot.gestion.model.FluxEntreesSorties;
-import com.entrepot.gestion.model.LigneMouvement;
-import com.entrepot.gestion.model.Mouvement;
-import com.entrepot.gestion.model.Produit;
-import com.entrepot.gestion.model.StatsClient;
-import com.entrepot.gestion.model.StatutMouvement;
-import com.entrepot.gestion.model.StockEmplacement;
-import com.entrepot.gestion.model.TopProduit;
-import com.entrepot.gestion.model.TypeMouvement;
-import com.entrepot.gestion.model.Utilisateur;
-import com.entrepot.gestion.repository.EmplacementRepository;
-import com.entrepot.gestion.repository.FluxEntreesSortiesRepository;
-import com.entrepot.gestion.repository.LigneMouvementRepository;
-import com.entrepot.gestion.repository.MouvementRepository;
-import com.entrepot.gestion.repository.ProduitRepository;
-import com.entrepot.gestion.repository.StatsClientRepository;
-import com.entrepot.gestion.repository.StatutMouvementRepository;
-import com.entrepot.gestion.repository.StockEmplacementRepository;
-import com.entrepot.gestion.repository.TopProduitRepository;
-import com.entrepot.gestion.repository.TypeMouvementRepository;
-import com.entrepot.gestion.repository.UtilisateurRepository;
-
-import jakarta.transaction.Transactional;
 
 @Service
 public class MouvementService {
@@ -131,8 +92,30 @@ public class MouvementService {
     public LigneMouvement ajouterLigne(Long mouvementId, LigneMouvementDTO dto) {
         Mouvement mouvement = mouvementRepository.findById(mouvementId)
             .orElseThrow(() -> new RuntimeException("Mouvement non trouvé"));
-
-        return creerEtSauverLigne(mouvement, dto);
+        
+        Produit produit = produitRepository.findById(dto.getProduitId())
+            .orElseThrow(() -> new RuntimeException("Produit non trouvé"));
+        
+        Emplacement emplacementSource = null;
+        if (dto.getEmplacementSourceId() != null) {
+            emplacementSource = emplacementRepository.findById(dto.getEmplacementSourceId())
+                .orElseThrow(() -> new RuntimeException("Emplacement source non trouvé"));
+        }
+        
+        Emplacement emplacementDest = null;
+        if (dto.getEmplacementDestId() != null) {
+            emplacementDest = emplacementRepository.findById(dto.getEmplacementDestId())
+                .orElseThrow(() -> new RuntimeException("Emplacement destination non trouvé"));
+        }
+        
+        LigneMouvement ligne = new LigneMouvement();
+        ligne.setMouvement(mouvement);
+        ligne.setProduit(produit);
+        ligne.setEmplacementSource(emplacementSource);
+        ligne.setEmplacementDest(emplacementDest);
+        ligne.setQuantite(dto.getQuantite());
+        
+        return ligneMouvementRepository.save(ligne);
     }
     
     @Transactional
@@ -234,15 +217,14 @@ public class MouvementService {
         
         if (stock == null) {
             stock = new StockEmplacement();
-            stock.setId(null);
             stock.setEmplacement(ligne.getEmplacementDest());
             stock.setProduit(ligne.getProduit());
             stock.setQuantite(ligne.getQuantite());
-            stock = stockEmplacementRepository.saveAndFlush(stock);
         } else {
             stock.setQuantite(stock.getQuantite().add(ligne.getQuantite()));
-            stockEmplacementRepository.saveAndFlush(stock);
         }
+        
+        stockEmplacementRepository.save(stock);
     }
     
     @Transactional
@@ -380,10 +362,9 @@ public class MouvementService {
     @Transactional
     public void mettreAJourTopProduits() {
         LocalDate today = LocalDate.now();
-        LocalDateTime startOfDay = today.atStartOfDay();
         
         List<Object[]> results = ligneMouvementRepository
-            .sumQuantiteByProduitGroupedByProduit(startOfDay);
+            .sumQuantiteByProduitGroupedByProduit(today);
         
         for (int i = 0; i < results.size(); i++) {
             Object[] row = results.get(i);
@@ -410,19 +391,9 @@ public class MouvementService {
     public List<MouvementListDTO> listerMouvements(MouvementFiltreDTO filtre) {
         List<Mouvement> mouvements;
         
-        // Convertir les dates en String vers LocalDateTime si nécessaire
-        if (filtre != null) {
-            if (filtre.getDateDebutStr() != null && !filtre.getDateDebutStr().isEmpty() && filtre.getDateDebut() == null) {
-                filtre.setDateDebut(java.time.LocalDate.parse(filtre.getDateDebutStr()).atStartOfDay());
-            }
-            if (filtre.getDateFinStr() != null && !filtre.getDateFinStr().isEmpty() && filtre.getDateFin() == null) {
-                filtre.setDateFin(java.time.LocalDate.parse(filtre.getDateFinStr()).atTime(23, 59, 59));
-            }
-        }
-        
-        if (filtre != null && filtre.getType() != null && !filtre.getType().isEmpty()) {
+        if (filtre != null && filtre.getType() != null) {
             mouvements = mouvementRepository.findByTypeMouvement_Sens(filtre.getType());
-        } else if (filtre != null && filtre.getStatut() != null && !filtre.getStatut().isEmpty()) {
+        } else if (filtre != null && filtre.getStatut() != null) {
             mouvements = mouvementRepository.findByStatutMouvement_Code(filtre.getStatut());
         } else if (filtre != null && filtre.getClientId() != null) {
             mouvements = mouvementRepository.findByClient_Id(filtre.getClientId());
@@ -455,14 +426,6 @@ public class MouvementService {
         dto.setStatutMouvementLibelle(mouvement.getStatutMouvement().getLibelle());
         dto.setClientEmail(mouvement.getClient() != null ? mouvement.getClient().getEmail() : null);
         dto.setUtilisateurEmail(mouvement.getUtilisateur().getEmail());
-        
-        // Additional fields for template compatibility
-        dto.setTypeMouvement(mouvement.getTypeMouvement().getCode());
-        dto.setStatutMouvement(mouvement.getStatutMouvement().getCode());
-        dto.setClient(mouvement.getClient() != null ? mouvement.getClient().getNom() : null);
-        dto.setNbLignes(mouvement.getLignes() != null ? mouvement.getLignes().size() : 0);
-        dto.setOperateur(mouvement.getUtilisateur() != null ? mouvement.getUtilisateur().getNom() : null);
-        
         return dto;
     }
     
@@ -503,188 +466,5 @@ public class MouvementService {
         dto.setEmplacementDestCode(ligne.getEmplacementDest() != null ? ligne.getEmplacementDest().getCode() : null);
         dto.setQuantite(ligne.getQuantite());
         return dto;
-    }
-    
-    // Additional methods for MouvementViewController
-    
-    public List<Utilisateur> getAllClients() {
-        return utilisateurRepository.findAll();
-    }
-    
-    public List<TypeMouvement> getAllTypesMouvement() {
-        return typeMouvementRepository.findAll();
-    }
-    
-    public List<StatutMouvement> getAllStatutsMouvement() {
-        return statutMouvementRepository.findAll();
-    }
-    
-    public List<Produit> getAllProduits() {
-        return produitRepository.findAll();
-    }
-    
-    public List<Emplacement> getAllEmplacements() {
-        return emplacementRepository.findAll();
-    }
-    
-    public Page<MouvementListDTO> rechercherMouvements(MouvementFiltreDTO filtre, Pageable pageable) {
-        List<Mouvement> mouvements;
-        
-        // Convertir les dates en String vers LocalDateTime si nécessaire
-        if (filtre != null) {
-            if (filtre.getDateDebutStr() != null && !filtre.getDateDebutStr().isEmpty() && filtre.getDateDebut() == null) {
-                filtre.setDateDebut(java.time.LocalDate.parse(filtre.getDateDebutStr()).atStartOfDay());
-            }
-            if (filtre.getDateFinStr() != null && !filtre.getDateFinStr().isEmpty() && filtre.getDateFin() == null) {
-                filtre.setDateFin(java.time.LocalDate.parse(filtre.getDateFinStr()).atTime(23, 59, 59));
-            }
-        }
-        
-        if (filtre != null && filtre.getType() != null && !filtre.getType().isEmpty()) {
-            mouvements = mouvementRepository.findByTypeMouvement_Code(filtre.getType());
-        } else if (filtre != null && filtre.getStatut() != null && !filtre.getStatut().isEmpty()) {
-            mouvements = mouvementRepository.findByStatutMouvement_Code(filtre.getStatut());
-        } else if (filtre != null && filtre.getClientId() != null) {
-            mouvements = mouvementRepository.findByClient_Id(filtre.getClientId());
-        } else if (filtre != null && filtre.getDateDebut() != null && filtre.getDateFin() != null) {
-            mouvements = mouvementRepository.findByDateMouvementBetween(
-                filtre.getDateDebut(), filtre.getDateFin()
-            );
-        } else {
-            mouvements = mouvementRepository.findAll();
-        }
-        
-        // Sort by dateMouvement descending
-        List<MouvementListDTO> dtoList = mouvements.stream()
-            .sorted((a, b) -> {
-                if (a.getDateMouvement() == null) return 1;
-                if (b.getDateMouvement() == null) return -1;
-                return b.getDateMouvement().compareTo(a.getDateMouvement());
-            })
-            .map(this::mapToListDTO)
-            .collect(Collectors.toList());
-        
-        // Apply pagination slice
-        int start = (int) pageable.getOffset();
-        int end = Math.min(start + pageable.getPageSize(), dtoList.size());
-        
-        List<MouvementListDTO> pageContent = start >= dtoList.size() 
-            ? List.of() 
-            : dtoList.subList(start, end);
-        
-        return new org.springframework.data.domain.PageImpl<>(pageContent, pageable, dtoList.size());
-    }
-    
-    @Transactional
-    public Long creerMouvementAvecLignes(MouvementCreateDTO dto, String type) {
-        TypeMouvement typeMouvement = typeMouvementRepository.findByCode(type)
-            .orElseThrow(() -> new RuntimeException("Type de mouvement non trouvé: " + type));
-        
-        dto.setTypeMouvementId(typeMouvement.getId());
-        
-        Long utilisateurId = 1L; // TODO: Get from authenticated user
-        Mouvement mouvement = creerMouvement(dto, utilisateurId);
-
-        if (dto.getLignes() != null) {
-            for (LigneMouvementDTO ligneDTO : dto.getLignes()) {
-                if (ligneDTO == null || ligneDTO.getProduitId() == null || ligneDTO.getQuantite() == null) {
-                    continue;
-                }
-                creerEtSauverLigne(mouvement, ligneDTO);
-            }
-        }
-        
-        return mouvement.getId();
-    }
-
-    private LigneMouvement creerEtSauverLigne(Mouvement mouvement, LigneMouvementDTO dto) {
-        Produit produit = produitRepository.findById(dto.getProduitId())
-            .orElseThrow(() -> new RuntimeException("Produit non trouvé"));
-
-        Emplacement emplacementSource = null;
-        if (dto.getEmplacementSourceId() != null) {
-            emplacementSource = emplacementRepository.findById(dto.getEmplacementSourceId())
-                .orElseThrow(() -> new RuntimeException("Emplacement source non trouvé"));
-        }
-
-        Emplacement emplacementDest = null;
-        if (dto.getEmplacementDestId() != null) {
-            emplacementDest = emplacementRepository.findById(dto.getEmplacementDestId())
-                .orElseThrow(() -> new RuntimeException("Emplacement destination non trouvé"));
-        }
-
-        LigneMouvement ligne = new LigneMouvement();
-        ligne.setMouvement(mouvement);
-        ligne.setProduit(produit);
-        ligne.setEmplacementSource(emplacementSource);
-        ligne.setEmplacementDest(emplacementDest);
-        ligne.setQuantite(dto.getQuantite());
-
-        return ligneMouvementRepository.save(ligne);
-    }
-    
-    public long countMouvementsByTypeAndDate(String type, LocalDateTime debut, LocalDateTime fin) {
-        List<Mouvement> mouvements = mouvementRepository.findByDateMouvementBetween(debut, fin);
-        return mouvements.stream()
-            .filter(m -> m.getTypeMouvement() != null && type.equals(m.getTypeMouvement().getSens()))
-            .filter(m -> m.getStatutMouvement() != null && "VALIDE".equals(m.getStatutMouvement().getCode()))
-            .count();
-    }
-    
-    public long countMouvementsByStatut(String statut) {
-        List<Mouvement> mouvements = mouvementRepository.findByStatutMouvement_Code(statut);
-        return mouvements.size();
-    }
-    
-    public List<MouvementListDTO> getDerniersMouvements(int limit) {
-        List<Mouvement> mouvements = mouvementRepository.findTop5ByOrderByDateMouvementDesc();
-        return mouvements.stream()
-            .limit(limit)
-            .map(this::mapToListDTO)
-            .collect(Collectors.toList());
-    }
-    
-    public List<AlerteStockEmplacementDTO> getEmplacementsStockBas() {
-        List<Emplacement> allEmplacements = emplacementRepository.findAll();
-        return allEmplacements.stream()
-            .filter(emp -> {
-                BigDecimal volumeOccupe = stockEmplacementRepository.sumVolumeByEmplacementId(emp.getId());
-                if (volumeOccupe == null) volumeOccupe = BigDecimal.ZERO;
-                BigDecimal capacite = emp.getCapaciteVolumeM3();
-                if (capacite == null) capacite = BigDecimal.ZERO;
-                return capacite.compareTo(BigDecimal.ZERO) > 0 && volumeOccupe.compareTo(capacite.multiply(new BigDecimal("0.1"))) < 0;
-            })
-            .map(emp -> {
-                BigDecimal volumeOccupe = stockEmplacementRepository.sumVolumeByEmplacementId(emp.getId());
-                if (volumeOccupe == null) {
-                    volumeOccupe = BigDecimal.ZERO;
-                }
-
-                BigDecimal capacite = emp.getCapaciteVolumeM3();
-                if (capacite == null) capacite = BigDecimal.ZERO;
-
-                BigDecimal pourcentage = capacite.compareTo(BigDecimal.ZERO) == 0
-                    ? BigDecimal.ZERO
-                    : volumeOccupe.multiply(new BigDecimal("100")).divide(capacite, 2, java.math.RoundingMode.HALF_UP);
-
-                return new AlerteStockEmplacementDTO(
-                    emp.getCode(),
-                    pourcentage,
-                    volumeOccupe,
-                    capacite
-                );
-            })
-            .collect(Collectors.toList());
-    }
-    
-    public BigDecimal getStockDisponible(Long produitId, Long emplacementId) {
-        return stockEmplacementRepository
-            .findByEmplacementIdAndProduitId(emplacementId, produitId)
-            .map(StockEmplacement::getQuantite)
-            .orElse(BigDecimal.ZERO);
-    }
-    
-    public List<MouvementListDTO> exporterMouvements(MouvementFiltreDTO filtre) {
-        return listerMouvements(filtre);
     }
 }

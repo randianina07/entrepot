@@ -1,27 +1,17 @@
-<<<<<<<< HEAD:demo/src/main/java/com/gestion/entrepot/controller/MouvementController.java
 package com.gestion.entrepot.controller;
 
 import com.gestion.entrepot.dto.*;
 import com.gestion.entrepot.model.LigneMouvement;
 import com.gestion.entrepot.model.Mouvement;
 import com.gestion.entrepot.service.MouvementService;
-========
-package com.entrepot.gestion.controller;
-
-import com.entrepot.gestion.dto.*;
-import com.entrepot.gestion.model.LigneMouvement;
-import com.entrepot.gestion.model.Mouvement;
-import com.entrepot.gestion.service.MouvementService;
->>>>>>>> 679f4dd59ceb46a21b28b61111443acba658d085:src/main/java/com/entrepot/gestion/controller/MouvementController.java
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.math.BigDecimal;
 
 @RestController
-@RequestMapping("/api/mouvements")
+@RequestMapping("/mouvements")
 public class MouvementController {
     
     private final MouvementService mouvementService;
@@ -47,14 +37,6 @@ public class MouvementController {
     public ResponseEntity<MouvementDetailDTO> getMouvement(@PathVariable Long id) {
         MouvementDetailDTO mouvement = mouvementService.getMouvementDetail(id);
         return ResponseEntity.ok(mouvement);
-    }
-    
-    @GetMapping("/stock")
-    public ResponseEntity<BigDecimal> getStockDisponible(
-            @RequestParam Long produitId, 
-            @RequestParam Long emplacementId) {
-        BigDecimal stock = mouvementService.getStockDisponible(produitId, emplacementId);
-        return ResponseEntity.ok(stock);
     }
     
     @PostMapping

@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:demo/src/main/java/com/gestion/entrepot/dto/MouvementFiltreDTO.java
 package com.gestion.entrepot.dto;
-========
-package com.entrepot.gestion.dto;
->>>>>>>> 679f4dd59ceb46a21b28b61111443acba658d085:src/main/java/com/entrepot/gestion/dto/MouvementFiltreDTO.java
 
 import java.time.LocalDateTime;
 
@@ -13,10 +9,6 @@ public class MouvementFiltreDTO {
     private Long clientId;
     private LocalDateTime dateDebut;
     private LocalDateTime dateFin;
-    
-    // For frontend compatibility with String dates
-    private String dateDebutStr;
-    private String dateFinStr;
     
     public MouvementFiltreDTO() {
     }
@@ -67,21 +59,5 @@ public class MouvementFiltreDTO {
     
     public void setDateFin(LocalDateTime dateFin) {
         this.dateFin = dateFin;
-    }
-    
-    public String getDateDebutStr() {
-        return dateDebutStr;
-    }
-    
-    public void setDateDebutStr(String dateDebutStr) {
-        this.dateDebutStr = dateDebutStr;
-    }
-    
-    public String getDateFinStr() {
-        return dateFinStr;
-    }
-    
-    public void setDateFinStr(String dateFinStr) {
-        this.dateFinStr = dateFinStr;
     }
 }

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/navbar :: head}"></head>
+<body class="storage-page">
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="container py-4">
+    <div th:replace="~{fragments/alerts :: alerts}"></div>
+    
+    <section class="storage-hero mb-4">
+        <div class="hero-copy">
+            <span class="hero-badge"><i class="bi bi-diagram-3"></i> Gestion des missions</span>
+            <h1>Missions logistiques</h1>
+            <p>Gérez les missions de livraison en cours et créez de nouvelles missions.</p>
+            <div class="hero-actions">
+                <a class="btn btn-outline-primary" th:href="@{/mouvements/tableau-de-bord}">Accueil</a>
+            </div>
+        </div>
+        <div class="hero-side">
+            <div class="mini-info-card">
+                <span class="value" th:text="${missionsEnCours != null ? #lists.size(missionsEnCours) : 0}">0</span>
+                <span class="label">Missions en cours</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Missions en cours -->
+    <section class="storage-section mb-4">
+        <div class="storage-section-header">
+            <div>
+                <span class="chip is-accent">En cours</span>
+                <h2 class="mb-0 mt-2">Missions en cours</h2>
+            </div>
+        </div>
+        <div class="storage-panel p-0 overflow-hidden">
+            <div class="px-4 pb-4">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                        <tr>
+                            <th>Référence</th>
+                            <th>Véhicule</th>
+                            <th>Chauffeur</th>
+                            <th>Statut</th>
+                            <th>Date départ</th>
+                            <th>Date arrivée</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:if="${missionsEnCours == null or missionsEnCours.isEmpty()}">
+                            <td colspan="7">
+                                <div class="empty-state">Aucune mission en cours.</div>
+                            </td>
+                        </tr>
+                        <tr th:each="m : ${missionsEnCours}">
+                            <td th:text="${m.referenceMission}"></td>
+                            <td th:text="${m.vehicule.marque}"></td>
+                            <td th:text="${m.chauffeur.prenom}"></td>
+                            <td>
+                                <span class="badge" 
+                                      th:classappend="${m.statutMission.code == 'PLANIFIEE' ? 'bg-warning' : m.statutMission.code == 'EN_COURS' ? 'bg-success' : 'bg-secondary'}"
+                                      th:text="${m.statutMission.libelle}"></span>
+                            </td>
+                            <td th:text="${m.dateDepartPrevue}"></td>
+                            <td th:text="${m.dateArriveePrevue}"></td>
+                            <td>
+                                <div class="btn-group">
+                                    <form th:if="${m.statutMission.code == 'PLANIFIEE'}" th:action="@{/missions/start}" method="post" style="display:inline">
+                                        <input type="hidden" name="missionId" th:value="${m.id}">
+                                        <button type="submit" class="btn btn-sm btn-success">
+                                            <i class="bi bi-play"></i> Commencer
+                                        </button>
+                                    </form>
+                                    <form th:if="${m.statutMission.code == 'EN_COURS'}" th:action="@{/missions/finish}" method="post" style="display:inline">
+                                        <input type="hidden" name="missionId" th:value="${m.id}">
+                                        <button type="submit" class="btn btn-sm btn-primary">
+                                            <i class="bi bi-check"></i> Terminer
+                                        </button>
+                                    </form>
+                                    <a th:href="@{/missions/details(missionId=${m.id})}" class="btn btn-sm btn-info">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <form th:action="@{/missions/cancel}" method="post" style="display:inline">
+                                        <input type="hidden" name="missionId" th:value="${m.id}">
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <i class="bi bi-x"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Détails mission -->
+    <div th:if="${detailMissionId != null}" class="storage-section mb-4">
+        <div class="storage-section-header">
+            <div>
+                <span class="chip is-success">Détails</span>
+                <h2 class="mb-0 mt-2" th:text="'Livraisons de la mission #' + ${detailMissionId}"></h2>
+            </div>
+        </div>
+        <div class="storage-panel p-0 overflow-hidden">
+            <div class="px-4 pb-4">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                        <tr>
+                            <th>ID livraison</th>
+                            <th>Client</th>
+                            <th>Adresse</th>
+                            <th>Commune</th>
+                            <th>Volume</th>
+                            <th>Date prévue</th>
+                            <th>Date livrée</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="l : ${detailLivraisons}">
+                            <td th:text="${l.id}"></td>
+                            <td th:text="${l.client.user_email}"></td>
+                            <td th:text="${l.adresseLivraison}"></td>
+                            <td th:text="${l.zoneLivraison.commune}"></td>
+                            <td th:text="${l.volumeTotal}"></td>
+                            <td th:text="${l.datePrevue}"></td>
+                            <td th:text="${l.dateLivraison}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Création mission -->
+    <section class="storage-section mb-4">
+        <div class="storage-section-header">
+            <div>
+                <span class="chip is-warning">Nouvelle mission</span>
+                <h2 class="mb-0 mt-2">Créer une nouvelle mission</h2>
+            </div>
+        </div>
+        <div class="search-form-shell">
+            <form class="row g-3" th:action="@{/missions/create}" method="post">
+                <div class="col-md-3">
+                    <label for="dateDepart" class="form-label">Date départ <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" id="dateDepart" name="dateDepart" required>
+                </div>
+                <div class="col-md-3">
+                    <label for="heureDepart" class="form-label">Heure départ <span class="text-danger">*</span></label>
+                    <input type="time" class="form-control" id="heureDepart" name="heureDepart" required>
+                </div>
+                <div class="col-md-3">
+                    <label for="dateArrivee" class="form-label">Date arrivée <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" id="dateArrivee" name="dateArrivee" required>
+                </div>
+                <div class="col-md-3">
+                    <label for="heureArrivee" class="form-label">Heure arrivée <span class="text-danger">*</span></label>
+                    <input type="time" class="form-control" id="heureArrivee" name="heureArrivee" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="vehiculeId" class="form-label">Véhicule <span class="text-danger">*</span></label>
+                    <select class="form-select" id="vehiculeId" name="vehiculeId" required>
+                        <option value="">Véhicule disponible</option>
+                        <option th:each="v : ${vehicule}"
+                                th:value="${v.id}"
+                                th:text="${v.marque + ' - cap. ' + v.capaciteVolume + 'm3'}">
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="chauffeurId" class="form-label">Chauffeur <span class="text-danger">*</span></label>
+                    <select class="form-select" id="chauffeurId" name="chauffeurId" required>
+                        <option value="">Chauffeur disponible</option>
+                        <option th:each="c : ${chauffeur}"
+                                th:value="${c.id}"
+                                th:text="${c.nom + ' ' + c.prenom}">
+                        </option>
+                    </select>
+                </div>
+                <div class="col-12">
+                    <h5>Livraisons à inclure</h5>
+                    <p class="text-muted small">Condition: même date prévue et volume cumulé ≤ capacité volume du véhicule</p>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead class="table-light">
+                            <tr>
+                                <th>Sélection</th>
+                                <th>Client</th>
+                                <th>Adresse</th>
+                                <th>Zone</th>
+                                <th>Poids</th>
+                                <th>Volume</th>
+                                <th>Date prévue</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="l : ${livraison}">
+                                <td><input type="checkbox" name="livraisonIds" th:value="${l.id}"></td>
+                                <td th:text="${l.client.user_email}"></td>
+                                <td th:text="${l.adresseLivraison}"></td>
+                                <td th:text="${l.zoneLivraison.commune}"></td>
+                                <td th:text="${l.poidsTotal}"></td>
+                                <td th:text="${l.volumeTotal}"></td>
+                                <td th:text="${l.datePrevue}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-12 mt-4">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="bi bi-plus-circle"></i> Créer mission PLANIFIÉE
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Historique -->
+    <section class="storage-section">
+        <div class="storage-section-header">
+            <div>
+                <span class="chip is-info">Historique</span>
+                <h2 class="mb-0 mt-2">Historique des missions</h2>
+            </div>
+        </div>
+        <div class="storage-panel p-0 overflow-hidden">
+            <div class="px-4 pb-4">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                        <tr>
+                            <th>Référence</th>
+                            <th>Véhicule</th>
+                            <th>Chauffeur</th>
+                            <th>Statut</th>
+                            <th>Observation</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:if="${historiqueMissions == null or historiqueMissions.isEmpty()}">
+                            <td colspan="6">
+                                <div class="empty-state">Aucune mission dans l'historique.</div>
+                            </td>
+                        </tr>
+                        <tr th:each="m : ${historiqueMissions}">
+                            <td th:text="${m.referenceMission}"></td>
+                            <td th:text="${m.vehicule.marque}"></td>
+                            <td th:text="${m.chauffeur.prenom}"></td>
+                            <td th:text="${m.statutMission.libelle}"></td>
+                            <td>
+                                <span th:if="${m.statutMission.code == 'TERMINEE'}" class="text-success">Mission terminée</span>
+                                <span th:if="${m.statutMission.code == 'ANNULEE'}" class="text-danger">Mission annulée</span>
+                            </td>
+                            <td>
+                                <a th:href="@{/missions/details(missionId=${m.id})}" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-eye"></i> Voir détails
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:demo/src/main/java/com/gestion/entrepot/model/Utilisateur.java
 package com.gestion.entrepot.model;
-========
-package com.entrepot.gestion.model;
->>>>>>>> 679f4dd59ceb46a21b28b61111443acba658d085:src/main/java/com/entrepot/gestion/model/Utilisateur.java
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -18,9 +14,6 @@ public class Utilisateur {
     
     @Column(nullable = false, unique = true, length = 150)
     private String email;
-    
-    @Column(length = 150)
-    private String nom;
     
     @Column(name = "mot_de_passe_hash", nullable = false, length = 255)
     private String motDePasseHash;
@@ -41,10 +34,9 @@ public class Utilisateur {
     public Utilisateur() {
     }
     
-    public Utilisateur(Long id, String email, String nom, String motDePasseHash, Role role, Boolean actif, LocalDateTime dateCreation, LocalDateTime derniereConnexion) {
+    public Utilisateur(Long id, String email, String motDePasseHash, Role role, Boolean actif, LocalDateTime dateCreation, LocalDateTime derniereConnexion) {
         this.id = id;
         this.email = email;
-        this.nom = nom;
         this.motDePasseHash = motDePasseHash;
         this.role = role;
         this.actif = actif;
@@ -66,14 +58,6 @@ public class Utilisateur {
     
     public void setEmail(String email) {
         this.email = email;
-    }
-    
-    public String getNom() {
-        return nom;
-    }
-    
-    public void setNom(String nom) {
-        this.nom = nom;
     }
     
     public String getMotDePasseHash() {
