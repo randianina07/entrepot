@@ -47,6 +47,20 @@
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle"
+                       th:classappend="${#execInfo.templateName == 'chauffeurs' or #execInfo.templateName == 'formulaireAjoutChauffeurs' or #strings.startsWith(#execInfo.templateName, 'vehicules/') or #execInfo.templateName == 'livraisons/livraison' or #execInfo.templateName == 'livraisons/config_livraison' or #execInfo.templateName == 'missions/save' or #execInfo.templateName == 'historiqueMaintenances' or #execInfo.templateName == 'formulaireAjoutMaintenances' ? 'active' : ''}"
+                       href="#" id="logistiqueDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-truck"></i> Logistique
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/chauffeurs"><i class="bi bi-person-badge"></i> Chauffeurs</a></li>
+                        <li><a class="dropdown-item" href="/vehicules/liste"><i class="bi bi-truck-front"></i> Véhicules</a></li>
+                        <li><a class="dropdown-item" href="/livraisons/livraison"><i class="bi bi-box-arrow-up-right"></i> Livraisons</a></li>
+                        <li><a class="dropdown-item" href="/missions/save"><i class="bi bi-diagram-3"></i> Missions</a></li>
+                        <li><a class="dropdown-item" href="/maintenances"><i class="bi bi-tools"></i> Maintenances</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle"
                        th:classappend="${#strings.startsWith(#execInfo.templateName, 'Emplacement/') or #execInfo.templateName == 'search' ? 'active' : ''}"
                        href="#" id="storageDropdown" role="button" data-bs-toggle="dropdown">
                         <i class="bi bi-boxes"></i> Stockages
