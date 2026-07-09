@@ -67,34 +67,43 @@ FROM stock_actuel sa, capacite_totale ct, snapshot_precedent sp;
 -- A2. Nombre de mouvements du mois courant + variation vs mois précédent
 --     → KPI card "Mouvements ce mois"
 -- ----------------------------------------------------------------------------
+
+DROP VIEW IF EXISTS v_kpi_mouvements_mois CASCADE;
 CREATE OR REPLACE VIEW v_kpi_mouvements_mois AS
-WITH mois_courant AS (
+WITH total_mvt AS (
     SELECT COUNT(*) AS nb
     FROM mouvements m
     JOIN statuts_mouvement sm ON sm.id = m.statut_mouvement_id
     WHERE sm.code != 'ANNULE'
-      AND DATE_TRUNC('month', m.date_mouvement) = DATE_TRUNC('month', CURRENT_DATE)
 ),
-mois_precedent AS (
+mvt_30j AS (
     SELECT COUNT(*) AS nb
     FROM mouvements m
     JOIN statuts_mouvement sm ON sm.id = m.statut_mouvement_id
     WHERE sm.code != 'ANNULE'
-      AND DATE_TRUNC('month', m.date_mouvement) = DATE_TRUNC('month', CURRENT_DATE - INTERVAL '1 month')
+      AND m.date_mouvement >= CURRENT_DATE - INTERVAL '30 days'
+),
+mvt_30j_prec AS (
+    SELECT COUNT(*) AS nb
+    FROM mouvements m
+    JOIN statuts_mouvement sm ON sm.id = m.statut_mouvement_id
+    WHERE sm.code != 'ANNULE'
+      AND m.date_mouvement >= CURRENT_DATE - INTERVAL '60 days'
+      AND m.date_mouvement < CURRENT_DATE - INTERVAL '30 days'
 )
 SELECT
-    mc.nb AS nb_mouvements_mois,
+    tm.nb AS nb_mouvements_mois,
     mp.nb AS nb_mouvements_mois_precedent,
-    CASE WHEN mp.nb = 0 THEN NULL
+    CASE WHEN mp.nb = 0 THEN 0
          ELSE ROUND((mc.nb - mp.nb)::NUMERIC / mp.nb * 100, 1)
     END AS variation_pct
-FROM mois_courant mc, mois_precedent mp;
-
+FROM total_mvt tm, mvt_30j mc, mvt_30j_prec mp;
 
 -- ----------------------------------------------------------------------------
 -- A3. Taux de ponctualité des livraisons (mois courant)
 --     → KPI card "Taux ponctualité"
 -- ----------------------------------------------------------------------------
+DROP VIEW IF EXISTS v_kpi_ponctualite_mois CASCADE;
 CREATE OR REPLACE VIEW v_kpi_ponctualite_mois AS
 SELECT
     COUNT(*) AS nb_livraisons_total,
@@ -108,45 +117,55 @@ FROM livraisons l
 JOIN missions_logistiques ml ON ml.id = l.mission_id
 JOIN statuts_mission sm ON sm.id = ml.statut_mission_id AND sm.code = 'TERMINEE'
 WHERE l.date_livraison IS NOT NULL
-  AND l.date_prevue IS NOT NULL
-  AND DATE_TRUNC('month', l.date_livraison) = DATE_TRUNC('month', CURRENT_DATE);
-
+  AND l.date_prevue IS NOT NULL;
 
 -- ----------------------------------------------------------------------------
 -- A4. Résultat net mensuel (recettes - dépenses du mois courant)
 --     → KPI card "Résultat net (mois)"
 -- ----------------------------------------------------------------------------
+DROP VIEW IF EXISTS v_kpi_resultat_net_mois CASCADE;
 CREATE OR REPLACE VIEW v_kpi_resultat_net_mois AS
-WITH recettes_mois AS (
+WITH recettes_totales AS (
     SELECT COALESCE(SUM(montant), 0) AS total
     FROM v_recettes
-    WHERE DATE_TRUNC('month', date_recette) = DATE_TRUNC('month', CURRENT_DATE)
 ),
-depenses_mois AS (
+depenses_totales AS (
     SELECT COALESCE(SUM(montant), 0) AS total
     FROM depenses
-    WHERE DATE_TRUNC('month', date_depense) = DATE_TRUNC('month', CURRENT_DATE)
 ),
-recettes_mois_prec AS (
+recettes_30j AS (
     SELECT COALESCE(SUM(montant), 0) AS total
     FROM v_recettes
-    WHERE DATE_TRUNC('month', date_recette) = DATE_TRUNC('month', CURRENT_DATE - INTERVAL '1 month')
+    WHERE date_recette >= CURRENT_DATE - INTERVAL '30 days'
 ),
-depenses_mois_prec AS (
+depenses_30j AS (
     SELECT COALESCE(SUM(montant), 0) AS total
     FROM depenses
-    WHERE DATE_TRUNC('month', date_depense) = DATE_TRUNC('month', CURRENT_DATE - INTERVAL '1 month')
+    WHERE date_depense >= CURRENT_DATE - INTERVAL '30 days'
+),
+recettes_30j_prec AS (
+    SELECT COALESCE(SUM(montant), 0) AS total
+    FROM v_recettes
+    WHERE date_recette >= CURRENT_DATE - INTERVAL '60 days'
+      AND date_recette < CURRENT_DATE - INTERVAL '30 days'
+),
+depenses_30j_prec AS (
+    SELECT COALESCE(SUM(montant), 0) AS total
+    FROM depenses
+    WHERE date_depense >= CURRENT_DATE - INTERVAL '60 days'
+      AND date_depense < CURRENT_DATE - INTERVAL '30 days'
 )
 SELECT
-    rm.total AS total_recettes,
-    dm.total AS total_depenses,
-    rm.total - dm.total AS resultat_net,
-    rmp.total - dmp.total AS resultat_net_mois_prec,
-    CASE WHEN (rmp.total - dmp.total) = 0 THEN NULL
-         ELSE ROUND(((rm.total - dm.total) - (rmp.total - dmp.total))::NUMERIC
-                    / ABS(rmp.total - dmp.total) * 100, 1)
+    rt.total AS total_recettes,
+    dt.total AS total_depenses,
+    rt.total - dt.total AS resultat_net,
+    (r30.total - d30.total) AS rn_30j,
+    (r30p.total - d30p.total) AS rn_30j_prec,
+    CASE WHEN (r30p.total - d30p.total) = 0 THEN 0
+         ELSE ROUND(((r30.total - d30.total) - (r30p.total - d30p.total))::NUMERIC
+                    / ABS(r30p.total - d30p.total) * 100, 1)
     END AS variation_pct
-FROM recettes_mois rm, depenses_mois dm, recettes_mois_prec rmp, depenses_mois_prec dmp;
+FROM recettes_totales rt, depenses_totales dt, recettes_30j r30, depenses_30j d30, recettes_30j_prec r30p, depenses_30j_prec d30p;
 
 
 -- ============================================================================

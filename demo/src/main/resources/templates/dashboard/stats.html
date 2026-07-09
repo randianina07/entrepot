@@ -38,7 +38,7 @@
   <!-- ====================================================================
        KPI CARDS
   ===================================================================== -->
-  <div class="kpi-row">
+   <div class="kpi-row">
 
     <!-- KPI 1 — Taux d'occupation global -->
     <div class="kpi">
@@ -52,22 +52,22 @@
         <span class="badge"
               th:classappend="${kpis.occVariationPts > 0 ? 'badge-warn' : 'badge-ok'}"
               th:text="(${kpis.occVariationPts > 0 ? '↑ +' : '↓ '}) + ${kpis.occVariationPts} + ' pts ce mois'">
-          ↑ +4 pts ce mois
+          ↑ +0 pts ce mois
         </span>
       </div>
     </div>
 
-    <!-- KPI 2 — Mouvements ce mois -->
+    <!-- KPI 2 — Mouvements globaux -->
     <div class="kpi">
       <div class="kpi-label">
-        <i class="ti ti-arrows-exchange" aria-hidden="true"></i>Mouvements ce mois
+        <i class="ti ti-arrows-exchange" aria-hidden="true"></i>Mouvements globaux
       </div>
       <div class="kpi-value"
            th:text="${kpis.nbMouvementsMois}">284</div>
       <div class="kpi-sub">
         <span class="badge"
               th:classappend="${kpis.mvtVariationPct >= 0 ? 'badge-ok' : 'badge-warn'}"
-              th:text="(${kpis.mvtVariationPct >= 0 ? '↑ +' : '↓ '}) + ${kpis.mvtVariationPct} + '%'">
+              th:text="(${kpis.mvtVariationPct >= 0 ? '↑ +' : '↓ '}) + ${kpis.mvtVariationPct} + '% (30j)'">
           ↑ +12%
         </span>
       </div>
@@ -92,7 +92,7 @@
     <!-- KPI 4 — Résultat net -->
     <div class="kpi">
       <div class="kpi-label">
-        <i class="ti ti-coin" aria-hidden="true"></i>Résultat net (mois)
+        <i class="ti ti-coin" aria-hidden="true"></i>Résultat net
       </div>
       <div class="kpi-value">
         <!-- Formatage Ar avec séparateur de milliers -->
@@ -103,8 +103,8 @@
       <div class="kpi-sub">
         <span class="badge"
               th:classappend="${kpis.rnVariationPct >= 0 ? 'badge-info' : 'badge-warn'}"
-              th:text="(${kpis.rnVariationPct >= 0 ? '+' : ''}) + ${kpis.rnVariationPct} + '% vs mois préc.'">
-          +8% vs mois préc.
+              th:text="(${kpis.rnVariationPct >= 0 ? '+' : ''}) + ${kpis.rnVariationPct} + '% vs 30j préc.'">
+          +8% vs 30j préc.
         </span>
       </div>
     </div>
