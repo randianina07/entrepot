@@ -1,7 +1,7 @@
 package entrepot.demo.controller;
 
 import entrepot.demo.entity.Chauffeur;
-import entrepot.demo.service.ChauffeurService;
+import entrepot.demo.service.Chauffeur_service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,9 +16,9 @@ import java.util.List;
 @RequestMapping("/chauffeurs")
 public class ChauffeurController {
 
-    private final ChauffeurService chauffeurService;
+    private final Chauffeur_service chauffeurService;
 
-    public ChauffeurController(ChauffeurService chauffeurService) {
+    public ChauffeurController(Chauffeur_service chauffeurService) {
         this.chauffeurService = chauffeurService;
     }
 

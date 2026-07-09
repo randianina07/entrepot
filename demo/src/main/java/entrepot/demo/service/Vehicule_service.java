@@ -37,6 +37,11 @@ public class Vehicule_service {
         return repository.findAll();
     }
 
+    public Vehicule findById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Véhicule introuvable"));
+    }
+
     // Ajouter un véhicule
     public Vehicule ajouterVehicule(Vehicule vehicule, Long typeVehiculeId, Long statutId) {
 
@@ -50,6 +55,34 @@ public class Vehicule_service {
         vehicule.setStatut(statut);
 
         return repository.save(vehicule);
+    }
+
+    public Vehicule modifierVehicule(Long id, Vehicule vehicule, Long typeVehiculeId, Long statutId) {
+
+        Vehicule vehiculeExistant = findById(id);
+
+        Type_vehicule type = type_vehicule_repository.findById(typeVehiculeId)
+                .orElseThrow(() -> new RuntimeException("Type véhicule introuvable"));
+
+        Statut_vehicule statut = statut_vehicule_repository.findById(statutId)
+                .orElseThrow(() -> new RuntimeException("Statut véhicule introuvable"));
+
+        vehiculeExistant.setImmatriculation(vehicule.getImmatriculation());
+        vehiculeExistant.setMarque(vehicule.getMarque());
+        vehiculeExistant.setModele(vehicule.getModele());
+        vehiculeExistant.setAnnee(vehicule.getAnnee());
+        vehiculeExistant.setCapaciteVolume(vehicule.getCapaciteVolume());
+        vehiculeExistant.setCapaciteChargekg(vehicule.getCapaciteChargekg());
+        vehiculeExistant.setKilometrage(vehicule.getKilometrage());
+        vehiculeExistant.setTypeVehicule(type);
+        vehiculeExistant.setStatut(statut);
+
+        return repository.save(vehiculeExistant);
+    }
+
+    public void supprimerVehicule(Long id) {
+        Vehicule vehicule = findById(id);
+        repository.delete(vehicule);
     }
 
     public List<Livraison> findallLivraisons() {

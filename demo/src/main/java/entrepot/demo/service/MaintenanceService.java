@@ -2,10 +2,12 @@ package entrepot.demo.service;
 
 import entrepot.demo.entity.Maintenance;
 import entrepot.demo.entity.TypeMaintenance;
-import entrepot.demo.entity.Vehicule;
+import entrepot.demo.model.Vehicule;
 import entrepot.demo.repository.MaintenanceRepository;
 import entrepot.demo.repository.TypeMaintenanceRepository;
-import entrepot.demo.repository.VehiculeRepository;
+import entrepot.demo.repository.Vehicule_repository;
+// import entrepot.demo.repository.Vehicule_repository;
+
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -16,12 +18,12 @@ import java.util.stream.Collectors;
 public class MaintenanceService {
 
 	private final MaintenanceRepository maintenanceRepository;
-	private final VehiculeRepository vehiculeRepository;
+	private final Vehicule_repository vehiculeRepository;
 	private final TypeMaintenanceRepository typeMaintenanceRepository;
 
 	public MaintenanceService(
 			MaintenanceRepository maintenanceRepository,
-			VehiculeRepository vehiculeRepository,
+			Vehicule_repository vehiculeRepository,
 			TypeMaintenanceRepository typeMaintenanceRepository) {
 		this.maintenanceRepository = maintenanceRepository;
 		this.vehiculeRepository = vehiculeRepository;
