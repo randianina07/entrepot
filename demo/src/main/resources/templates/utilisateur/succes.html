@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Succès</title>
+</head>
+<body>
+
+<h1>Utilisateur créé avec succès</h1>
+
+<p th:text="${message}"></p>
+
+<p>
+    Email :
+    <strong th:text="${email}"></strong>
+</p>
+
+<p>
+    Rôle :
+    <strong th:text="${role}"></strong>
+</p>
+
+<p>
+    Mot de passe généré :
+    <strong th:text="${motDePasse}"></strong>
+</p>
+
+<a th:href="@{/utilisateurs/nouveau}">
+    Créer un autre utilisateur
+</a>
+
+<a th:href="@{/clients}">
+    Voir liste des clients
+</a>
+
+</body>
+</html>
