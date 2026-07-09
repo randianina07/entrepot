@@ -19,12 +19,12 @@ public class UtilisateurController {
         this.utilisateurService = utilisateurService;
     }
 
-    @GetMapping("/clients/nouveau")
+    @GetMapping("/nouveau")
     public String afficherFormulaire(Model model) {
         model.addAttribute("utilisateur", new Utilisateur());
         model.addAttribute("utilisateurInfo", new UtilisateurInfo());
 
-        return "client/formulaire";
+        return "/formulaire";
     }
 
     @PostMapping("/clients/enregistrer")
