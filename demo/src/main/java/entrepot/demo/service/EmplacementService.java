@@ -38,7 +38,7 @@ public class EmplacementService {
 
         List<Emplacement> listeEmplacementsTrouves = new ArrayList<>();
         for (Zones zones : toutesLesZones) {
-            if (zones.getId() != null && zones.getId().equals(id_zone)) {
+            if (zones.getId() != null && zones.getId() == id_zone ) {
                 Allee alleeDeLaZone = zones.getAllee();
                 if (alleeDeLaZone == null)
                     continue;
@@ -48,10 +48,10 @@ public class EmplacementService {
                         if (listeEmplacementsTrouves.size() == quantite) {
                             break;
                         }
-                        if (emp.getAllee() != null && emp.getAllee().getId().equals(alleeDeLaZone.getId()) &&
-                            emp.getEtage() != null && emp.getEtage().getId().equals(etage.getId())) {
+                        if (emp.getAllee() != null && emp.getAllee().getId() == alleeDeLaZone.getId() &&
+                            emp.getEtage() != null && emp.getEtage().getId() == etage.getId()) {
                             // Règle métier : Doit être actif ET assez grand (taille < capacité)
-                            if (emp.isActif() && emp.getCapacite_volume_m3() >= tailleProduit) {
+                            if (!emp.isActif() && emp.getCapacite_volume_m3() >= tailleProduit) {
                                 listeEmplacementsTrouves.add(emp);
                             }
                         }
