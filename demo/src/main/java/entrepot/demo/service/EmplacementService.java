@@ -6,7 +6,6 @@ import entrepot.demo.model.Etage;
 import entrepot.demo.repositories.EmplacementRepository;
 import entrepot.demo.repositories.EtageRepository;
 import entrepot.demo.repositories.ZonesRepository;
-import entrepot.demo.repositories.AlleeRepository;
 import entrepot.demo.model.Zones;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +18,6 @@ public class EmplacementService {
 
     @Autowired
     private ZonesRepository zonesRepository;
-
-    @Autowired
-    private AlleeRepository alleeRepository;
 
     @Autowired
     private EtageRepository etageRepository;

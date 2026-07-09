@@ -54,6 +54,15 @@ public class EmplacementController {
         } else {
             model.addAttribute("resultat", placeTrouvee);
         }
+
+        List<TypeZone> listTypeZone = typeZoneService.getAll();
+
+        // Charger la liste de type de zone 
+        if (listTypeZone != null) {
+            model.addAttribute("listeZone" , listTypeZone);
+        } else {
+            model.addAttribute("listeZone", new ArrayList<>());
+        }
         
         // On renvoie vers la même page pour afficher le résultat en bas
         return "search";
