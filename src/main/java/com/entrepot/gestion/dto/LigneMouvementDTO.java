@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:demo/src/main/java/com/gestion/entrepot/dto/LigneMouvementDTO.java
-package com.gestion.entrepot.dto;
-========
 package com.entrepot.gestion.dto;
->>>>>>>> 679f4dd59ceb46a21b28b61111443acba658d085:src/main/java/com/entrepot/gestion/dto/LigneMouvementDTO.java
 
 import java.math.BigDecimal;
 

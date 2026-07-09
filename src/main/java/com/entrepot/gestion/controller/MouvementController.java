@@ -1,18 +1,9 @@
-<<<<<<<< HEAD:demo/src/main/java/com/gestion/entrepot/controller/MouvementController.java
-package com.gestion.entrepot.controller;
-
-import com.gestion.entrepot.dto.*;
-import com.gestion.entrepot.model.LigneMouvement;
-import com.gestion.entrepot.model.Mouvement;
-import com.gestion.entrepot.service.MouvementService;
-========
 package com.entrepot.gestion.controller;
 
 import com.entrepot.gestion.dto.*;
 import com.entrepot.gestion.model.LigneMouvement;
 import com.entrepot.gestion.model.Mouvement;
 import com.entrepot.gestion.service.MouvementService;
->>>>>>>> 679f4dd59ceb46a21b28b61111443acba658d085:src/main/java/com/entrepot/gestion/controller/MouvementController.java
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

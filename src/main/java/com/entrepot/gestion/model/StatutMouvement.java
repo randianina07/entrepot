@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:demo/src/main/java/com/gestion/entrepot/model/StatutMouvement.java
-package com.gestion.entrepot.model;
-========
 package com.entrepot.gestion.model;
->>>>>>>> 679f4dd59ceb46a21b28b61111443acba658d085:src/main/java/com/entrepot/gestion/model/StatutMouvement.java
 
 import jakarta.persistence.*;
 import java.util.Objects;

@@ -1,14 +1,4 @@
-<<<<<<<< HEAD:demo/src/main/java/com/gestion/entrepot/service/MouvementService.java
-package com.gestion.entrepot.service;
-
-import com.gestion.entrepot.dto.*;
-import com.gestion.entrepot.model.*;
-import com.gestion.entrepot.repository.*;
-import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
-========
 package com.entrepot.gestion.service;
->>>>>>>> 679f4dd59ceb46a21b28b61111443acba658d085:src/main/java/com/entrepot/gestion/service/MouvementService.java
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

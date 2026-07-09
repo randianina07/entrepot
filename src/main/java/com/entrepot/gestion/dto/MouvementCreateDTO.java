@@ -1,11 +1,7 @@
-<<<<<<<< HEAD:demo/src/main/java/com/gestion/entrepot/dto/MouvementCreateDTO.java
-package com.gestion.entrepot.dto;
-========
 package com.entrepot.gestion.dto;
 
 import java.util.ArrayList;
 import java.util.List;
->>>>>>>> 679f4dd59ceb46a21b28b61111443acba658d085:src/main/java/com/entrepot/gestion/dto/MouvementCreateDTO.java
 
 public class MouvementCreateDTO {
     
