@@ -1,37 +1,99 @@
 <!DOCTYPE html>
-
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recherhe rapide emplacement</title>
-</head>
-
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/navbar :: head}"></head>
 <body>
-    <h2>Veuillez remplir les informations ci_dessous : </h2>
-    <form th:action="@{/faire-recherche}" method="GET">
-        <label for="typeProduit">Le type de produit </label>
-        <select name="typeZoneRequis">
-        <option th:each="lz : ${listeZone}"
-                th:value="${lz.id}" 
-                th:text="${lz.code}">code</option>
-            </select><br>
-        <label for="volume">Volume requis</label>
-        <input type="number" name="volume" /><br/>
-        <label for="quantite">Quantite</label>
-        <input type="number" name="quantite" /><br/>
-        <button type="submit">Rechercher</button>
-    </form>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-    <hr>
-    <h2>Resultat de la recherche :</h2><br/>
-    <div th:if="${erreur != null}">
-        <p th:text="${erreur}">erreur</p>
-    </div>
+    <main class="container">
+        <section class="storage-hero mb-4">
+            <div class="hero-copy">
+                <span class="hero-badge"><i class="bi bi-search"></i> Recherche rapide</span>
+                <h1>Trouver un emplacement disponible</h1>
+                <p>
+                    Renseigne le type de zone, le volume et la quantite pour voir les emplacements compatibles.
+                </p>
+                <div class="hero-actions">
+                    <a class="btn btn-outline-primary btn-lg" th:href="@{/accueil}">
+                        <i class="bi bi-arrow-left"></i> Retour stockage
+                    </a>
+                    <a class="btn btn-primary btn-lg" th:href="@{/choose-type_zones}">
+                        <i class="bi bi-grid-3x3-gap"></i> Visualisation
+                    </a>
+                </div>
+            </div>
+            <div class="hero-side">
+                <div class="mini-info-card">
+                    <span class="value">Rapide</span>
+                    <span class="label">formulaire unique pour lancer la recherche</span>
+                </div>
+                <div class="mini-info-card">
+                    <span class="value">Ciblee</span>
+                    <span class="label">resultats adaptes aux contraintes de stockage</span>
+                </div>
+            </div>
+        </section>
 
-    <ul th:each="res : ${resultat}">
-        <li th:text="${res.codes}">code</li>
-    </ul>
+        <section class="storage-section">
+            <div class="storage-section-header">
+                <div>
+                    <h2>Formulaire de recherche</h2>
+                    <p>Filtre les emplacements selon le volume, la quantite et le type de zone requis.</p>
+                </div>
+            </div>
+
+            <div class="search-form-shell mb-4">
+                <form th:action="@{/faire-recherche}" method="get" class="row g-3 align-items-end">
+                    <div class="col-lg-4">
+                        <label for="typeZoneRequis" class="form-label">Type de zone</label>
+                        <select class="form-select" id="typeZoneRequis" name="typeZoneRequis" required>
+                            <option value="">Selectionner un type</option>
+                            <option th:each="lz : ${listeZone}" th:value="${lz.id}" th:text="${lz.code}">code</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-3">
+                        <label for="volume" class="form-label">Volume requis</label>
+                        <input type="number" class="form-control" id="volume" name="volume" min="0" step="0.01" required>
+                    </div>
+                    <div class="col-lg-3">
+                        <label for="quantite" class="form-label">Quantite</label>
+                        <input type="number" class="form-control" id="quantite" name="quantite" min="1" step="1" required>
+                    </div>
+                    <div class="col-lg-2 d-grid">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-search"></i> Rechercher
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div th:if="${erreur != null}" class="alert alert-danger">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                <span th:text="${erreur}">erreur</span>
+            </div>
+
+            <div th:if="${resultat != null and !#lists.isEmpty(resultat)}" class="search-results-grid">
+                <div th:each="res : ${resultat}" class="result-card">
+                    <div class="zone-header">
+                        <div>
+                            <span class="chip success">Disponible</span>
+                            <h3 class="mt-2 mb-1" th:text="${res.code}">code</h3>
+                        </div>
+                        <span class="chip info" th:text="${res.actif ? 'Actif' : 'Inactif'}">Actif</span>
+                    </div>
+                    <div class="storage-details">
+                        <span><strong>Etage :</strong> <span th:text="${res.etage != null ? res.etage.numero_etage : '-'}">1</span></span>
+                        <span><strong>Colonne :</strong> <span th:text="${res.colonne}">1</span></span>
+                        <span><strong>Capacite :</strong> <span th:text="${res.capaciteVolumeM3}">0</span> m3</span>
+                        <span><strong>Charge max :</strong> <span th:text="${res.charge_max}">0</span></span>
+                        <span><strong>Allee :</strong> <span th:text="${res.allee != null ? res.allee.libelle : '-'}">A</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <div th:if="${(resultat == null or #lists.isEmpty(resultat)) and erreur == null}" class="empty-state">
+                Lance une recherche pour afficher les emplacements compatibles.
+            </div>
+        </section>
+    </main>
 </body>
 </html>

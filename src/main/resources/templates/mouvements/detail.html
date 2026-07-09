@@ -1,76 +1,57 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/navbar :: head}"></head>
-<body>
+<body class="storage-page">
     <div th:replace="~{fragments/navbar :: navbar}"></div>
     
-    <div class="container mt-4">
+    <div class="container py-4">
         <div th:replace="~{fragments/alerts :: alerts}"></div>
         
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1><i class="bi bi-file-text"></i> Detail du Mouvement</h1>
-            <a href="/mouvements/liste" class="btn btn-secondary">
-                <i class="bi bi-arrow-left"></i> Retour à la liste
-            </a>
-        </div>
+        <section class="storage-hero mb-4">
+            <div class="hero-copy">
+                <span class="hero-badge">Lecture détaillée</span>
+                <h1>Detail du mouvement</h1>
+                <p>Consultez les métadonnées, les lignes et les actions disponibles dans une fiche plus claire.</p>
+                <div class="hero-actions">
+                    <a href="/mouvements/liste" class="btn btn-outline-primary"><i class="bi bi-arrow-left"></i> Retour à la liste</a>
+                    <a th:href="@{/mouvements/export/pdf}" class="btn btn-danger"><i class="bi bi-file-earmark-pdf"></i> Export PDF</a>
+                </div>
+            </div>
+            <div class="hero-side">
+                <div class="mini-info-card"><span class="value" th:text="${mouvement.code}">MVT-001</span><span class="label">Code</span></div>
+                <div class="mini-info-card"><span class="value" th:text="${mouvement.typeMouvementLibelle}">ENTREE</span><span class="label">Type</span></div>
+                <div class="mini-info-card"><span class="value" th:text="${mouvement.statutMouvementLibelle}">BROUILLON</span><span class="label">Statut</span></div>
+            </div>
+        </section>
         
         <!-- En-tête du mouvement -->
-        <div class="card mb-4">
-            <div class="card-header">
-                <div><i class="bi bi-info-circle"></i> Informations generales</div>
+        <div class="storage-panel mb-4 p-4">
+            <div class="storage-section-header">
+                <div>
+                    <span class="chip is-accent">Informations générales</span>
+                    <h2 class="mb-0 mt-2">Synthèse du mouvement</h2>
+                </div>
             </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-3">
-                        <label class="fw-bold">Code:</label>
-                        <div class="d-flex align-items-center gap-2">
-                            <p class="mb-0" th:text="${mouvement.code}" data-mouvement-code> MVT-001</p>
-                            <button type="button" class="btn btn-sm btn-outline-secondary" data-copy-mouvement-code>
-                                <i class="bi bi-clipboard"></i> Copier
-                            </button>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="fw-bold">Date:</label>
-                        <p th:text="${#temporals.format(mouvement.dateMouvement, 'dd/MM/yyyy HH:mm')}">01/01/2026 10:00</p>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="fw-bold">Type:</label>
-                        <p th:text="${mouvement.typeMouvementLibelle}">ENTREE</p>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="fw-bold">Statut:</label>
-                        <p>
-                            <span class="badge" 
-                                  th:classappend="${mouvement.statutMouvementCode == 'BROUILLON' ? 'bg-secondary' : 
-                                                 mouvement.statutMouvementCode == 'VALIDE' ? 'bg-success' : 'bg-danger'}"
-                                  th:text="${mouvement.statutMouvementLibelle}">BROUILLON</span>
-                        </p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <label class="fw-bold">Client:</label>
-                        <p th:text="${mouvement.clientEmail ?: 'Aucun client'}">client@example.com</p>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="fw-bold">Operateur:</label>
-                        <p th:text="${mouvement.utilisateurEmail}">admin@example.com</p>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="fw-bold">Notes:</label>
-                        <p th:text="${mouvement.notes ?: 'Aucune note'}">Notes du mouvement</p>
-                    </div>
-                </div>
+            <div class="row g-3">
+                <div class="col-md-3"><div class="storage-detail-card"><div class="detail-title">Code</div><div class="d-flex align-items-center gap-2"><p class="mb-0" th:text="${mouvement.code}" data-mouvement-code>MVT-001</p><button type="button" class="btn btn-sm btn-outline-secondary" data-copy-mouvement-code><i class="bi bi-clipboard"></i> Copier</button></div></div></div>
+                <div class="col-md-3"><div class="storage-detail-card"><div class="detail-title">Date</div><p class="mb-0" th:text="${#temporals.format(mouvement.dateMouvement, 'dd/MM/yyyy HH:mm')}">01/01/2026 10:00</p></div></div>
+                <div class="col-md-3"><div class="storage-detail-card"><div class="detail-title">Type</div><p class="mb-0" th:text="${mouvement.typeMouvementLibelle}">ENTREE</p></div></div>
+                <div class="col-md-3"><div class="storage-detail-card"><div class="detail-title">Statut</div><p class="mb-0"><span class="badge" th:classappend="${mouvement.statutMouvementCode == 'BROUILLON' ? 'bg-secondary' : mouvement.statutMouvementCode == 'VALIDE' ? 'bg-success' : 'bg-danger'}" th:text="${mouvement.statutMouvementLibelle}">BROUILLON</span></p></div></div>
+                <div class="col-md-4"><div class="storage-detail-card"><div class="detail-title">Client</div><p class="mb-0" th:text="${mouvement.clientEmail ?: 'Aucun client'}">client@example.com</p></div></div>
+                <div class="col-md-4"><div class="storage-detail-card"><div class="detail-title">Operateur</div><p class="mb-0" th:text="${mouvement.utilisateurEmail}">admin@example.com</p></div></div>
+                <div class="col-md-4"><div class="storage-detail-card"><div class="detail-title">Notes</div><p class="mb-0" th:text="${mouvement.notes ?: 'Aucune note'}">Notes du mouvement</p></div></div>
             </div>
         </div>
         
         <!-- Tableau des lignes -->
-        <div class="card mb-4">
-            <div class="card-header">
-                <div><i class="bi bi-list"></i> Lignes du mouvement</div>
+        <div class="storage-search-card mb-4">
+            <div class="storage-section-header">
+                <div>
+                    <span class="chip is-success">Détail ligne</span>
+                    <h2 class="mb-0 mt-2">Lignes du mouvement</h2>
+                </div>
             </div>
-            <div class="card-body">
+            <div>
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead class="table-light">
@@ -100,9 +81,14 @@
         </div>
         
         <!-- Boutons d'action -->
-        <div class="card">
-            <div class="card-body">
-                <div class="d-flex gap-2">
+        <div class="storage-panel p-4">
+            <div class="storage-section-header">
+                <div>
+                    <span class="chip is-warning">Actions</span>
+                    <h2 class="mb-0 mt-2">Valider ou annuler</h2>
+                </div>
+            </div>
+            <div class="d-flex flex-wrap gap-2">
                     <form th:if="${mouvement.statutMouvementCode == 'BROUILLON'}" 
                           th:action="@{/mouvements/{id}/valider(id=${mouvement.id})}" 
                           method="post" style="display: inline;">

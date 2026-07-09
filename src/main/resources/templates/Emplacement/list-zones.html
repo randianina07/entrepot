@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/navbar :: head}"></head>
-<body>
+<body class="storage-page">
     <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-    <main class="container">
-        <section class="storage-hero mb-4">
+    <div class="container">
+        <div class="storage-hero mb-4">
             <div class="hero-copy">
                 <span class="hero-badge"><i class="bi bi-map"></i> Visualisation detaillee</span>
                 <h1>Zones et emplacements</h1>
@@ -31,7 +31,7 @@
                     <span class="label">ouvre la grille dynamique d'emplacements</span>
                 </div>
             </div>
-        </section>
+        </div>
 
         <section class="storage-section">
             <div class="storage-section-header">
@@ -52,20 +52,22 @@
                         th:onclick="|ShowEmplacement(${zone.id})|">
                     <div class="zone-header">
                         <div>
-                            <span class="chip">Zone</span>
+                            <span class="chip is-accent">Zone</span>
                             <h3 class="mt-2 mb-1" th:text="${zone.libelle}">Zone A</h3>
                         </div>
-                        <span class="chip info" th:text="${zone.type_zone != null ? zone.type_zone.libelle : 'N/A'}">Standard</span>
+                        <span class="zone-chip" th:text="${zone.type_zone != null ? zone.type_zone.libelle : 'N/A'}">Standard</span>
                     </div>
-                    <div class="storage-details">
+                    <div class="zone-meta">
                         <span>
-                            <strong>Allees :</strong> <span th:text="${zone.allees != null ? zone.allees.code : 'N/A'}">A1</span>
+                            <i class="bi bi-grid-3x3"></i>
+                            Allees : <strong th:text="${zone.allees != null ? zone.allees.code : 'N/A'}">A1</strong>
                         </span>
                         <span>
-                            <strong>Volume total :</strong> <span th:text="${zone.volume_total_m3}">0</span> m3
+                            <i class="bi bi-rulers"></i>
+                            Volume total : <strong th:text="${zone.volume_total_m3}">0</strong> m3
                         </span>
                     </div>
-                    <div class="mt-3">
+                    <div class="zone-actions mt-3">
                         <span class="btn btn-outline-primary btn-sm">
                             <i class="bi bi-eye"></i> Voir les emplacements
                         </span>
@@ -73,7 +75,7 @@
                 </button>
             </div>
         </section>
-    </main>
+    </div>
 
     <div id="popup" class="storage-modal" aria-hidden="true">
         <div class="storage-modal-panel">

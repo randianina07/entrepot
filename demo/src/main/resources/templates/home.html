@@ -1,28 +1,65 @@
 <!DOCTYPE html>
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accueil</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-</head>
+<head th:replace="~{fragments/navbar :: head}"></head>
 <body>
-<main class="page-shell hero-shell">
-    <section class="hero-card">
-        <p class="eyebrow">Gestion d'entrepot</p>
-        <h1>Tableau de bord logistique</h1>
-        <p class="lead">Acces rapide aux chauffeurs, aux maintenances et aux operations courantes.</p>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 
-        <div class="action-grid">
-            <a class="action-card" th:href="@{/chauffeurs}">
-                <span>Chauffeurs</span>
-                <strong>Consulter la liste</strong>
+<main class="container">
+    <section class="storage-hero mb-4">
+        <div class="hero-copy">
+            <span class="hero-badge"><i class="bi bi-box-seam"></i> Gestion d'entrepot</span>
+            <h1>Tableau de bord logistique</h1>
+            <p>
+                Acces rapide aux chauffeurs, aux maintenances, au dashboard analytique et aux outils de stockage.
+            </p>
+            <div class="hero-actions">
+                <a class="btn btn-primary btn-lg" th:href="@{/chauffeurs}">
+                    <i class="bi bi-person-badge"></i> Chauffeurs
+                </a>
+                <a class="btn btn-outline-primary btn-lg" th:href="@{/maintenances}">
+                    <i class="bi bi-tools"></i> Maintenances
+                </a>
+                <a class="btn btn-outline-primary btn-lg" th:href="@{/dashboard/stats}">
+                    <i class="bi bi-bar-chart"></i> Statistiques
+                </a>
+            </div>
+        </div>
+        <div class="hero-side">
+            <div class="mini-info-card">
+                <span class="value">Stockages</span>
+                <span class="label">visualisation dynamique et recherche rapide</span>
+            </div>
+            <div class="mini-info-card">
+                <span class="value">Logistique</span>
+                <span class="label">chauffeurs, vehicules, livraisons et missions</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="storage-section">
+        <div class="storage-section-header">
+            <div>
+                <h2>Acces rapides</h2>
+                <p>Les pages principales du module sont regroupees dans une presentation unique, plus claire et plus moderne.</p>
+            </div>
+        </div>
+
+        <div class="feature-grid">
+            <a class="feature-card text-decoration-none" th:href="@{/choose-type_zones}">
+                <div class="feature-card-icon"><i class="bi bi-grid-3x3-gap"></i></div>
+                <h3>Visualisation des zones</h3>
+                <p>Ouvre la vue des zones et des emplacements stockes.</p>
             </a>
-            <a class="action-card" th:href="@{/maintenances}">
-                <span>Maintenances</span>
-                <strong>Voir l'historique</strong>
+            <a class="feature-card text-decoration-none" th:href="@{/recherche}">
+                <div class="feature-card-icon"><i class="bi bi-search"></i></div>
+                <h3>Recherche rapide</h3>
+                <p>Trouve un emplacement compatible selon le volume et la quantite.</p>
             </a>
-            
+            <a class="feature-card text-decoration-none" th:href="@{/dashboard/stats}">
+                <div class="feature-card-icon"><i class="bi bi-bar-chart-line"></i></div>
+                <h3>Dashboard BI</h3>
+                <p>Consulte les indicateurs de performance et les graphiques analytiques.</p>
+            </a>
         </div>
     </section>
 </main>

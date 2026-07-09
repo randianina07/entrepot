@@ -1,24 +1,35 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/navbar :: head}"></head>
-<body>
+<body class="storage-page">
     <div th:replace="~{fragments/navbar :: navbar}"></div>
     
-    <div class="container mt-4">
+    <div class="container py-4">
         <div th:replace="~{fragments/alerts :: alerts}"></div>
         
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1><i class="bi bi-plus-circle"></i> Nouveau Mouvement - Sortie</h1>
-            <a href="/mouvements/liste" class="btn btn-secondary">
-                <i class="bi bi-arrow-left"></i> Annuler
-            </a>
-        </div>
-        
-        <div class="card">
-            <div class="card-header">
-                <div><i class="bi bi-box-seam"></i> Formulaire de creation de sortie</div>
+        <section class="storage-hero mb-4">
+            <div class="hero-copy">
+                <span class="hero-badge">Mouvement sortant</span>
+                <h1>Nouvelle sortie</h1>
+                <p>Préparez une sortie avec une interface épurée, plus rapide à lire et à remplir.</p>
+                <div class="hero-actions">
+                    <a href="/mouvements/liste" class="btn btn-outline-primary"><i class="bi bi-arrow-left"></i> Retour à la liste</a>
+                </div>
             </div>
-            <div class="card-body">
+            <div class="hero-side">
+                <div class="mini-info-card"><span class="value">Sortie</span><span class="label">Type de mouvement</span></div>
+                <div class="mini-info-card"><span class="value">1+</span><span class="label">Lignes possibles</span></div>
+            </div>
+        </section>
+        
+        <div class="storage-search-card">
+            <div class="storage-section-header">
+                <div>
+                    <span class="chip is-accent">Création</span>
+                    <h2 class="mb-0 mt-2">Formulaire de sortie</h2>
+                </div>
+            </div>
+            <div class="search-form-shell">
                 <form th:action="@{/mouvements/nouveau}" method="post" id="formSortie" th:object="${dto}">
                     <input type="hidden" name="type" value="SORTIE">
                     
@@ -49,7 +60,7 @@
                     
                     <div id="lignesContainer">
                         <!-- Ligne par defaut -->
-                        <div class="ligne-mouvement card mb-3" data-ligne-index="0">
+                        <div class="ligne-mouvement storage-detail-card mb-3" data-ligne-index="0">
                             <div class="card-body">
                                 <div class="row g-3">
                                     <div class="col-md-3">

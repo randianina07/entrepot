@@ -1,56 +1,75 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/navbar :: head}"></head>
-<body>
+<body class="storage-page">
     <div th:replace="~{fragments/navbar :: navbar}"></div>
     
-    <div class="container mt-4">
+    <div class="container py-4">
         <div th:replace="~{fragments/alerts :: alerts}"></div>
         
-        <h1 class="mb-4"><i class="bi bi-speedometer2"></i> Tableau de Bord</h1>
-        
-        <!-- Widgets statistiques -->
-        <div class="row mb-5">
-            <div class="col-md-4 mb-3 mb-md-0">
-                <div class="card stat-card stat-card-success">
-                    <div class="card-body">
-                        <div class="content">
-                            <h6><i class="bi bi-arrow-down-circle me-1"></i> Entrées aujourd'hui</h6>
-                            <div class="display-4" th:text="${entreesAujourdhui}">0</div>
+        <section class="storage-hero mb-4">
+            <div class="hero-copy">
+                <span class="hero-badge">Pilotage</span>
+                <h1>Tableau de bord des mouvements</h1>
+                <p>Suivez les entrées, les sorties et les validations dans une vue plus claire, rapide et élégante.</p>
+                <div class="hero-actions">
+                    <a href="/mouvements/nouveau/entree" class="btn btn-success"><i class="bi bi-arrow-down-circle"></i> Nouvelle entrée</a>
+                    <a href="/mouvements/nouveau/sortie" class="btn btn-danger"><i class="bi bi-arrow-up-circle"></i> Nouvelle sortie</a>
+                    <a href="/mouvements/liste" class="btn btn-outline-primary"><i class="bi bi-list-ul"></i> Voir la liste</a>
+                </div>
+            </div>
+            <div class="hero-side">
+                <div class="mini-info-card"><span class="value" th:text="${entreesAujourdhui}">0</span><span class="label">Entrées aujourd'hui</span></div>
+                <div class="mini-info-card"><span class="value" th:text="${sortiesAujourdhui}">0</span><span class="label">Sorties aujourd'hui</span></div>
+                <div class="mini-info-card"><span class="value" th:text="${enAttenteValidation}">0</span><span class="label">En attente de validation</span></div>
+            </div>
+        </section>
+
+        <section class="storage-section">
+            <div class="storage-section-header">
+                <div>
+                    <span class="hero-badge">Indicateurs</span>
+                    <h2 class="mb-0 mt-2">Lecture rapide de l'activité</h2>
+                    <p>Les chiffres clés sont mis en avant pour identifier immédiatement les flux du jour.</p>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                    <div class="card stat-card stat-card-success h-100">
+                        <div class="card-body">
+                            <div class="content">
+                                <h6><i class="bi bi-arrow-down-circle me-1"></i> Entrées aujourd'hui</h6>
+                                <div class="display-4" th:text="${entreesAujourdhui}">0</div>
+                            </div>
+                            <div class="icon-wrapper"><i class="bi bi-box-seam"></i></div>
                         </div>
-                        <div class="icon-wrapper">
-                            <i class="bi bi-box-seam"></i>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card stat-card stat-card-danger h-100">
+                        <div class="card-body">
+                            <div class="content">
+                                <h6><i class="bi bi-arrow-up-circle me-1"></i> Sorties aujourd'hui</h6>
+                                <div class="display-4" th:text="${sortiesAujourdhui}">0</div>
+                            </div>
+                            <div class="icon-wrapper"><i class="bi bi-box-arrow-up-right"></i></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card stat-card stat-card-warning h-100">
+                        <div class="card-body">
+                            <div class="content">
+                                <h6><i class="bi bi-clock-history me-1"></i> En attente de validation</h6>
+                                <div class="display-4" th:text="${enAttenteValidation}">0</div>
+                            </div>
+                            <div class="icon-wrapper"><i class="bi bi-hourglass-split"></i></div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 mb-3 mb-md-0">
-                <div class="card stat-card stat-card-danger">
-                    <div class="card-body">
-                        <div class="content">
-                            <h6><i class="bi bi-arrow-up-circle me-1"></i> Sorties aujourd'hui</h6>
-                            <div class="display-4" th:text="${sortiesAujourdhui}">0</div>
-                        </div>
-                        <div class="icon-wrapper">
-                            <i class="bi bi-box-seam"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card stat-card stat-card-warning">
-                    <div class="card-body">
-                        <div class="content">
-                            <h6><i class="bi bi-clock-history me-1"></i> En attente de validation</h6>
-                            <div class="display-4" th:text="${enAttenteValidation}">0</div>
-                        </div>
-                        <div class="icon-wrapper">
-                            <i class="bi bi-hourglass-split"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </section>
         
         <!-- Alertes stock bas -->
         <div th:if="${alertesStock != null && !#lists.isEmpty(alertesStock)}" class="alert alert-danger mb-4">
@@ -65,11 +84,14 @@
         </div>
         
         <!-- 5 derniers mouvements -->
-        <div class="card">
-            <div class="card-header">
-                <div><i class="bi bi-list"></i> 5 derniers mouvements</div>
+        <div class="storage-search-card mb-4">
+            <div class="storage-section-header">
+                <div>
+                    <span class="chip is-accent">Dernières activités</span>
+                    <h2 class="mb-0 mt-2">5 derniers mouvements</h2>
+                </div>
             </div>
-            <div class="card-body">
+            <div>
                 <div class="table-responsive">
                     <table class="table table-hover">
                         <thead class="table-light">
@@ -118,34 +140,22 @@
         </div>
         
         <!-- Actions rapides -->
-        <div class="row mt-4">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body text-center">
-                        <h5 class="card-title"><i class="bi bi-plus-circle"></i> Actions rapides</h5>
-                        <div class="d-flex justify-content-center gap-3 mt-3">
-                            <a href="/mouvements/nouveau/entree" class="btn btn-success">
-                                <i class="bi bi-arrow-down-circle"></i> Nouvelle Entree
-                            </a>
-                            <a href="/mouvements/nouveau/sortie" class="btn btn-danger">
-                                <i class="bi bi-arrow-up-circle"></i> Nouvelle Sortie
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body text-center">
-                        <h5 class="card-title"><i class="bi bi-file-earmark-pdf"></i> Export</h5>
-                        <div class="d-flex justify-content-center gap-3 mt-3">
-                            <a href="/mouvements/export/pdf" class="btn btn-outline-danger">
-                                <i class="bi bi-download"></i> Exporter PDF
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="feature-grid mt-4">
+            <a href="/mouvements/nouveau/entree" class="feature-card text-decoration-none">
+                <div class="feature-card-icon"><i class="bi bi-arrow-down-circle"></i></div>
+                <h3>Créer une entrée</h3>
+                <p>Enregistrer rapidement un flux entrant dans un format propre et guidé.</p>
+            </a>
+            <a href="/mouvements/nouveau/sortie" class="feature-card text-decoration-none">
+                <div class="feature-card-icon"><i class="bi bi-arrow-up-circle"></i></div>
+                <h3>Créer une sortie</h3>
+                <p>Préparer un mouvement sortant avec les bonnes vérifications de stock.</p>
+            </a>
+            <a href="/mouvements/export/pdf" class="feature-card text-decoration-none">
+                <div class="feature-card-icon"><i class="bi bi-file-earmark-pdf"></i></div>
+                <h3>Exporter en PDF</h3>
+                <p>Sortir une synthèse lisible pour le suivi opérationnel ou le partage.</p>
+            </a>
         </div>
     </div>
     
