@@ -855,3 +855,328 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER trg_check_capacite_livraison
     BEFORE INSERT OR UPDATE ON livraisons
     FOR EACH ROW EXECUTE FUNCTION fn_check_capacite_livraison();
+
+INSERT INTO roles (code, libelle) VALUES
+    ('ADMIN', 'Administrateur'),
+    ('GESTIONNAIRE', 'Gestionnaire d''entrepot'),
+    ('RESPONSABLE_LOGISTIQUE', 'Responsable logistique'),
+    ('COMPTABLE', 'Comptable'),
+    ('CLIENT', 'Client');
+
+INSERT INTO types_zone (code, libelle, controle_temperature, acces_restreint, journalisation_acces, charge_lourde_possible) VALUES
+    ('ETA', 'Etagere classique', FALSE, FALSE, FALSE, FALSE),
+    ('CHF', 'Frigo / Chambre froide', TRUE, FALSE, FALSE, FALSE),
+    ('SEC', 'Zone securisee', FALSE, TRUE, TRUE, FALSE),
+    ('SOL', 'Zone au sol', FALSE, FALSE, FALSE, TRUE);
+
+INSERT INTO types_mouvement (code, libelle, sens) VALUES
+    ('RETOUR_CLIENT', 'Retour client', 'ENTREE'),
+    ('RECEPTION', 'Reception', 'ENTREE'),
+    ('LIVRAISON_CLIENT', 'Livraison client', 'SORTIE'),
+    ('TRANSFERT_INTERNE', 'Transfert interne', 'SORTIE'),
+    ('PERTE_DESTRUCTION', 'Perte / Destruction', 'SORTIE'),
+    ('EXPEDITION', 'Expedition', 'SORTIE');
+
+INSERT INTO statuts_mouvement (code, libelle, ordre) VALUES
+    ('EN_ATTENTE', 'En attente', 1),
+    ('EN_CONTROLE', 'En controle', 2),
+    ('VALIDE', 'Valide', 3),
+    ('EXPEDIE', 'Expedie', 4),
+    ('ANNULE', 'Annule', 5);
+
+INSERT INTO modes_paiement (code, libelle) VALUES
+    ('ESPECES', 'Especes'),
+    ('MOBILE_MONEY', 'Mobile Money'),
+    ('VIREMENT', 'Virement bancaire'),
+    ('CHEQUE', 'Cheque');
+
+INSERT INTO types_contrat (code, libelle) VALUES
+    ('ABONNE', 'Abonne'),
+    ('NON_ABONNE', 'Non abonne');
+
+INSERT INTO statuts_demande_stockage (code, libelle) VALUES
+    ('EN_ATTENTE', 'Demande en attente'),
+    ('ACCEPTEE', 'Demande acceptee'),
+    ('REFUSEE', 'Demande refusee');
+
+INSERT INTO statuts_renouvellement (code, libelle) VALUES
+    ('EN_ATTENTE', 'En attente'),
+    ('ACCEPTEE', 'Acceptee'),
+    ('REFUSEE', 'Refusee');
+
+INSERT INTO unites_duree (code, libelle) VALUES
+    ('JOUR', 'Jour'),
+    ('SEMAINE', 'Semaine'),
+    ('MOIS', 'Mois');
+
+INSERT INTO types_vehicule (code, libelle) VALUES
+    ('CAMION_LEGER', 'Camion leger'),
+    ('CAMION_FRIGO', 'Camion frigorifique'),
+    ('FOURGONNETTE', 'Fourgonnette'),
+    ('MOTO_LIVRAISON', 'Moto de livraison');
+
+INSERT INTO statuts_vehicule (code, libelle) VALUES
+    ('DISPONIBLE', 'Disponible'),
+    ('EN_MISSION', 'En mission'),
+    ('EN_MAINTENANCE', 'En maintenance'),
+    ('HORS_SERVICE', 'Hors service');
+
+INSERT INTO statuts_mission (code, libelle) VALUES
+    ('PLANIFIEE', 'Planifiee'),
+    ('EN_COURS', 'En cours'),
+    ('TERMINEE', 'Terminee'),
+    ('ANNULEE', 'Annulee');
+
+-- Exemples a adapter selon le parc reel
+INSERT INTO types_maintenance (code, libelle) VALUES
+    ('REVISION', 'Revision periodique'),
+    ('REPARATION', 'Reparation'),
+    ('VIDANGE', 'Vidange'),
+    ('PNEUS', 'Changement pneumatiques');
+
+INSERT INTO modes_calcul_livraison (code, libelle) VALUES
+    ('POIDS', 'Par poids'),
+    ('VOLUME', 'Par volume'),
+    ('ZONE', 'Par zone'),
+    ('POIDS_ZONE', 'Poids + Zone'),
+    ('VOLUME_ZONE', 'Volume + Zone');
+
+INSERT INTO categories_depense (code, libelle) VALUES
+    ('MAINTENANCE', 'Maintenance et reparations'),
+    ('CARBURANT', 'Carburant'),
+    ('SALAIRES', 'Salaires et charges sociales'),
+    ('ELECTRICITE_FROID', 'Electricite et froid');
+
+-- ============================================================================
+-- INSERTION DONNEES TEST - 2 LIGNES PAR TABLE
+-- ============================================================================
+
+-- 1. roles
+INSERT INTO roles (code, libelle) VALUES
+('ADMIN','Administrateur'),
+('CLIENT','Client test');
+
+-- 2. utilisateurs
+INSERT INTO utilisateurs (email, mot_de_passe_hash, role_id) VALUES
+('admin@test.com','hash1',1),
+('client@test.com','hash2',2);
+
+-- 3. utilisateurs_info
+INSERT INTO utilisateurs_info (utilisateur_id, nom, prenom, numero, adresse, secteur) VALUES
+(1,'Admin','Systeme','000','Antananarivo','IT'),
+(2,'Rakoto','Jean','111','Tana','Commerce');
+
+-- 4. types_produits
+INSERT INTO types_produits (code, libelle) VALUES
+('ALIM','Alimentaire'),
+('IND','Industriel');
+
+-- 5. produits
+INSERT INTO produits (code, nom, description, type_produit_id, volume_unitaire_m3, poids_unitaire_kg) VALUES
+('P001','Riz','Sac de riz',1,0.05,25),
+('P002','Sucre','Sac sucre',1,0.04,20);
+
+-- 6. types_zone
+INSERT INTO types_zone (code, libelle, controle_temperature, acces_restreint, journalisation_acces, charge_lourde_possible) VALUES
+('ETA','Etagere',false,false,false,false),
+('CHF','Chambre froide',true,false,false,false);
+
+-- 7. zones
+INSERT INTO zones (code, libelle, type_zone_id, volume_total_m3) VALUES
+('A1','Zone A1',1,100),
+('B1','Zone B1',2,200);
+
+-- 8. emplacements
+INSERT INTO emplacements (code, zone_id, capacite_volume_m3) VALUES
+('ETA-A1-N1',1,10),
+('CHF-B1-N1',2,20);
+
+-- 9. stocks_emplacement
+INSERT INTO stocks_emplacement (emplacement_id, produit_id, quantite) VALUES
+(1,1,10),
+(2,2,5);
+
+-- 10. types_contrat
+INSERT INTO types_contrat (code, libelle) VALUES
+('ABONNE','Abonné'),
+('NON_ABONNE','Non abonné');
+
+-- 11. modes_paiement
+INSERT INTO modes_paiement (code, libelle) VALUES
+('ESPECES','Espèces'),
+('VIREMENT','Virement');
+
+-- 12. statuts_demande_stockage
+INSERT INTO statuts_demande_stockage (code, libelle) VALUES
+('EN_ATTENTE','En attente'),
+('ACCEPTEE','Acceptée');
+
+-- 13. demandes_stockage
+INSERT INTO demandes_stockage (utilisateur_id,type_zone_id,type_contrat_id,volume_espace_m3,date_debut)
+VALUES
+(2,1,1,10,'2026-01-01'),
+(2,2,2,20,'2026-01-02');
+
+-- 14. contrats
+INSERT INTO contrats (demande_stockage_id,utilisateur_id,type_contrat_id,date_debut)
+VALUES
+(1,2,1,'2026-01-01'),
+(2,2,2,'2026-01-02');
+
+-- 15. factures
+INSERT INTO factures (contrat_id,mode_paiement_id,volume_espace_m3,prix_facture)
+VALUES
+(1,1,10,1000),
+(2,2,20,2000);
+
+-- 16. types_mouvement
+INSERT INTO types_mouvement (code,libelle,sens) VALUES
+('RECEPTION','Reception','ENTREE'),
+('LIVRAISON_CLIENT','Livraison','SORTIE');
+
+-- 17. statuts_mouvement
+INSERT INTO statuts_mouvement (code,libelle,ordre) VALUES
+('VALIDE','Valide',1),
+('EN_ATTENTE','En attente',2);
+
+-- 18. mouvements
+INSERT INTO mouvements (code,type_mouvement_id,statut_mouvement_id,utilisateur_id)
+VALUES
+('M001',1,1,1),
+('M002',2,2,1);
+
+-- 19. lignes_mouvement
+INSERT INTO lignes_mouvement (mouvement_id,produit_id,emplacement_dest_id,quantite)
+VALUES
+(1,1,1,5),
+(2,2,2,2);
+
+-- 20. types_vehicule
+INSERT INTO types_vehicule (code,libelle) VALUES
+('CAMION','Camion'),
+('MOTO','Moto');
+
+-- 21. statuts_vehicule
+INSERT INTO statuts_vehicule (code,libelle) VALUES
+('DISPONIBLE','Disponible'),
+('EN_MISSION','En mission');
+
+-- 22. vehicules
+INSERT INTO vehicules (immatriculation,marque,modele,annee,capacite_volume_m3,capacite_charge_kg,type_vehicule_id,statut_vehicule_id)
+VALUES
+('1234TBA','Toyota','Hilux',2020,10,1000,1,1),
+('5678TBB','Yamaha','TruckBike',2022,5,200,2,2);
+
+-- 23. chauffeurs
+INSERT INTO chauffeurs (nom,prenom,telephone,numero_permis)
+VALUES
+('Rakoto','Jean','033000000','P001'),
+('Rabe','Paul','034000000','P002');
+
+-- 24. statuts_mission
+INSERT INTO statuts_mission (code,libelle) VALUES
+('PLANIFIEE','Planifiée'),
+('EN_COURS','En cours');
+
+-- 25. missions_logistiques
+INSERT INTO missions_logistiques (reference_mission,vehicule_id,chauffeur_id,statut_mission_id)
+VALUES
+('MS001',1,1,1),
+('MS002',2,2,2);
+
+-- 26. zones_livraison
+INSERT INTO zones_livraison (libelle,commune,distance_km,tarif_base)
+VALUES
+('Centre','Tana',5,1000),
+('Nord','Tana',10,2000);
+
+-- 27. modes_calcul_livraison
+INSERT INTO modes_calcul_livraison (code,libelle)
+VALUES
+('POIDS','Par poids'),
+('VOLUME','Par volume');
+
+-- 28. tarifs_livraison
+INSERT INTO tarifs_livraison (zone_livraison_id,mode_calcul_id,prix_base,prix_par_kg,prix_par_m3,date_debut_validite)
+VALUES
+(1,1,100,10,5,'2026-01-01'),
+(2,2,200,20,10,'2026-01-01');
+
+-- 29. livraisons
+INSERT INTO livraisons (mission_id,client_id,adresse_livraison,zone_livraison_id,poids_total,volume_total)
+VALUES
+(1,2,'Tana Centre',1,10,1),
+(2,2,'Tana Nord',2,20,2);
+
+-- 30. preuves_livraison
+INSERT INTO preuves_livraison (livraison_id,signature_client,photo_colis)
+VALUES
+(1,'sig1','img1.jpg'),
+(2,'sig2','img2.jpg');
+
+-- 31. categories_depense
+INSERT INTO categories_depense (code,libelle)
+VALUES
+('CARBURANT','Carburant'),
+('MAINTENANCE','Maintenance');
+
+-- 32. depenses
+INSERT INTO depenses (categorie_id,montant,description,vehicule_id,utilisateur_id)
+VALUES
+(1,100,'Essence',1,1),
+(2,200,'Reparation',2,1);
+
+-- 33. unites_duree
+INSERT INTO unites_duree (code,libelle)
+VALUES
+('JOUR','Jour'),
+('MOIS','Mois');
+
+-- 34. occupation_espaces
+INSERT INTO occupation_espaces (date_snapshot,zone_id,capacite_totale_m3,capacite_occupee_m3)
+VALUES
+('2026-06-01',1,100,50),
+('2026-06-02',2,200,80);
+
+-- 35. stats_clients
+INSERT INTO stats_clients (date_debut,date_fin,volume_stocke_m3,duree_moyenne_jours,nb_entrees,nb_sorties,chiffre_affaires,client_id)
+VALUES
+('2026-01-01','2026-01-31',100,10,5,2,10000,2),
+('2026-02-01','2026-02-28',200,20,10,5,20000,2);
+
+-- 36. flux_entrees_sorties
+INSERT INTO flux_entrees_sorties (date,type_flux,type_detail,quantite,volume_m3,mouvement_id)
+VALUES
+('2026-06-01','ENTREE','Reception',5,1,1),
+('2026-06-02','SORTIE','Livraison',2,0.5,2);
+
+-- 37. performance_logistique
+INSERT INTO performance_logistique (date_snapshot,nb_livraisons_total,nb_livraisons_ok,delai_moyen_heures,nb_retards)
+VALUES
+('2026-06-01',10,8,5,2),
+('2026-06-02',20,18,4,1);
+
+-- 38. top_produits
+INSERT INTO top_produits (date_snapshot,rang,quantite_totale,duree_moyenne_stockage_jours,produit_id)
+VALUES
+('2026-06-01',1,100,5,1),
+('2026-06-01',2,80,3,2);
+
+-- 39. types_maintenance
+INSERT INTO types_maintenance (code,libelle)
+VALUES
+('REVISION','Révision'),
+('VIDANGE','Vidange');
+
+-- 40. maintenances_vehicule
+INSERT INTO maintenances_vehicule (vehicule_id,type_maintenance_id,date_maintenance,kilometrage,cout)
+VALUES
+(1,1,'2026-06-01',10000,500),
+(2,2,'2026-06-02',20000,800);
+
+-- 41. historique_vehicule
+INSERT INTO historique_vehicule (vehicule_id,mission_id,date_depart,date_arrivee,kilometrage_depart,kilometrage_arrivee)
+VALUES
+(1,1,'2026-06-01','2026-06-02',10000,10100),
+(2,2,'2026-06-03','2026-06-04',20000,20200);
+

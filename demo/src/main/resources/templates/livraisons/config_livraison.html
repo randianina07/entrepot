@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h3 th:if="${successMessage != null}" th:text="${successMessage}"></h3>
+    <h3 th:if="${errorMessage != null}" th:text="${errorMessage}"></h3>
+
+    <h3>Livraison de </h3>
+    <h3 th:text="${livraison.client.user_email}"></h3>
+
+    <p th:text="${livraison.adresseLivraison}"></p>
+    <p>Poids du colis</p>
+    <p th:text="${livraison.poidsTotal}"></p>
+    <p>Taille du Colis</p>
+    <p th:text="${livraison.volumeTotal}"></p>
+
+    <form th:action="@{/livraisons/config_livraison}" method="post">
+        <input type="hidden" name="livraisonId" th:value="${livraison.id}">
+
+        <p>Date Prevue de la livraison</p>
+
+        <input type="date" name="datePrevue" required>
+        <input type="time" name="heurePrevue" required>
+
+        <p>Mode de calcule de la livraison</p>
+        <select name="mode_calcule_id" disabled>
+            <option value="">Choisir</option>
+            <option th:each="m :${mode_calcule}" th:value="${m.id}" th:text="${m.libelle}">
+            </option>
+        </select>
+
+        <p>Tarif de livraison (zone correspondante)</p>
+        <select name="tarifId" required>
+            <option value="">Choisir tarif</option>
+            <option
+                th:each="t :${tarif_livraison}"
+                th:if="${t.zoneLivraison != null and livraison.zoneLivraison != null and t.zoneLivraison.id == livraison.zoneLivraison.id}"
+                th:value="${t.id}"
+                th:text="${(t.modeCalculeLivraison != null ? t.modeCalculeLivraison.libelle : 'Tarif') + ' | Kg:' + t.prixParKg + ' | m3:' + t.prixParm + ' | base zone:' + t.zoneLivraison.tarifBase}">
+            </option>
+        </select>
+
+        <table border="1">
+            <tr>
+                <th>Poids kg </th>
+                <th>Volume m3</th>
+                <th>Zone</th>
+                <th>Commune</th>
+                <th>Prix Poids </th>
+                <th>Prix Volume </th>
+                <th>Prix de la Livraison</th>
+                <th>Total</th>
+            </tr>
+            <tr th:each="t :${tarif_livraison}" th:if="${t.zoneLivraison != null and livraison.zoneLivraison != null and t.zoneLivraison.id == livraison.zoneLivraison.id}">
+                <td th:text="${livraison.poidsTotal}"></td>
+                <td th:text="${livraison.volumeTotal}"></td>
+                <td th:text="${livraison.zoneLivraison.libelle}"></td>
+                <td th:text="${livraison.zoneLivraison.commune}"></td>
+                <td th:text="${t.prixParKg}"></td>
+                <td th:text="${t.prixParm}"></td>
+                <td th:text="${t.zoneLivraison.tarifBase}"></td>
+                <td
+                    th:text="${(livraison.poidsTotal * t.prixParKg) + (livraison.volumeTotal * t.prixParm) + t.zoneLivraison.tarifBase }">
+                </td>
+            </tr>
+        </table>
+
+        <p>Frais de livraison: choisissez un tarif puis validez.</p>
+        <input type="submit" value="Valider la Livraison">
+    </form>
+
+</body>
+
+</html>
