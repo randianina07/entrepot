@@ -47,18 +47,18 @@
                 </div>
 
                 <div class="col-md-4">
-                    <label for="capaciteVolume" class="form-label">Capacité Volume (m³) <span class="text-danger">*</span></label>
-                    <input type="number" step="0.01" class="form-control" id="capaciteVolume" th:field="*{capaciteVolume}" placeholder="Capacité Volume" required>
+                    <label for="capaciteVolumeM3" class="form-label">Capacité Volume (m³) <span class="text-danger">*</span></label>
+                    <input type="number" step="0.01" class="form-control" id="capaciteVolumeM3" th:field="*{capaciteVolumeM3}" placeholder="Capacité Volume" required>
                 </div>
 
                 <div class="col-md-4">
-                    <label for="capaciteChargekg" class="form-label">Capacité Charge (kg) <span class="text-danger">*</span></label>
-                    <input type="number" step="0.01" class="form-control" id="capaciteChargekg" th:field="*{capaciteChargekg}" placeholder="Capacité kg" required>
+                    <label for="capaciteChargeKg" class="form-label">Capacité Charge (kg) <span class="text-danger">*</span></label>
+                    <input type="number" step="0.01" class="form-control" id="capaciteChargeKg" th:field="*{capaciteChargeKg}" placeholder="Capacité kg" required>
                 </div>
 
                 <div class="col-md-4">
-                    <label for="kilometrage" class="form-label">Kilométrage actuel</label>
-                    <input type="number" step="0.01" class="form-control" id="kilometrage" th:field="*{kilometrage}" placeholder="Kilométrage actuel">
+                    <label for="kilometrageActuel" class="form-label">Kilométrage actuel</label>
+                    <input type="number" step="0.01" class="form-control" id="kilometrageActuel" th:field="*{kilometrageActuel}" placeholder="Kilométrage actuel">
                 </div>
 
                 <div class="col-md-6">
@@ -79,7 +79,7 @@
                         <option th:each="s : ${statutVehicule}"
                                 th:value="${s.id}"
                                 th:text="${s.libelle}"
-                                th:selected="${vehicule.statut != null and vehicule.statut.id == s.id}"></option>
+                                th:selected="${vehicule.statutVehicule != null and vehicule.statutVehicule.id == s.id}"></option>
                     </select>
                 </div>
 

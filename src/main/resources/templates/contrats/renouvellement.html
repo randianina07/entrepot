@@ -5,6 +5,7 @@
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <main class="container py-4">
+    <div th:replace="~{fragments/alerts :: alerts}"></div>
     <section class="storage-hero mb-4">
         <div class="hero-copy">
             <span class="hero-badge"><i class="bi bi-arrow-clockwise"></i> Renouvellement</span>
@@ -25,21 +26,21 @@
         </div>
 
         <div class="search-form-shell">
-            <form class="row g-3" th:action="@{/contrats/renouvellement}" th:object="${demande}" method="post">
+            <form class="row g-3" th:action="@{/contrats/renouvellement}" method="post">
                 <div class="col-md-6">
                     <label for="contratId" class="form-label">Contrat à renouveler <span class="text-danger">*</span></label>
                     <select class="form-select" id="contratId" name="contratId" required>
                         <option value="">-- Sélectionner un contrat --</option>
                         <option th:each="contrat : ${contrats}" 
                                 th:value="${contrat.id}"
-                                th:text="|Contrat #${contrat.id} - ${contrat.typeZone.libelle} (${contrat.dateDebut} → ${contrat.dateFin})|">
+                                th:text="|Contrat #${contrat.id} - ${contrat.type_zone_libelle} (${contrat.date_debut_fmt} → ${contrat.date_fin_fmt}) - ${contrat.client_email}|">
                         </option>
                     </select>
                 </div>
 
                 <div class="col-md-6">
                     <label for="dateFin" class="form-label">Nouvelle date de fin souhaitée <span class="text-danger">*</span></label>
-                    <input type="date" class="form-control" id="dateFin" th:field="*{dateFin}" required>
+                    <input type="date" class="form-control" id="dateFin" name="dateFin" required>
                 </div>
 
                 <div class="col-12 mt-4">

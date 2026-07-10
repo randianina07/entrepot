@@ -92,9 +92,10 @@ public class MouvementService {
     public Mouvement creerMouvement(MouvementCreateDTO dto, Long utilisateurId) {
         TypeMouvement typeMouvement = typeMouvementRepository.findById(dto.getTypeMouvementId())
             .orElseThrow(() -> new RuntimeException("Type de mouvement non trouvé"));
-        
+
         StatutMouvement statutBrouillon = statutMouvementRepository.findByCode("BROUILLON")
-            .orElseThrow(() -> new RuntimeException("Statut BROUILLON non trouvé"));
+            .or(() -> statutMouvementRepository.findByCode("EN_ATTENTE"))
+            .orElseThrow(() -> new RuntimeException("Statut initial introuvable (BROUILLON / EN_ATTENTE)"));
         
         Utilisateur utilisateur = utilisateurRepository.findById(utilisateurId)
             .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
@@ -166,8 +167,13 @@ public class MouvementService {
         StatutMouvement statutValide = statutMouvementRepository.findByCode("VALIDE")
             .orElseThrow(() -> new RuntimeException("Statut VALIDE non trouvé"));
         
-        if (!mouvement.getStatutMouvement().getCode().equals("BROUILLON")) {
-            throw new RuntimeException("Seuls les mouvements en statut BROUILLON peuvent être validés");
+        String statutActuel = mouvement.getStatutMouvement() != null ? mouvement.getStatutMouvement().getCode() : null;
+        boolean peutValider = "BROUILLON".equals(statutActuel)
+                || "EN_ATTENTE".equals(statutActuel)
+                || "EN_CONTROLE".equals(statutActuel);
+
+        if (!peutValider) {
+            throw new RuntimeException("Seuls les mouvements en attente/brouillon peuvent être validés");
         }
         
         for (LigneMouvement ligne : mouvement.getLignes()) {
@@ -449,9 +455,9 @@ public class MouvementService {
         // Additional fields for template compatibility
         dto.setTypeMouvement(mouvement.getTypeMouvement().getCode());
         dto.setStatutMouvement(mouvement.getStatutMouvement().getCode());
-        dto.setClient(mouvement.getClient() != null ? mouvement.getClient().getNom() : null);
+        dto.setClient(mouvement.getClient() != null ? mouvement.getClient().getDisplayName() : null);
         dto.setNbLignes(mouvement.getLignes() != null ? mouvement.getLignes().size() : 0);
-        dto.setOperateur(mouvement.getUtilisateur() != null ? mouvement.getUtilisateur().getNom() : null);
+        dto.setOperateur(mouvement.getUtilisateur() != null ? mouvement.getUtilisateur().getDisplayName() : null);
         
         return dto;
     }
@@ -568,8 +574,9 @@ public class MouvementService {
     @Transactional
     public Long creerMouvementAvecLignes(MouvementCreateDTO dto, String type) {
         TypeMouvement typeMouvement = typeMouvementRepository.findByCode(type)
+            .or(() -> typeMouvementRepository.findFirstBySensOrderByIdAsc(type))
             .orElseThrow(() -> new RuntimeException("Type de mouvement non trouvé: " + type));
-        
+
         dto.setTypeMouvementId(typeMouvement.getId());
         
         Long utilisateurId = 1L; // TODO: Get from authenticated user
@@ -623,7 +630,14 @@ public class MouvementService {
     
     public long countMouvementsByStatut(String statut) {
         List<Mouvement> mouvements = mouvementRepository.findByStatutMouvement_Code(statut);
-        return mouvements.size();
+
+        if (!mouvements.isEmpty() || !"BROUILLON".equals(statut)) {
+            return mouvements.size();
+        }
+
+        long enAttente = mouvementRepository.findByStatutMouvement_Code("EN_ATTENTE").size();
+        long enControle = mouvementRepository.findByStatutMouvement_Code("EN_CONTROLE").size();
+        return enAttente + enControle;
     }
     
     public List<MouvementListDTO> getDerniersMouvements(int limit) {

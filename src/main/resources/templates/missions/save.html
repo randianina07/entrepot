@@ -62,8 +62,8 @@
                                       th:classappend="${m.statutMission.code == 'PLANIFIEE' ? 'bg-warning' : m.statutMission.code == 'EN_COURS' ? 'bg-success' : 'bg-secondary'}"
                                       th:text="${m.statutMission.libelle}"></span>
                             </td>
-                            <td th:text="${m.dateDepartPrevue}"></td>
-                            <td th:text="${m.dateArriveePrevue}"></td>
+                            <td th:text="${m.dateDepartPrevue != null ? #temporals.format(m.dateDepartPrevue, 'dd/MM/yyyy HH:mm') : '-'}"></td>
+                            <td th:text="${m.dateArriveePrevue != null ? #temporals.format(m.dateArriveePrevue, 'dd/MM/yyyy HH:mm') : '-'}"></td>
                             <td>
                                 <div class="btn-group">
                                     <form th:if="${m.statutMission.code == 'PLANIFIEE'}" th:action="@{/missions/start}" method="post" style="display:inline">
@@ -123,12 +123,12 @@
                         <tbody>
                         <tr th:each="l : ${detailLivraisons}">
                             <td th:text="${l.id}"></td>
-                            <td th:text="${l.client.user_email}"></td>
-                            <td th:text="${l.adresseLivraison}"></td>
-                            <td th:text="${l.zoneLivraison.commune}"></td>
-                            <td th:text="${l.volumeTotal}"></td>
-                            <td th:text="${l.datePrevue}"></td>
-                            <td th:text="${l.dateLivraison}"></td>
+                            <td th:text="${l.client_email}"></td>
+                            <td th:text="${l.adresse_livraison}"></td>
+                            <td th:text="${l.zone_commune}"></td>
+                            <td th:text="${l.volume_total}"></td>
+                            <td th:text="${l.date_prevue_fmt}"></td>
+                            <td th:text="${l.date_livraison_fmt}"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -169,7 +169,7 @@
                         <option value="">Véhicule disponible</option>
                         <option th:each="v : ${vehicule}"
                                 th:value="${v.id}"
-                                th:text="${v.marque + ' - cap. ' + v.capaciteVolume + 'm3'}">
+                                th:text="${v.marque + ' - cap. ' + v.capaciteVolumeM3 + 'm3'}">
                         </option>
                     </select>
                 </div>
@@ -202,12 +202,12 @@
                             <tbody>
                             <tr th:each="l : ${livraison}">
                                 <td><input type="checkbox" name="livraisonIds" th:value="${l.id}"></td>
-                                <td th:text="${l.client.user_email}"></td>
-                                <td th:text="${l.adresseLivraison}"></td>
-                                <td th:text="${l.zoneLivraison.commune}"></td>
-                                <td th:text="${l.poidsTotal}"></td>
-                                <td th:text="${l.volumeTotal}"></td>
-                                <td th:text="${l.datePrevue}"></td>
+                                <td th:text="${l.client_email}"></td>
+                                <td th:text="${l.adresse_livraison}"></td>
+                                <td th:text="${l.zone_commune}"></td>
+                                <td th:text="${l.poids_total}"></td>
+                                <td th:text="${l.volume_total}"></td>
+                                <td th:text="${l.date_prevue_fmt != null ? l.date_prevue_fmt : '-'}"></td>
                             </tr>
                             </tbody>
                         </table>

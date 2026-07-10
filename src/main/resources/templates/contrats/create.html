@@ -5,6 +5,7 @@
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <main class="container py-4">
+    <div th:replace="~{fragments/alerts :: alerts}"></div>
     <section class="storage-hero mb-4">
         <div class="hero-copy">
             <span class="hero-badge"><i class="bi bi-file-earmark-plus"></i> Nouveau contrat</span>
@@ -25,7 +26,7 @@
         </div>
 
         <div class="search-form-shell">
-            <form class="row g-3" th:action="@{/contrats/create}" method="post" th:object="${contrat}">
+            <form class="row g-3" th:action="@{/contrats/create}" method="post">
                 <div class="col-12">
                     <h5>Contrat avec :</h5>
                 </div>
@@ -55,32 +56,32 @@
 
                 <div class="col-md-6">
                     <label for="demandeStockageId" class="form-label">Demande de stockage (ID) <span class="text-danger">*</span></label>
-                    <input type="number" class="form-control" id="demandeStockageId" th:field="*{demandeStockageId}" required>
+                    <input type="number" class="form-control" id="demandeStockageId" name="demandeStockageId" required>
                 </div>
 
                 <div class="col-md-6">
                     <label for="typeZoneId" class="form-label">Zone (ID) <span class="text-danger">*</span></label>
-                    <input type="number" class="form-control" id="typeZoneId" th:field="*{typeZoneId}" required>
+                    <input type="number" class="form-control" id="typeZoneId" name="typeZoneId">
                 </div>
 
                 <div class="col-md-4">
                     <label for="volumeEspaceM3" class="form-label">Volume d'espace (m³) <span class="text-danger">*</span></label>
-                    <input type="number" step="0.001" class="form-control" id="volumeEspaceM3" th:field="*{volumeEspaceM3}" required>
+                    <input type="number" step="0.001" class="form-control" id="volumeEspaceM3" name="volumeEspaceM3" required>
                 </div>
 
                 <div class="col-md-4">
                     <label for="dateDebut" class="form-label">Date début <span class="text-danger">*</span></label>
-                    <input type="date" class="form-control" id="dateDebut" th:field="*{dateDebut}" required>
+                    <input type="date" class="form-control" id="dateDebut" name="dateDebut" required>
                 </div>
 
                 <div class="col-md-4">
                     <label for="dateFin" class="form-label">Date fin</label>
-                    <input type="date" class="form-control" id="dateFin" th:field="*{dateFin}">
+                    <input type="date" class="form-control" id="dateFin" name="dateFin">
                 </div>
 
                 <div class="col-12">
                     <label for="description" class="form-label">Description</label>
-                    <textarea class="form-control" id="description" th:field="*{description}" rows="4"></textarea>
+                    <textarea class="form-control" id="description" name="description" rows="4"></textarea>
                 </div>
 
                 <div class="col-12 mt-4">

@@ -57,7 +57,7 @@
                         <select class="form-select" id="client" name="clientId">
                             <option value="">Tous</option>
                             <option th:each="c : ${clients}" th:value="${c.id}" 
-                                    th:text="${c.nom}" th:selected="${filtre?.clientId == c.id}"></option>
+                                    th:text="${c.displayName}" th:selected="${filtre?.clientId == c.id}"></option>
                         </select>
                     </div>
                     <div class="col-md-2">

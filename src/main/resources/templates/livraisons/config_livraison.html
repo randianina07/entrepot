@@ -28,12 +28,12 @@
         <div class="storage-panel">
             <div class="row">
                 <div class="col-md-6">
-                    <p><strong>Client:</strong> <span th:text="${livraison.client.user_email}"></span></p>
-                    <p><strong>Adresse:</strong> <span th:text="${livraison.adresseLivraison}"></span></p>
+                    <p><strong>Client:</strong> <span th:text="${livraison.client_email}"></span></p>
+                    <p><strong>Adresse:</strong> <span th:text="${livraison.adresse_livraison}"></span></p>
                 </div>
                 <div class="col-md-6">
-                    <p><strong>Poids total:</strong> <span th:text="${livraison.poidsTotal} + ' kg'"></span></p>
-                    <p><strong>Volume total:</strong> <span th:text="${livraison.volumeTotal} + ' m³'"></span></p>
+                    <p><strong>Poids total:</strong> <span th:text="${#numbers.formatDecimal(livraison.poids_total, 1, 2)} + ' kg'"></span></p>
+                    <p><strong>Volume total:</strong> <span th:text="${#numbers.formatDecimal(livraison.volume_total, 1, 3)} + ' m³'"></span></p>
                 </div>
             </div>
         </div>
@@ -66,9 +66,8 @@
                     <select class="form-select" id="tarifId" name="tarifId" required>
                         <option value="">Choisir tarif</option>
                         <option th:each="t : ${tarif_livraison}"
-                                th:if="${t.zoneLivraison != null and livraison.zoneLivraison != null and t.zoneLivraison.id == livraison.zoneLivraison.id}"
                                 th:value="${t.id}"
-                                th:text="${(t.modeCalculeLivraison != null ? t.modeCalculeLivraison.libelle : 'Tarif') + ' | Kg:' + t.prixParKg + ' | m3:' + t.prixParm + ' | base zone:' + t.zoneLivraison.tarifBase}">
+                                th:text="${(t.mode_libelle != null ? t.mode_libelle : 'Tarif') + ' | Kg:' + t.prix_par_kg + ' | m3:' + t.prix_par_m3 + ' | base zone:' + livraison.zone_tarif_base}">
                         </option>
                     </select>
                 </div>
@@ -89,16 +88,15 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="t : ${tarif_livraison}" 
-                                th:if="${t.zoneLivraison != null and livraison.zoneLivraison != null and t.zoneLivraison.id == livraison.zoneLivraison.id}">
-                                <td th:text="${livraison.poidsTotal}"></td>
-                                <td th:text="${livraison.volumeTotal}"></td>
-                                <td th:text="${livraison.zoneLivraison.libelle}"></td>
-                                <td th:text="${livraison.zoneLivraison.commune}"></td>
-                                <td th:text="${t.prixParKg}"></td>
-                                <td th:text="${t.prixParm}"></td>
-                                <td th:text="${t.zoneLivraison.tarifBase}"></td>
-                                <td th:text="${(livraison.poidsTotal * t.prixParKg) + (livraison.volumeTotal * t.prixParm) + t.zoneLivraison.tarifBase}"></td>
+                            <tr th:each="t : ${tarif_livraison}">
+                                <td th:text="${livraison.poids_total}"></td>
+                                <td th:text="${livraison.volume_total}"></td>
+                                <td th:text="${livraison.zone_libelle}"></td>
+                                <td th:text="${livraison.zone_commune}"></td>
+                                <td th:text="${#numbers.formatDecimal(t.prix_par_kg, 1, 2)} + ' Ar'"></td>
+                                <td th:text="${#numbers.formatDecimal(t.prix_par_m3, 1, 2)} + ' Ar'"></td>
+                                <td th:text="${#numbers.formatDecimal(livraison.zone_tarif_base, 1, 2)} + ' Ar'"></td>
+                                <td th:text="${#numbers.formatDecimal((livraison.poids_total * t.prix_par_kg) + (livraison.volume_total * t.prix_par_m3) + livraison.zone_tarif_base + t.prix_base, 1, 2)} + ' Ar'"></td>
                             </tr>
                             </tbody>
                         </table>

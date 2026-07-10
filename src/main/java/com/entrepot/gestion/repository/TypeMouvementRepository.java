@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface TypeMouvementRepository extends JpaRepository<TypeMouvement, Long> {
     
     Optional<TypeMouvement> findByCode(String code);
+
+    Optional<TypeMouvement> findFirstBySensOrderByIdAsc(String sens);
 }

@@ -5,6 +5,7 @@
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <main class="container py-4">
+    <div th:replace="~{fragments/alerts :: alerts}"></div>
     <section class="storage-hero mb-4">
         <div class="hero-copy">
             <span class="hero-badge"><i class="bi bi-clipboard-list"></i> Demandes de stockage</span>
@@ -51,13 +52,13 @@
                         </td>
                     </tr>
                     <tr th:each="demande : ${demandes}">
-                        <td th:text="${demande.utilisateur.email}"></td>
-                        <td th:text="${demande.utilisateur.email}"></td>
-                        <td th:text="${demande.typeZone.libelle}"></td>
-                        <td th:text="${demande.typeContrat.libelle}"></td>
-                        <td th:text="${demande.volumeEspaceM3}"></td>
-                        <td th:text="${demande.dateDebut}"></td>
-                        <td th:text="${demande.dateFin}"></td>
+                        <td th:text="${demande.client_email}"></td>
+                        <td th:text="${demande.client_email}"></td>
+                        <td th:text="${demande.type_zone_libelle}"></td>
+                        <td th:text="${demande.type_contrat_libelle}"></td>
+                        <td th:text="${#numbers.formatDecimal(demande.volume_espace_m3, 1, 2)} + ' m³'"></td>
+                        <td th:text="${demande.date_debut_fmt}"></td>
+                        <td th:text="${demande.date_fin_fmt}"></td>
                         <td>
                             <div class="btn-group">
                                 <a th:href="@{/contrats/demande/accepter/{id}(id=${demande.id})}" class="btn btn-sm btn-success">

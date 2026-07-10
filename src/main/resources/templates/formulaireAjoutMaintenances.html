@@ -32,7 +32,7 @@
                         <option value="">Sélectionner un véhicule</option>
                         <option th:each="vehicule : ${vehicules}"
                                 th:value="${vehicule.id}"
-                                th:text="${vehicule.libelleAffichage}"></option>
+                                th:text="${vehicule.immatriculation + ' - ' + (vehicule.marque != null ? vehicule.marque : '') + ' ' + (vehicule.modele != null ? vehicule.modele : '')}"></option>
                     </select>
                 </div>
 
@@ -42,7 +42,7 @@
                         <option value="">Sélectionner un type</option>
                         <option th:each="typeMaintenance : ${typesMaintenances}"
                                 th:value="${typeMaintenance.id}"
-                                th:text="${typeMaintenance.libelleAffichage}"></option>
+                                th:text="${typeMaintenance.libelle}"></option>
                     </select>
                 </div>
 

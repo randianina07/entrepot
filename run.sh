@@ -26,11 +26,11 @@ fi
 sleep 1
 
 if [[ -x "./mvnw" ]]; then
-  exec ./mvnw -f demo/pom.xml spring-boot:run
+  exec ./mvnw spring-boot:run
 fi
 
 if command -v mvn >/dev/null 2>&1; then
-  exec mvn -f demo/pom.xml spring-boot:run
+  exec mvn spring-boot:run
 fi
 
 echo "Maven wrapper not found and Maven is not available on PATH."

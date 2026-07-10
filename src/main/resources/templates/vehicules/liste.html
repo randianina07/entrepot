@@ -108,11 +108,11 @@
                         <td th:text="${v.marque}"></td>
                         <td th:text="${v.modele}"></td>
                         <td th:text="${v.annee}"></td>
-                        <td th:text="${v.capaciteVolume} + ' m³'"></td>
-                        <td th:text="${v.capaciteChargekg} + ' kg'"></td>
-                        <td th:text="${v.kilometrage} + ' km'"></td>
+                        <td th:text="${v.capaciteVolumeM3} + ' m³'"></td>
+                        <td th:text="${v.capaciteChargeKg} + ' kg'"></td>
+                        <td th:text="${v.kilometrageActuel} + ' km'"></td>
                         <td th:text="${v.typeVehicule.libelle}"></td>
-                        <td th:text="${v.Statut.libelle}"></td>
+                        <td th:text="${v.statutVehicule.libelle}"></td>
                         <td>
                             <a th:href="@{/vehicules/modifier/{id}(id=${v.id})}" class="btn btn-sm btn-outline-primary">
                                 <i class="bi bi-pencil"></i>

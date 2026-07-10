@@ -27,8 +27,8 @@ INSERT INTO roles (code, libelle) VALUES
     ('CLIENT', 'Client');
 
 INSERT INTO utilisateurs (email, mot_de_passe_hash, role_id, actif, date_creation) VALUES
-    ('admin@entrepot.com', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iAt6Z5EH', 1, true, now()),
-    ('client1@test.com', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iAt6Z5EH', 4, true, now());
+    ('admin@entrepot.com', '$2a$10$dXUCIrzukQ84x0UKkr0xZ.4QBMUoyzdM4Cva9CceR8eCnQXuvOW/6', 1, true, now()),
+    ('client1@test.com', '$2a$10$dXUCIrzukQ84x0UKkr0xZ.4QBMUoyzdM4Cva9CceR8eCnQXuvOW/6', 4, true, now());
 
 INSERT INTO utilisateurs_info (utilisateur_id, nom, prenom, numero, adresse, secteur) VALUES
     (1, 'Admin', 'System', '001234567', 'Adresse Admin', 'Centre'),

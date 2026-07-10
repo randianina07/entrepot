@@ -39,7 +39,7 @@
                             <select class="form-select" id="clientId" name="clientId" required>
                                 <option value="">Selectionner un client</option>
                                 <option th:each="c : ${clients}" th:value="${c.id}" 
-                                        th:text="${c.nom}"></option>
+                                        th:text="${c.displayName}"></option>
                             </select>
                             <div class="text-danger" th:if="${#fields.hasErrors('clientId')}" 
                                  th:errors="*{clientId}">Erreur client</div>

@@ -27,13 +27,4 @@ public class Type_zone_controller {
         return "Emplacement/Choose_type_zone";
     }
 
-    @GetMapping("/accueil")
-    public String Espace_stockage() {
-
-        return "Emplacement/accueil";
-
-    }
-    
-        
-
 }

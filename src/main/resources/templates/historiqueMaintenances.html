@@ -5,6 +5,7 @@
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <main class="container py-4">
+    <div th:replace="~{fragments/alerts :: alerts}"></div>
     <section class="storage-hero mb-4">
         <div class="hero-copy">
             <span class="hero-badge"><i class="bi bi-tools"></i> Maintenances</span>
@@ -39,7 +40,7 @@
                         <option value="" th:selected="${typeMaintenanceIdSelectionne == null}">Tous</option>
                         <option th:each="typeMaintenance : ${typesMaintenances}"
                                 th:value="${typeMaintenance.id}"
-                                th:text="${typeMaintenance.libelleAffichage}"
+                                th:text="${typeMaintenance.libelle}"
                                 th:selected="${typeMaintenanceIdSelectionne != null and typeMaintenanceIdSelectionne == typeMaintenance.id}"></option>
                     </select>
                 </div>
@@ -99,11 +100,11 @@
                         </td>
                     </tr>
                     <tr th:each="maintenance : ${maintenances}">
-                        <td th:text="${maintenance.vehiculeId}"></td>
-                        <td th:text="${maintenance.typeMaintenanceId}"></td>
-                        <td th:text="${maintenance.dateMaintenance}"></td>
-                        <td th:text="${maintenance.kilometrage}"></td>
-                        <td th:text="${maintenance.cout}"></td>
+                        <td th:text="${maintenance.immatriculation + ' - ' + (maintenance.marque != null ? maintenance.marque : '') + ' ' + (maintenance.modele != null ? maintenance.modele : '')}"></td>
+                        <td th:text="${maintenance.type_maintenance_libelle}"></td>
+                        <td th:text="${maintenance.date_maintenance_fmt}"></td>
+                        <td th:text="${maintenance.kilometrage != null ? #numbers.formatDecimal(maintenance.kilometrage, 1, 2) + ' km' : '-'}"></td>
+                        <td th:text="${maintenance.cout != null ? #numbers.formatDecimal(maintenance.cout, 1, 2) + ' Ar' : '-'}"></td>
                         <td th:text="${maintenance.description}"></td>
                     </tr>
                     </tbody>

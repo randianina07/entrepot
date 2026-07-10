@@ -5,6 +5,7 @@
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <main class="container py-4">
+    <div th:replace="~{fragments/alerts :: alerts}"></div>
     <section class="storage-hero mb-4">
         <div class="hero-copy">
             <span class="hero-badge"><i class="bi bi-arrow-clockwise"></i> Renouvellements</span>
@@ -51,11 +52,11 @@
                     </tr>
                     <tr th:each="demande : ${demandes}">
                         <td th:text="${demande.id}"></td>
-                        <td th:text="${demande.contrat.id}"></td>
-                        <td th:text="${demande.contrat.utilisateur.email}"></td>
-                        <td th:text="${demande.dateDemande}"></td>
-                        <td th:text="${demande.contrat.dateFin}"></td>
-                        <td th:text="${demande.dateFin}"></td>
+                        <td th:text="${demande.contrat_id}"></td>
+                        <td th:text="${demande.client_email}"></td>
+                        <td th:text="${demande.date_demande_fmt}"></td>
+                        <td th:text="${demande.ancienne_date_fin_fmt}"></td>
+                        <td th:text="${demande.nouvelle_date_fin_fmt}"></td>
                         <td>
                             <div class="btn-group">
                                 <a th:href="@{/contrats/renouvellement/accepter/{id}(id=${demande.id})}" class="btn btn-sm btn-success">

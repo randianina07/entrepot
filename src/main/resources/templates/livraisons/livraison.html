@@ -5,6 +5,7 @@
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <main class="container py-4">
+    <div th:replace="~{fragments/alerts :: alerts}"></div>
     <section class="storage-hero mb-4">
         <div class="hero-copy">
             <span class="hero-badge"><i class="bi bi-box-arrow-up-right"></i> Livraisons</span>
@@ -37,19 +38,25 @@
                         <th>ID</th>
                         <th>Client</th>
                         <th>Adresse</th>
+                        <th>Date prévue</th>
+                        <th>Date livrée</th>
+                        <th>Montant</th>
                         <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:if="${listeLivraison == null or listeLivraison.isEmpty()}">
-                        <td colspan="4">
+                        <td colspan="7">
                             <div class="empty-state">Aucune livraison disponible.</div>
                         </td>
                     </tr>
                     <tr th:each="l : ${listeLivraison}">
                         <td th:text="${l.id}"></td>
-                        <td th:text="${l.client.user_email}"></td>
-                        <td th:text="${l.adresseLivraison}"></td>
+                        <td th:text="${l.client_email}"></td>
+                        <td th:text="${l.adresse_livraison}"></td>
+                        <td th:text="${l.date_prevue_fmt != null ? l.date_prevue_fmt : '-'}"></td>
+                        <td th:text="${l.date_livraison_fmt}"></td>
+                        <td th:text="${l.montant_livraison != null ? #numbers.formatDecimal(l.montant_livraison, 1, 2) + ' Ar' : '-'}"></td>
                         <td>
                             <a th:href="@{/livraisons/config_livraison(id=${l.id})}" class="btn btn-sm btn-primary">
                                 <i class="bi bi-gear"></i> Configurer

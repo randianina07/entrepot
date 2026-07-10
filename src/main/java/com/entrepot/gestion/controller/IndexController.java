@@ -8,6 +8,26 @@ public class IndexController {
 
     @GetMapping("/")
     public String index() {
-        return "redirect:/mouvements/tableau-de-bord";
+        return "redirect:/dashboard";
+    }
+
+    @GetMapping("/accueil")
+    public String accueil() {
+        return "Emplacement/accueil";
+    }
+
+    @GetMapping("/historiqueMaintenances")
+    public String legacyHistoriqueMaintenances() {
+        return "redirect:/maintenances";
+    }
+
+    @GetMapping("/formulaireAjoutMaintenances")
+    public String legacyFormulaireAjoutMaintenances() {
+        return "redirect:/maintenances/ajouter";
+    }
+
+    @GetMapping("/formulaireAjoutChauffeurs")
+    public String legacyFormulaireAjoutChauffeurs() {
+        return "redirect:/chauffeurs/ajouter";
     }
 }

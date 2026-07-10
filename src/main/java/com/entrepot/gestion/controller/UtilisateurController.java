@@ -2,6 +2,7 @@ package com.entrepot.gestion.controller;
 
 import com.entrepot.gestion.model.Role;
 import com.entrepot.gestion.model.Utilisateur;
+import com.entrepot.gestion.model.UtilisateurInfo;
 import com.entrepot.gestion.repository.RoleRepository;
 import com.entrepot.gestion.repository.UtilisateurInfoRepository;
 import com.entrepot.gestion.repository.UtilisateurRepository;
@@ -9,9 +10,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -55,7 +56,7 @@ public class UtilisateurController {
         try {
             // Vérifier si l'email existe déjà
             if (utilisateurRepository.existsByEmail(email)) {
-                model.addAttribute("erreur", "Cet email est déjà utilisé.");
+                model.addAttribute("erreur", "❌ Cet email est déjà utilisé.");
                 model.addAttribute("roles", rolesInscriptionClient());
                 return "utilisateur/formulaire";
             }
@@ -64,7 +65,7 @@ public class UtilisateurController {
                     .orElseThrow(() -> new RuntimeException("Rôle non trouvé"));
 
             if (!"CLIENT".equals(role.getCode())) {
-                model.addAttribute("erreur", "Seule l'inscription client est autorisée depuis cette page.");
+                model.addAttribute("erreur", "❌ Seule l'inscription client est autorisée depuis cette page.");
                 model.addAttribute("roles", rolesInscriptionClient());
                 return "utilisateur/formulaire";
             }
@@ -90,13 +91,13 @@ public class UtilisateurController {
             
             utilisateurInfoRepository.save(utilisateurInfo);
 
-            model.addAttribute("message", "L'utilisateur a été créé avec succès.");
+            model.addAttribute("message", "✅ Votre compte client a été créé avec succès.");
             model.addAttribute("email", email);
             model.addAttribute("role", role.getCode());
             
             return "utilisateur/succes";
         } catch (Exception e) {
-            model.addAttribute("erreur", "Erreur lors de la création: " + e.getMessage());
+            model.addAttribute("erreur", "❌ Impossible de créer le compte: " + e.getMessage());
             model.addAttribute("roles", rolesInscriptionClient());
             return "utilisateur/formulaire";
         }
@@ -110,8 +111,7 @@ public class UtilisateurController {
 
     @GetMapping("/clients")
     public String listeClients(Model model) {
-        // TODO: Intégrer les vraies données quand le service sera disponible
-        model.addAttribute("clients", Collections.emptyList());
+        model.addAttribute("clients", utilisateurInfoRepository.findByUtilisateur_Role_Code("CLIENT"));
         return "client/liste";
     }
 
@@ -121,23 +121,59 @@ public class UtilisateurController {
     }
 
     @GetMapping("/clients/supprimer/{id}")
-    public String supprimerClient(@PathVariable Long id) {
-        // TODO: Supprimer le client avec le service
+    public String supprimerClient(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            UtilisateurInfo info = utilisateurInfoRepository.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("Client non trouvé: " + id));
+            Long utilisateurId = info.getUtilisateur().getId();
+            utilisateurInfoRepository.deleteById(id);
+            utilisateurRepository.deleteById(utilisateurId);
+            redirectAttributes.addFlashAttribute("success", "✅ Client supprimé avec succès.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "❌ Impossible de supprimer le client: " + e.getMessage());
+        }
         return "redirect:/clients";
     }
 
     @GetMapping("/clients/modifier/{id}")
     public String afficherModification(@PathVariable Long id, Model model) {
-        // TODO: Charger le client à modifier
-        model.addAttribute("client", new Object());
+        UtilisateurInfo client = utilisateurInfoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Client non trouvé: " + id));
+        model.addAttribute("client", client);
         return "client/modifier";
     }
 
     @PostMapping("/clients/modifier/{id}")
     public String modifierClient(
             @PathVariable Long id,
-            @ModelAttribute("client") Object client) {
-        // TODO: Modifier le client avec le service
+            @RequestParam String nom,
+            @RequestParam(required = false) String prenom,
+            @RequestParam(required = false) String numero,
+            @RequestParam(required = false) String adresse,
+            @RequestParam(required = false) String secteur,
+            @RequestParam String email,
+            RedirectAttributes redirectAttributes) {
+        try {
+            UtilisateurInfo client = utilisateurInfoRepository.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("Client non trouvé: " + id));
+
+            client.setNom(nom);
+            client.setPrenom(prenom);
+            client.setNumero(numero);
+            client.setAdresse(adresse);
+            client.setSecteur(secteur);
+            utilisateurInfoRepository.save(client);
+
+            Utilisateur utilisateur = client.getUtilisateur();
+            if (!email.equals(utilisateur.getEmail())) {
+                utilisateur.setEmail(email);
+                utilisateurRepository.save(utilisateur);
+            }
+
+            redirectAttributes.addFlashAttribute("success", "✅ Client modifié avec succès.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "❌ Impossible de modifier le client: " + e.getMessage());
+        }
         return "redirect:/clients";
     }
 }
