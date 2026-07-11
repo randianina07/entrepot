@@ -12,4 +12,6 @@ public interface Stocks_emplacement_repository extends JpaRepository<Stocks_empl
     @Query(value = "SELECT * FROM stocks_emplacement WHERE zone_id = ?1", nativeQuery = true)
     List<Stocks_emplacement> findByZoneId(Long id);
 
+    @Query(value = "SELECT * FROM stocks_emplacement WHERE emplacement_id = ?1", nativeQuery = true)
+    List<Stocks_emplacement> findByEmplacementId(Long emplacementId);
 }

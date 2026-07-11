@@ -79,4 +79,4 @@ public class Stocks_emplacement {
         this.zone = zone;
     }
     
-}
+} 
