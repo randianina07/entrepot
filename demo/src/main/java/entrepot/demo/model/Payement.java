@@ -26,4 +26,36 @@ public class Payement {
     @JoinColumn(name = "id_mode_de_payement" , referencedColumnName = "id")
     Mode_payement mode_de_payement;
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Utilisateur getClient() {
+        return client;
+    }
+
+    public void setClient(Utilisateur client) {
+        this.client = client;
+    }
+
+    public double getPrix_payer() {
+        return prix_payer;
+    }
+
+    public void setPrix_payer(double prix_payer) {
+        this.prix_payer = prix_payer;
+    }
+
+    public Mode_payement getMode_de_payement() {
+        return mode_de_payement;
+    }
+
+    public void setMode_de_payement(Mode_payement mode_de_payement) {
+        this.mode_de_payement = mode_de_payement;
+    }
+
 }

@@ -1,16 +1,128 @@
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
-    </head>
-    <body>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 
-        
-        
-        
-    </body>
-</html>
+<head>
+    <meta charset="UTF-8">
+    <title>Payer</title>
+
+    <style>
+
+        .payement{
+            border:1px solid #ccc;
+            padding:15px;
+            margin-bottom:15px;
+        }
+
+        label{
+            display:block;
+            margin-top:10px;
+        }
+
+        button{
+            margin-top:15px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<h2>Insertion de plusieurs paiements</h2>
+
+<p th:if="${successMessage}" th:text="${successMessage}"></p>
+
+<form th:action="@{/payer}" method="post" th:object="${payementForm}">
+
+    <div id="listeFormulaire">
+
+        <div class="payement">
+
+            <label>Mode de paiement</label>
+
+            <select name="payements[0].mode_de_payement">
+                <option value="">-- Choisir --</option>
+
+                <option
+                        th:each="mode : ${mode_payement}"
+                        th:value="${mode.id}"
+                        th:text="${mode.libelle}">
+                </option>
+
+            </select>
+
+            <label>Client</label>
+
+            <select name="payements[0].client">
+
+                <option value="">-- Choisir --</option>
+
+                <option
+                        th:each="client : ${all_client}"
+                        th:value="${client.id}"
+                        th:text="${client.email}">
+                </option>
+
+            </select>
+
+            <label>Montant</label>
+
+            <input
+                    type="number"
+                    step="0.01"
+                    name="payements[0].prix_payer">
+
+        </div>
+
+    </div>
+
+    <button type="button" onclick="showNewForm()">
+        + Ajouter un paiement
+    </button>
+
+    <button type="submit">
+        Enregistrer
+    </button>
+
+</form>
+
+<script>
+
+let index = 1;
+
+function showNewForm() {
+
+    const container = document.getElementById("listeFormulaire");
+
+    const premier = container.querySelector(".payement");
+
+    const clone = premier.cloneNode(true);
+
+    clone.querySelectorAll("select,input").forEach(function(element){
+
+        if(element.name.includes("mode_de_payement")){
+            element.name = "payements[" + index + "].mode_de_payement";
+            element.selectedIndex = 0;
+        }
+
+        if(element.name.includes("client")){
+            element.name = "payements[" + index + "].client";
+            element.selectedIndex = 0;
+        }
+
+        if(element.name.includes("prix_payer")){
+            element.name = "payements[" + index + "].prix_payer";
+            element.value = "";
+        }
+
+    });
+
+    container.appendChild(clone);
+
+    index++;
+
+}
+
+</script>
+
+</body>

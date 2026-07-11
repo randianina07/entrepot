@@ -76,3 +76,55 @@ INSERT INTO stocks_emplacement (id, quantite, emplacement_id, produit_id, zone_i
 (4, 1, 8, 1, 1),
 (5, 1, 5, 2, 2),
 (6, 1, 6, 3, 2);
+
+
+
+
+
+
+INSERT INTO role (libelle) VALUES
+    ('Administrateur'),
+    ('Gestionnaire d''entrepot'),
+    ('RESPONSABLE_LOGISTIQUE'),
+    ('COMPTABLE'),
+    ('CLIENT');
+
+-- ==========================
+-- MODE DE PAYEMENT
+-- ==========================
+INSERT INTO mode_payement (libelle) VALUES
+('Espèces'),
+('Carte bancaire'),
+('Mobile Money'),
+('Virement bancaire');
+
+-- ==========================
+-- UTILISATEURS
+-- ==========================
+INSERT INTO utilisateurs
+(email, mot_de_passe_hash, role_id, date_creation)
+VALUES
+('admin@gmail.com',
+'$2a$10$admin123',
+1,
+NOW()),
+
+('gestionnaire@gmail.com',
+'$2a$10$gestion123',
+2,
+NOW()),
+
+('client1@gmail.com',
+'$2a$10$client123',
+5,
+NOW()),
+
+('client2@gmail.com',
+'$2a$10$client456',
+5,
+NOW()),
+
+('client3@gmail.com',
+'$2a$10$client789',
+5,
+NOW()); 
