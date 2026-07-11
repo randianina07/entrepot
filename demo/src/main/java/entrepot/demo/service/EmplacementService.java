@@ -27,6 +27,13 @@ public class EmplacementService {
 
     // Le cœur de ton MVP : l'algorithme de recherche rapide
     public List<Emplacement> trouverPlaceRapide(Long id_zone, double tailleProduit, int quantite) {
+        // Critère de vérification 
+        if (id_zone == null || 
+            tailleProduit <= 0 || 
+            quantite <= 0) {
+        return new ArrayList<>(); // On renvoie une liste vide immédiatement sans chercher
+    }
+       
         // Liste d'emplacements
         List<Emplacement> tousLesEmplacements = emplacementRepository.findAll();
         // Liste d'étages
