@@ -3,9 +3,11 @@ package entrepot.demo.service;
 import entrepot.demo.model.Allee;
 import entrepot.demo.model.Emplacement;
 import entrepot.demo.model.Etage;
+import entrepot.demo.model.Stocks_emplacement;
 import entrepot.demo.repositories.EmplacementRepository;
 import entrepot.demo.repositories.EtageRepository;
 import entrepot.demo.repositories.ZonesRepository;
+import entrepot.demo.repository.Stocks_emplacement_repository;
 import entrepot.demo.model.Zones;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,9 @@ import java.util.List;
 
 @Service
 public class EmplacementService {
+
+    @Autowired
+    private Stocks_emplacement_repository stocksEmplacementRepository;
 
     @Autowired
     private ZonesRepository zonesRepository;
@@ -27,13 +32,13 @@ public class EmplacementService {
 
     // Le cœur de ton MVP : l'algorithme de recherche rapide
     public List<Emplacement> trouverPlaceRapide(Long id_zone, double tailleProduit, int quantite) {
-        // Critère de vérification 
-        if (id_zone == null || 
-            tailleProduit <= 0 || 
-            quantite <= 0) {
-        return new ArrayList<>(); // On renvoie une liste vide immédiatement sans chercher
-    }
-       
+        // Critère de vérification
+        if (id_zone == null ||
+                tailleProduit <= 0 ||
+                quantite <= 0) {
+            return new ArrayList<>(); // On renvoie une liste vide immédiatement sans chercher
+        }
+
         // Liste d'emplacements
         List<Emplacement> tousLesEmplacements = emplacementRepository.findAll();
         // Liste d'étages
@@ -56,7 +61,23 @@ public class EmplacementService {
                             break;
                         }
                         if (emp.getAllee() != null && emp.getAllee().getId().equals(alleeDeLaZone.getId()) &&
-                            emp.getEtage() != null && emp.getEtage().getId().equals(etage.getId())) {
+                                emp.getEtage() != null && emp.getEtage().getId().equals(etage.getId())) {
+
+                            // Liste d'stocks Emplacement
+                            List<Stocks_emplacement> stock = stocksEmplacementRepository.findByEmplacementId(emp.getId());
+                            boolean estActif = false;
+
+                            for (Stocks_emplacement ls_stock : stock) {
+                                if (ls_stock.isActif()) {
+                                    estActif = true;
+                                    break;
+                                }
+                            }
+
+                            if (!estActif) {
+                                continue;
+                            }
+
                             // Règle métier : Doit être actif ET assez grand (taille < capacité)
                             double volumeRestant = emp.getCapacite_volume_m3();
                             if (volumeRestant >= tailleProduit) {
