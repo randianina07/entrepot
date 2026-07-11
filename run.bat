@@ -14,14 +14,14 @@ for /f "tokens=5" %%a in ('netstat -ano ^| findstr ":8080" ^| findstr "LISTENING
 timeout /t 1 >nul
 
 if exist "%~dp0mvnw.cmd" (
-    call "%~dp0mvnw.cmd" -f demo/pom.xml spring-boot:run
+    call "%~dp0mvnw.cmd" spring-boot:run
 ) else (
     where mvn >nul 2>nul
     if errorlevel 1 (
         echo Maven wrapper not found and Maven is not available on PATH.
         exit /b 1
     )
-    mvn -f demo/pom.xml spring-boot:run
+    mvn spring-boot:run
 )
 
 endlocal

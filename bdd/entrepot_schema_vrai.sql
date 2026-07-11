@@ -34,6 +34,9 @@
 -- ============================================================================
 -- 1. REFERENTIELS GENERIQUES : ROLES, UTILISATEURS (internes + clients)
 -- ============================================================================
+-- Note: La base de données doit être créée manuellement avant d'exécuter ce script
+ CREATE DATABASE entrepot;
+ \c entrepot;
 
 CREATE TABLE roles (
     id      BIGSERIAL PRIMARY KEY,
@@ -49,6 +52,7 @@ CREATE TABLE utilisateurs (
     mot_de_passe_hash VARCHAR(255) NOT NULL,
     role_id BIGINT NOT NULL,
     date_creation    TIMESTAMP NOT NULL DEFAULT now(),
+    actif            BOOLEAN NOT NULL DEFAULT TRUE,
     CONSTRAINT fk_utilisateurs_role_id FOREIGN KEY (role_id) REFERENCES roles(id)
 );
 
@@ -496,6 +500,7 @@ CREATE TABLE facturation_livraison (
 
 CREATE TABLE types_maintenance (
     id      BIGSERIAL PRIMARY KEY,
+    code    VARCHAR(30) NOT NULL UNIQUE,
     libelle VARCHAR(100) NOT NULL
 );
 
@@ -861,13 +866,15 @@ INSERT INTO roles (code, libelle) VALUES
     ('GESTIONNAIRE', 'Gestionnaire d''entrepot'),
     ('RESPONSABLE_LOGISTIQUE', 'Responsable logistique'),
     ('COMPTABLE', 'Comptable'),
-    ('CLIENT', 'Client');
+    ('CLIENT', 'Client')
+ON CONFLICT (code) DO NOTHING;
 
 INSERT INTO types_zone (code, libelle, controle_temperature, acces_restreint, journalisation_acces, charge_lourde_possible) VALUES
     ('ETA', 'Etagere classique', FALSE, FALSE, FALSE, FALSE),
     ('CHF', 'Frigo / Chambre froide', TRUE, FALSE, FALSE, FALSE),
     ('SEC', 'Zone securisee', FALSE, TRUE, TRUE, FALSE),
-    ('SOL', 'Zone au sol', FALSE, FALSE, FALSE, TRUE);
+    ('SOL', 'Zone au sol', FALSE, FALSE, FALSE, TRUE)
+ON CONFLICT (code) DO NOTHING;
 
 INSERT INTO types_mouvement (code, libelle, sens) VALUES
     ('RETOUR_CLIENT', 'Retour client', 'ENTREE'),
@@ -875,77 +882,90 @@ INSERT INTO types_mouvement (code, libelle, sens) VALUES
     ('LIVRAISON_CLIENT', 'Livraison client', 'SORTIE'),
     ('TRANSFERT_INTERNE', 'Transfert interne', 'SORTIE'),
     ('PERTE_DESTRUCTION', 'Perte / Destruction', 'SORTIE'),
-    ('EXPEDITION', 'Expedition', 'SORTIE');
+    ('EXPEDITION', 'Expedition', 'SORTIE')
+ON CONFLICT (code) DO NOTHING;
 
 INSERT INTO statuts_mouvement (code, libelle, ordre) VALUES
     ('EN_ATTENTE', 'En attente', 1),
     ('EN_CONTROLE', 'En controle', 2),
     ('VALIDE', 'Valide', 3),
     ('EXPEDIE', 'Expedie', 4),
-    ('ANNULE', 'Annule', 5);
+    ('ANNULE', 'Annule', 5)
+ON CONFLICT (code) DO NOTHING;
 
 INSERT INTO modes_paiement (code, libelle) VALUES
     ('ESPECES', 'Especes'),
     ('MOBILE_MONEY', 'Mobile Money'),
     ('VIREMENT', 'Virement bancaire'),
-    ('CHEQUE', 'Cheque');
+    ('CHEQUE', 'Cheque')
+ON CONFLICT (code) DO NOTHING;
 
 INSERT INTO types_contrat (code, libelle) VALUES
     ('ABONNE', 'Abonne'),
-    ('NON_ABONNE', 'Non abonne');
+    ('NON_ABONNE', 'Non abonne')
+ON CONFLICT (code) DO NOTHING;
 
 INSERT INTO statuts_demande_stockage (code, libelle) VALUES
     ('EN_ATTENTE', 'Demande en attente'),
     ('ACCEPTEE', 'Demande acceptee'),
-    ('REFUSEE', 'Demande refusee');
+    ('REFUSEE', 'Demande refusee')
+ON CONFLICT (code) DO NOTHING;
 
 INSERT INTO statuts_renouvellement (code, libelle) VALUES
     ('EN_ATTENTE', 'En attente'),
     ('ACCEPTEE', 'Acceptee'),
-    ('REFUSEE', 'Refusee');
+    ('REFUSEE', 'Refusee')
+ON CONFLICT (code) DO NOTHING;
 
 INSERT INTO unites_duree (code, libelle) VALUES
     ('JOUR', 'Jour'),
     ('SEMAINE', 'Semaine'),
-    ('MOIS', 'Mois');
+    ('MOIS', 'Mois')
+ON CONFLICT (code) DO NOTHING;
 
 INSERT INTO types_vehicule (code, libelle) VALUES
     ('CAMION_LEGER', 'Camion leger'),
     ('CAMION_FRIGO', 'Camion frigorifique'),
     ('FOURGONNETTE', 'Fourgonnette'),
-    ('MOTO_LIVRAISON', 'Moto de livraison');
+    ('MOTO_LIVRAISON', 'Moto de livraison')
+ON CONFLICT (code) DO NOTHING;
 
 INSERT INTO statuts_vehicule (code, libelle) VALUES
     ('DISPONIBLE', 'Disponible'),
     ('EN_MISSION', 'En mission'),
     ('EN_MAINTENANCE', 'En maintenance'),
-    ('HORS_SERVICE', 'Hors service');
+    ('HORS_SERVICE', 'Hors service')
+ON CONFLICT (code) DO NOTHING;
 
 INSERT INTO statuts_mission (code, libelle) VALUES
     ('PLANIFIEE', 'Planifiee'),
     ('EN_COURS', 'En cours'),
     ('TERMINEE', 'Terminee'),
-    ('ANNULEE', 'Annulee');
+    ('ANNULEE', 'Annulee')
+ON CONFLICT (code) DO NOTHING;
 
 -- Exemples a adapter selon le parc reel
 INSERT INTO types_maintenance (code, libelle) VALUES
     ('REVISION', 'Revision periodique'),
     ('REPARATION', 'Reparation'),
     ('VIDANGE', 'Vidange'),
-    ('PNEUS', 'Changement pneumatiques');
+    ('PNEUS', 'Changement pneumatiques')
+ON CONFLICT (code) DO NOTHING;
 
 INSERT INTO modes_calcul_livraison (code, libelle) VALUES
     ('POIDS', 'Par poids'),
     ('VOLUME', 'Par volume'),
     ('ZONE', 'Par zone'),
     ('POIDS_ZONE', 'Poids + Zone'),
-    ('VOLUME_ZONE', 'Volume + Zone');
+    ('VOLUME_ZONE', 'Volume + Zone')
+ON CONFLICT (code) DO NOTHING;
 
 INSERT INTO categories_depense (code, libelle) VALUES
     ('MAINTENANCE', 'Maintenance et reparations'),
     ('CARBURANT', 'Carburant'),
     ('SALAIRES', 'Salaires et charges sociales'),
-    ('ELECTRICITE_FROID', 'Electricite et froid');
+    ('ELECTRICITE_FROID', 'Electricite et froid')
+ON CONFLICT (code) DO NOTHING;
 
 -- ============================================================================
 -- INSERTION DONNEES TEST - 2 LIGNES PAR TABLE
@@ -954,12 +974,16 @@ INSERT INTO categories_depense (code, libelle) VALUES
 -- 1. roles
 INSERT INTO roles (code, libelle) VALUES
 ('ADMIN','Administrateur'),
-('CLIENT','Client test');
+('GESTIONNAIRE','Gestionnaire d''entrepot'),
+('RESPONSABLE_LOGISTIQUE','Responsable logistique'),
+('COMPTABLE','Comptable'),
+('CLIENT','Client')
+ON CONFLICT (code) DO NOTHING;
 
--- 2. utilisateurs
-INSERT INTO utilisateurs (email, mot_de_passe_hash, role_id) VALUES
-('admin@test.com','hash1',1),
-('client@test.com','hash2',2);
+-- 2. utilisateurs (mot de passe par defaut : admin123)
+INSERT INTO utilisateurs (email, mot_de_passe_hash, role_id, actif) VALUES
+('admin@entrepot.com','$2a$10$dXUCIrzukQ84x0UKkr0xZ.4QBMUoyzdM4Cva9CceR8eCnQXuvOW/6',(SELECT id FROM roles WHERE code='ADMIN'),true),
+('client@test.com','$2a$10$dXUCIrzukQ84x0UKkr0xZ.4QBMUoyzdM4Cva9CceR8eCnQXuvOW/6',(SELECT id FROM roles WHERE code='CLIENT'),true);
 
 -- 3. utilisateurs_info
 INSERT INTO utilisateurs_info (utilisateur_id, nom, prenom, numero, adresse, secteur) VALUES

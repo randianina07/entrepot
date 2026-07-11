@@ -6,7 +6,7 @@ INSERT INTO utilisateurs (
 )
 VALUES (
     'admin@entrepot.com',
-    '$2a$10$7EqJtq98hPqEX7fNZaFWoOHiKqG5q6QeF1J7P2QJm2d7l5z0QvM6C',
+    '$2a$10$',
     '1'
 );
 

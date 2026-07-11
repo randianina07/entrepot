@@ -32,7 +32,7 @@ public class MouvementViewController {
     @Autowired
     private PDFService pdfService;
 
-    @GetMapping("/liste")
+    @GetMapping({"", "/liste"})
     public String listeMouvements(
             @RequestParam(required = false) String type,
             @RequestParam(required = false) String statut,
@@ -74,7 +74,7 @@ public class MouvementViewController {
         return "mouvements/detail";
     }
 
-    @GetMapping("/nouveau/entree")
+    @GetMapping({"/nouvelle-entree", "/nouveau/entree"})
     public String formulaireEntree(Model model) {
         model.addAttribute("dto", new MouvementCreateDTO());
         model.addAttribute("type", "ENTREE");
@@ -84,7 +84,7 @@ public class MouvementViewController {
         return "mouvements/form-entree";
     }
 
-    @GetMapping("/nouveau/sortie")
+    @GetMapping({"/nouvelle-sortie", "/nouveau/sortie"})
     public String formulaireSortie(Model model) {
         model.addAttribute("dto", new MouvementCreateDTO());
         model.addAttribute("type", "SORTIE");
@@ -92,6 +92,16 @@ public class MouvementViewController {
         model.addAttribute("produits", mouvementService.getAllProduits());
         model.addAttribute("emplacements", mouvementService.getAllEmplacements());
         return "mouvements/form-sortie";
+    }
+
+    @GetMapping("/transfert")
+    public String formulaireTransfert(Model model) {
+        model.addAttribute("dto", new MouvementCreateDTO());
+        model.addAttribute("type", "TRANSFERT");
+        model.addAttribute("clients", mouvementService.getAllClients());
+        model.addAttribute("produits", mouvementService.getAllProduits());
+        model.addAttribute("emplacements", mouvementService.getAllEmplacements());
+        return "mouvements/form-transfert";
     }
 
     @PostMapping("/nouveau")
@@ -107,9 +117,11 @@ public class MouvementViewController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Erreur lors de la creation: " + e.getMessage());
             if ("ENTREE".equals(type)) {
-                return "redirect:/mouvements/nouveau/entree";
+                return "redirect:/mouvements/nouvelle-entree";
+            } else if ("SORTIE".equals(type)) {
+                return "redirect:/mouvements/nouvelle-sortie";
             } else {
-                return "redirect:/mouvements/nouveau/sortie";
+                return "redirect:/mouvements/transfert";
             }
         }
     }
@@ -135,7 +147,7 @@ public class MouvementViewController {
         // Alertes stock bas
         model.addAttribute("alertesStock", mouvementService.getEmplacementsStockBas());
 
-        return "mouvements/dashboard";
+        return "dashboard";
     }
 
     @PostMapping("/{id}/valider")
