@@ -16,7 +16,12 @@ public class TypeZoneService {
         this.typeZoneRepository = typeZoneRepository;
     }
 
-    public List<TypeZone> getAll() {
+    public List<TypeZone> findAll() {
         return typeZoneRepository.findAll();
+    }
+
+    public TypeZone findById(Long id) {
+        return typeZoneRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Type de zone introuvable"));
     }
 }
