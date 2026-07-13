@@ -9,30 +9,34 @@ public class Vehicule {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
-    
-    @Column(nullable = false, unique = true)
+
+    @Column(name = "immatriculation", nullable = false, unique = true, length = 20)
     private String immatriculation;
-    
+
+    @Column(name = "marque", length = 60)
     private String marque;
-    
+
+    @Column(name = "modele", length = 60)
     private String modele;
-    
+
+    @Column(name = "annee")
     private Integer annee;
-    
+
     @Column(name = "capacite_volume_m3", nullable = false, precision = 10, scale = 3)
     private BigDecimal capaciteVolumeM3;
-    
+
     @Column(name = "capacite_charge_kg", nullable = false, precision = 10, scale = 2)
     private BigDecimal capaciteChargeKg;
-    
+
     @Column(name = "kilometrage_actuel", nullable = false, precision = 10, scale = 2)
     private BigDecimal kilometrageActuel = BigDecimal.ZERO;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "type_vehicule_id", nullable = false)
     private TypeVehicule typeVehicule;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "statut_vehicule_id", nullable = false)
     private StatutVehicule statutVehicule;

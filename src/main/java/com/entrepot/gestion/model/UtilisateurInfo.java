@@ -8,21 +8,26 @@ public class UtilisateurInfo {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "utilisateur_id", nullable = false, unique = true)
     private Utilisateur utilisateur;
-    
-    @Column(nullable = false)
+
+    @Column(name = "nom", nullable = false, length = 100)
     private String nom;
-    
+
+    @Column(name = "prenom", length = 100)
     private String prenom;
-    
+
+    @Column(name = "numero", length = 30)
     private String numero;
-    
+
+    @Column(name = "adresse", length = 255)
     private String adresse;
-    
+
+    @Column(name = "secteur", length = 100)
     private String secteur;
     
     public UtilisateurInfo() {}

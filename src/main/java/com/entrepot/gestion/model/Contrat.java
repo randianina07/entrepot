@@ -15,48 +15,39 @@ public class Contrat {
     @Column(name = "id")
     private Long id;
 
-
     @ManyToOne
     @JoinColumn(name = "demande_stockage_id", nullable = false)
     private DemandeStockage demandeStockage;
-
 
     @ManyToOne
     @JoinColumn(name = "utilisateur_id", nullable = false)
     private Utilisateur utilisateur;
 
-
     @ManyToOne
     @JoinColumn(name = "type_zone_id", nullable = false)
     private TypeZone typeZone;
-
 
     @ManyToOne
     @JoinColumn(name = "type_contrat_id", nullable = false)
     private TypeContrat typeContrat;
 
-
     @Column(name = "volume_espace_m3", nullable = false, precision = 10, scale = 3)
     private BigDecimal volumeEspaceM3;
 
+    @Column(name = "quantite_emplacement", nullable = false)
+    private Integer quantiteEmplacement;
 
     @Column(name = "date_creation", nullable = false)
     private LocalDateTime dateCreation;
 
-
     @Column(name = "date_debut", nullable = false)
     private LocalDate dateDebut;
-
 
     @Column(name = "date_fin")
     private LocalDate dateFin;
 
-
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
-
-    @Column(name = "quantite_emplacement", nullable = false)
-    private Integer quantiteEmplacement;
 
     public Contrat() {
     }
