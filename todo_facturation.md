@@ -12,7 +12,7 @@
     + [x] ajouter nouvel attribut quantiteEmplacement:
       + [x] DemandeStockage
       + [x] Contrat
-    + [] ajouter champ qte_emplacement
+    + [x] ajouter champ qte_emplacement
     + [] rendre intéractive :
         + [] si abonné : 
             + [] champ date fin stockage supprimé
