@@ -7,7 +7,7 @@ CREATE DATABASE entrepot;
 -- =========================
 -- 1. TYPE_PRODUIT
 -- =========================
-INSERT INTO type_produit (id, code, libelle) VALUES
+INSERT INTO types_produits (id, code, libelle) VALUES
 (1, 'TP1', 'Alimentaire'),
 (2, 'TP2', 'Electroménager');
 

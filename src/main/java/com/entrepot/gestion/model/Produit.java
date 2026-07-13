@@ -39,7 +39,7 @@ public class Produit {
     @Column(name = "poids_unitaire_kg", precision = 10, scale = 3)
     private BigDecimal poidsUnitaireKg;
     
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Boolean actif = true;
     
     public Produit() {

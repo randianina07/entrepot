@@ -17,7 +17,7 @@ public class Stocks_emplacement_controller {
     Stocks_emplacement_service stocks_emplacement_service;
 
     @GetMapping("/api/zone/{id}")
-    public List<Stocks_emplacement> api_emplacement(@PathVariable Long id) {
+    public List<Stocks_emplacement> api_emplacement(@PathVariable("id") Long id) {
         
         List<Stocks_emplacement> stocks_emplacements = stocks_emplacement_service.getStocksEmplacementsByZoneId(id);
         return stocks_emplacements;
