@@ -1,12 +1,12 @@
 # TO DO FACTURATION
 
-+ [] Prérequis
-    + [] inserer les parametres.
-        + [] 2 données unités durée 
-        + [] 8 données tarifs zones 
-    + [] ajouter colonne qté emplacement dans la table demande_stockage et contrat
++ [x] Prérequis
+    + [x] inserer les parametres.
+        + [x] 2 données unités durée 
+        + [x] 8 données tarifs zones 
+    + [x] ajouter colonne qté emplacement dans la table demande_stockage et contrat
 
-    + [] créer une table abonnement_stockage : id, utilisateur_id, contrat_id, duree_mois, type_zone_id
+    + [x] créer une table abonnement_stockage : id, utilisateur_id, contrat_id, duree_mois, type_zone_id
 
 + [] modifier formulaire demande stockage 
     + [] ajouter champ qte_emplacement
