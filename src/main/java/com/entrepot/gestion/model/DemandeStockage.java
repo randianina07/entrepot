@@ -35,6 +35,9 @@ public class DemandeStockage {
     @Column(name = "date_fin")
     private LocalDate dateFin;
 
+    @Column(name = "quantite_emplacement", nullable = false)
+    private Integer quantiteEmplacement;
+
     public DemandeStockage() {
     }
 
@@ -92,5 +95,13 @@ public class DemandeStockage {
 
     public void setDateFin(LocalDate dateFin) {
         this.dateFin = dateFin;
+    }
+
+    public Integer getQuantiteEmplacement() {
+        return quantiteEmplacement;
+    }
+
+    public void setQuantiteEmplacement(Integer quantiteEmplacement) {
+        this.quantiteEmplacement = quantiteEmplacement;
     }
 }

@@ -55,6 +55,8 @@ public class Contrat {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
+    @Column(name = "quantite_emplacement", nullable = false)
+    private Integer quantiteEmplacement;
 
     public Contrat() {
     }
@@ -139,5 +141,13 @@ public class Contrat {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Integer getQuantiteEmplacement() {
+        return quantiteEmplacement;
+    }
+
+    public void setQuantiteEmplacement(Integer quantiteEmplacement) {
+        this.quantiteEmplacement = quantiteEmplacement;
     }
 }
