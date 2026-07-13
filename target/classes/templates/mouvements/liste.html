@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/navbar :: head}"></head>
+<body class="storage-page">
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+    <div class="container py-4">
+        <div th:replace="~{fragments/alerts :: alerts}"></div>
+        
+        <section class="storage-hero mb-4">
+            <div class="hero-copy">
+                <span class="hero-badge">Exploration</span>
+                <h1>Liste des mouvements</h1>
+                <p>Filtrez, comparez et ouvrez chaque mouvement dans une interface plus respirante et plus lisible.</p>
+                <div class="hero-actions">
+                    <a href="/mouvements/nouveau/entree" class="btn btn-success"><i class="bi bi-arrow-down-circle"></i> Nouvelle entrée</a>
+                    <a href="/mouvements/nouveau/sortie" class="btn btn-danger"><i class="bi bi-arrow-up-circle"></i> Nouvelle sortie</a>
+                    <a href="/mouvements/tableau-de-bord" class="btn btn-outline-primary"><i class="bi bi-speedometer2"></i> Tableau de bord</a>
+                </div>
+            </div>
+            <div class="hero-side">
+                <div class="mini-info-card"><span class="value" th:text="${totalElements}">0</span><span class="label">Mouvements trouvés</span></div>
+                <div class="mini-info-card"><span class="value" th:text="${currentPage + 1}">1</span><span class="label">Page courante</span></div>
+                <div class="mini-info-card"><span class="value" th:text="${totalPages}">1</span><span class="label">Pages disponibles</span></div>
+            </div>
+        </section>
+        
+        <!-- Formulaire de filtres -->
+        <div class="storage-search-card mb-4">
+            <div class="storage-section-header">
+                <div>
+                    <span class="chip is-accent">Affinage</span>
+                    <h2 class="mb-0 mt-2">Filtres de recherche</h2>
+                    <p>Gardez une vue nette sur le type, le statut, le client et la période.</p>
+                </div>
+            </div>
+            <div class="search-form-shell">
+                <form th:action="@{/mouvements/liste}" method="get" class="row g-3">
+                    <div class="col-md-2">
+                        <label for="type" class="form-label">Type</label>
+                        <select class="form-select" id="type" name="type">
+                            <option value="">Tous</option>
+                            <option th:each="t : ${types}" th:value="${t.code}" 
+                                    th:text="${t.libelle}" th:selected="${filtre?.type == t.code}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="statut" class="form-label">Statut</label>
+                        <select class="form-select" id="statut" name="statut">
+                            <option value="">Tous</option>
+                            <option th:each="s : ${statuts}" th:value="${s.code}" 
+                                    th:text="${s.libelle}" th:selected="${filtre?.statut == s.code}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="client" class="form-label">Client</label>
+                        <select class="form-select" id="client" name="clientId">
+                            <option value="">Tous</option>
+                            <option th:each="c : ${clients}" th:value="${c.id}" 
+                                    th:text="${c.displayName}" th:selected="${filtre?.clientId == c.id}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="dateDebut" class="form-label">Date debut</label>
+                        <input type="date" class="form-control" id="dateDebut" name="dateDebut" 
+                               th:value="${filtre?.dateDebut}">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="dateFin" class="form-label">Date fin</label>
+                        <input type="date" class="form-control" id="dateFin" name="dateFin" 
+                               th:value="${filtre?.dateFin}">
+                    </div>
+                    <div class="col-md-1 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-filter"></i> Filtrer
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Bouton export PDF -->
+        <div class="mb-3">
+            <a th:href="@{/mouvements/export/pdf(type=${filtre?.type}, statut=${filtre?.statut}, 
+               clientId=${filtre?.clientId}, dateDebut=${filtre?.dateDebut}, dateFin=${filtre?.dateFin})}" 
+               class="btn btn-outline-danger">
+                <i class="bi bi-file-earmark-pdf"></i> Exporter PDF
+            </a>
+        </div>
+        
+        <!-- Tableau des mouvements -->
+        <div class="storage-panel p-0 overflow-hidden">
+            <div class="storage-section-header px-4 pt-4">
+                <div>
+                    <span class="chip is-success">Résultats</span>
+                    <h2 class="mb-0 mt-2">Mouvements enregistrés</h2>
+                </div>
+            </div>
+            <div class="px-4 pb-4">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Code</th>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Statut</th>
+                                <th>Client</th>
+                                <th>Nb Lignes</th>
+                                <th>Operateur</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:if="${mouvements.empty}">
+                                <td colspan="8" class="text-center text-muted">
+                                    Aucun mouvement trouve
+                                </td>
+                            </tr>
+                            <tr th:each="mvt : ${mouvements}">
+                                <td th:text="${mvt.code}">MVT-001</td>
+                                <td th:text="${#temporals.format(mvt.dateMouvement, 'dd/MM/yyyy HH:mm')}">01/01/2026 10:00</td>
+                                <td th:text="${mvt.typeMouvement}">ENTREE</td>
+                                <td>
+                                    <span class="badge" 
+                                          th:classappend="${mvt.statutMouvement == 'BROUILLON' ? 'badge-secondary' : 
+                                                         mvt.statutMouvement == 'VALIDE' ? 'badge-success' : 'badge-danger'}"
+                                          th:text="${mvt.statutMouvement}">BROUILLON</span>
+                                </td>
+                                <td th:text="${mvt.client}">Client ABC</td>
+                                <td th:text="${mvt.nbLignes}">3</td>
+                                <td th:text="${mvt.operateur}">Admin</td>
+                                <td>
+                                    <a th:href="@{/mouvements/{id}/detail(id=${mvt.id})}" 
+                                       class="btn btn-sm btn-info" title="Voir detail">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                <div th:replace="~{fragments/pagination :: pagination(${currentPage}, ${totalPages}, '/mouvements/liste')}"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+</body>
+</html>
