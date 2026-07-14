@@ -12,34 +12,6 @@
 
 <body>
 
-<<<<<<< HEAD
-<nav class="navbar navbar-expand-lg pro-navbar" th:fragment="navbar">
-    <div class="container-fluid">
-        <!-- Logo & Brand -->
-        <a class="navbar-brand d-flex align-items-center" th:href="@{/mouvements/tableau-de-bord}"
-           sec:authorize="hasRole('CLIENT')">
-            <div class="brand-icon me-3">
-                <i class="bi bi-box-seam-fill"></i>
-            </div>
-            <div class="brand-text">
-                <span class="brand-title">Tech Entrepôt</span>
-                <span class="brand-subtitle">ERP Professionnel</span>
-            </div>
-        </a>
-        <a class="navbar-brand d-flex align-items-center" th:href="@{/dashboard}"
-           sec:authorize="!hasRole('CLIENT')">
-            <div class="brand-icon me-3">
-                <i class="bi bi-box-seam-fill"></i>
-            </div>
-            <div class="brand-text">
-                <span class="brand-title">Tech Entrepôt</span>
-                <span class="brand-subtitle">ERP Professionnel</span>
-            </div>
-        </a>
-        
-        <!-- Toggler -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-=======
     <nav class="navbar navbar-expand-lg pro-navbar" th:fragment="navbar">
         <div class="container-fluid">
             <!-- Logo & Brand -->
@@ -66,7 +38,6 @@
 
             <!-- Toggler -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
->>>>>>> 53edad24d346966bbb17b2f7b52aa87701cdfb39
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
