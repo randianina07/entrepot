@@ -30,11 +30,11 @@
         + [] si client : formulaire de modification
 
             + [] Comment:
-                + [] ProfilController : 
-                    + [] afficher la page du profil
-                    + [] afficher le formulaire de changement de mot de passe 
-                    + [] récupérer les données envoyées par le formulaire
-                    + [] appeler le service 
+                + [x] ProfilController : 
+                    + [x] afficher la page du profil
+                    + [x] afficher le formulaire de changement de mot de passe 
+                    + [x] récupérer les données envoyées par le formulaire
+                    + [x] appeler le service 
 
                 + [x] UtilisateurService
                     + [x] Créer les méthodes :
@@ -46,14 +46,11 @@
                             - chiffre le nouveau mot de passe 
                             - sauvegarde en base 
 
-                + [] UtilisateurRepository
-                    + [] findByEmail()
+                + [x] UtilisateurInfoRepository
+                    + [x] findByUtilisateur()
 
-                + [] AuthDetails
-                    + [] Utilisateur utilisateur 
-
-                + [] SecurityContextHolder 
-                    + récupérer l'id de l'utilisateur par Spring Security
+                + [x] AuthDetails
+                    + [x] Utilisateur utilisateur 
 
                 + [] Vue :
                     + [] dossier : profil

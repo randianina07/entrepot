@@ -29,6 +29,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/login", "/utilisateurs/nouveau", "/utilisateurs/enregistrer").permitAll()
                 .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
+                .requestMatchers("/profil/**").authenticated()
                 .requestMatchers("/", "/mouvements/**").authenticated()
                 .requestMatchers("/accueil", "/choose-type_zones", "/type-zone/**", "/recherche", "/faire-recherche").authenticated()
                 .requestMatchers("/dashboard/**").hasAnyRole("ADMIN", "GESTIONNAIRE", "COMPTABLE")
