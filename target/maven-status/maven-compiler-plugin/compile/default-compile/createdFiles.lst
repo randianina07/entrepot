@@ -4,7 +4,6 @@ com/entrepot/gestion/model/StatutMouvement.class
 com/entrepot/gestion/model/StatsClient.class
 com/entrepot/gestion/repository/DemandeRenouvellementRepository.class
 com/entrepot/gestion/model/UtilisateurInfo.class
-<<<<<<< HEAD
 com/entrepot/gestion/model/Colonne.class
 com/entrepot/gestion/repository/RoleRepository.class
 com/entrepot/gestion/service/HistoriqueEtatDemandeService.class
@@ -17,19 +16,10 @@ com/entrepot/gestion/model/Produits.class
 com/entrepot/gestion/service/TypeContratService.class
 com/entrepot/gestion/service/FactureService.class
 com/entrepot/gestion/service/TypeProduitService.class
-=======
-com/entrepot/gestion/service/HistoriqueEtatDemandeService.class
-com/entrepot/gestion/repository/RoleRepository.class
-com/entrepot/gestion/dto/LigneMouvementDTO.class
-com/entrepot/gestion/repository/ProduitRepository.class
-com/entrepot/gestion/repository/TypeZoneRepository.class
-com/entrepot/gestion/service/TypeContratService.class
->>>>>>> dev_facture
 com/entrepot/gestion/controller/DashboardController.class
 com/entrepot/gestion/model/Vehicule.class
 com/entrepot/gestion/repository/DemandeStockageRepository.class
 com/entrepot/gestion/repository/TypeContratRepository.class
-<<<<<<< HEAD
 com/entrepot/gestion/model/Zone.class
 com/entrepot/gestion/security/CustomUserDetailsService.class
 com/entrepot/gestion/controller/MouvementController.class
@@ -54,19 +44,6 @@ com/entrepot/gestion/service/Type_zone_service.class
 com/entrepot/gestion/controller/ChauffeurController.class
 com/entrepot/gestion/repository/TopProduitRepository.class
 com/entrepot/gestion/controller/LoginController.class
-=======
-com/entrepot/gestion/security/CustomUserDetailsService.class
-com/entrepot/gestion/repository/ContratRepository.class
-com/entrepot/gestion/repository/StockEmplacementRepository.class
-com/entrepot/gestion/model/Chauffeur.class
-com/entrepot/gestion/controller/AdminController.class
-com/entrepot/gestion/service/UtilisateurService.class
-com/entrepot/gestion/repository/MissionLogistiqueRepository.class
-com/entrepot/gestion/config/DataInitializer.class
-com/entrepot/gestion/controller/MissionController.class
-com/entrepot/gestion/controller/ChauffeurController.class
-com/entrepot/gestion/repository/TopProduitRepository.class
->>>>>>> dev_facture
 com/entrepot/gestion/dto/MouvementListDTO.class
 com/entrepot/gestion/repository/TypeMouvementRepository.class
 com/entrepot/gestion/config/SecurityConfig.class
@@ -83,10 +60,7 @@ com/entrepot/gestion/repository/EmplacementRepository.class
 com/entrepot/gestion/repository/UtilisateurInfoRepository.class
 com/entrepot/gestion/service/DemandeStockageService.class
 com/entrepot/gestion/model/TypeProduit.class
-<<<<<<< HEAD
 com/entrepot/gestion/model/Facture.class
-=======
->>>>>>> dev_facture
 com/entrepot/gestion/repository/ChauffeurRepository.class
 com/entrepot/gestion/service/Emplacement_service.class
 com/entrepot/gestion/model/Emplacement.class
@@ -96,17 +70,11 @@ com/entrepot/gestion/service/Stocks_emplacement_service.class
 com/entrepot/gestion/dto/MouvementCreateDTO.class
 com/entrepot/gestion/model/StatutVehicule.class
 com/entrepot/gestion/repository/RenouvellementContratRepository.class
-<<<<<<< HEAD
 com/entrepot/gestion/repository/TarifZoneRepository.class
 com/entrepot/gestion/controller/StockageController.class
 com/entrepot/gestion/dto/LigneMouvementResponseDTO.class
 com/entrepot/gestion/repository/HistoriqueEtatDemandeRepository.class
 com/entrepot/gestion/service/MouvementService.class
-=======
-com/entrepot/gestion/dto/LigneMouvementResponseDTO.class
-com/entrepot/gestion/service/MouvementService.class
-com/entrepot/gestion/repository/HistoriqueEtatDemandeRepository.class
->>>>>>> dev_facture
 com/entrepot/gestion/model/Role.class
 com/entrepot/gestion/service/Etage_service.class
 com/entrepot/gestion/dto/AlerteStockEmplacementDTO.class
@@ -142,10 +110,7 @@ com/entrepot/gestion/model/Allee.class
 com/entrepot/gestion/service/StatutDemandeStockageService.class
 com/entrepot/gestion/repository/StatutMouvementRepository.class
 com/entrepot/gestion/model/TypeVehicule.class
-<<<<<<< HEAD
 com/entrepot/gestion/repository/TypeVehiculeRepository.class
-=======
->>>>>>> dev_facture
 com/entrepot/gestion/repository/FluxEntreesSortiesRepository.class
 com/entrepot/gestion/service/TypeZoneService.class
 com/entrepot/gestion/model/Mouvement.class
