@@ -10,7 +10,15 @@
 
 <body>
 
+    <div th:replace="~{fragments/navbar-new :: navbar}"></div>
+
     <div class="container mt-5">
+
+        <!-- Message d'erreur -->
+        <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span th:text="${param.error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
 
         <div class="card shadow">
 
@@ -92,81 +100,119 @@
                 </form>
 
                 <!-- ======================= -->
-                <!-- CONTRATS D'ABONNEMENT -->
+                <!-- CONTRATS D'ABONNEMENT   -->
                 <!-- ======================= -->
 
                 <h5 class="mt-4">Contrats d'abonnement</h5>
 
-                <table class="table table-striped table-bordered">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
 
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Type zone</th>
-                            <th>Volume (m³)</th>
-                            <th>Emplacements</th>
-                            <th>Date début</th>
-                            <th>Durée (mois)</th>
-                        </tr>
-                    </thead>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Type zone</th>
+                                <th>Volume (m³)</th>
+                                <th>Emplacements</th>
+                                <th>Date début</th>
+                                <th>Durée (mois)</th>
+                                <th style="min-width: 250px;">Voir facture</th>
+                            </tr>
+                        </thead>
 
-                    <tbody>
+                        <tbody>
 
-                        <tr th:each="contrat : ${contrats}" th:if="${contrat.dureeMois != null}">
+                            <tr th:each="contrat : ${contrats}" th:if="${contrat.dureeMois != null}">
 
-                            <td th:text="${contrat.id}"></td>
-                            <td th:text="${contrat.typeZone.libelle}"></td>
-                            <td th:text="${contrat.volumeEspaceM3}"></td>
-                            <td th:text="${contrat.quantiteEmplacement}"></td>
-                            <td th:text="${#temporals.format(contrat.dateDebut,'dd/MM/yyyy')}"></td>
-                            <td th:text="${contrat.dureeMois}"></td>
+                                <td th:text="${contrat.id}"></td>
+                                <td th:text="${contrat.typeZone.libelle}"></td>
+                                <td th:text="${contrat.volumeEspaceM3}"></td>
+                                <td th:text="${contrat.quantiteEmplacement}"></td>
+                                <td th:text="${#temporals.format(contrat.dateDebut,'dd/MM/yyyy')}"></td>
+                                <td th:text="${contrat.dureeMois}"></td>
+                                <td>
+                                    <form th:action="@{/facture/contrat/{id}(id=${contrat.id})}" method="get" class="row g-1 align-items-center">
+                                        <div class="col-auto">
+                                            <input type="date" class="form-control form-control-sm" name="date" style="width: 140px;">
+                                        </div>
+                                        <div class="col-auto">
+                                            <button type="submit" class="btn btn-sm btn-info">Voir facture</button>
+                                        </div>
+                                    </form>
+                                </td>
 
-                        </tr>
+                            </tr>
 
-                    </tbody>
+                            <tr th:if="${#lists.isEmpty(contrats)}">
+                                <td colspan="7" class="text-center text-muted">Aucun contrat d'abonnement</td>
+                            </tr>
 
-                </table>
+                        </tbody>
+
+                    </table>
+                </div>
+
+                <!-- ======================= -->
+                <!-- CONTRATS SIMPLES        -->
+                <!-- ======================= -->
 
                 <h5 class="mt-5">Contrats simples</h5>
 
-                <table class="table table-striped table-bordered">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
 
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Type zone</th>
-                            <th>Volume (m³)</th>
-                            <th>Emplacements</th>
-                            <th>Date début</th>
-                            <th>Date fin</th>
-                        </tr>
-                    </thead>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Type zone</th>
+                                <th>Volume (m³)</th>
+                                <th>Emplacements</th>
+                                <th>Date début</th>
+                                <th>Date fin</th>
+                                <th style="min-width: 250px;">Voir facture</th>
+                            </tr>
+                        </thead>
 
-                    <tbody>
+                        <tbody>
 
-                        <tr th:each="contrat : ${contrats}" th:if="${contrat.dureeMois == null}">
+                            <tr th:each="contrat : ${contrats}" th:if="${contrat.dureeMois == null}">
 
-                            <td th:text="${contrat.id}"></td>
-                            <td th:text="${contrat.typeZone.libelle}"></td>
-                            <td th:text="${contrat.volumeEspaceM3}"></td>
-                            <td th:text="${contrat.quantiteEmplacement}"></td>
-                            <td th:text="${#temporals.format(contrat.dateDebut,'dd/MM/yyyy')}"></td>
-                            <td
-                                th:text="${contrat.dateFin != null ? #temporals.format(contrat.dateFin,'dd/MM/yyyy') : '-'}">
-                            </td>
+                                <td th:text="${contrat.id}"></td>
+                                <td th:text="${contrat.typeZone.libelle}"></td>
+                                <td th:text="${contrat.volumeEspaceM3}"></td>
+                                <td th:text="${contrat.quantiteEmplacement}"></td>
+                                <td th:text="${#temporals.format(contrat.dateDebut,'dd/MM/yyyy')}"></td>
+                                <td th:text="${contrat.dateFin != null ? #temporals.format(contrat.dateFin,'dd/MM/yyyy') : '-'}"></td>
+                                <td>
+                                    <form th:action="@{/facture/contrat/{id}(id=${contrat.id})}" method="get" class="row g-1 align-items-center">
+                                        <div class="col-auto">
+                                            <input type="date" class="form-control form-control-sm" name="date" style="width: 140px;">
+                                        </div>
+                                        <div class="col-auto">
+                                            <button type="submit" class="btn btn-sm btn-info">Voir facture</button>
+                                        </div>
+                                    </form>
+                                </td>
 
-                            <th>Date fin</th>
-                        </tr>
+                            </tr>
 
-                    </tbody>
+                            <tr th:if="${#lists.isEmpty(contrats)}">
+                                <td colspan="7" class="text-center text-muted">Aucun contrat simple</td>
+                            </tr>
 
-                </table>
+                        </tbody>
+
+                    </table>
+                </div>
 
             </div>
 
         </div>
 
     </div>
+
+    <!-- Bootstrap JS for alert dismiss -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

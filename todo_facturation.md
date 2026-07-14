@@ -66,38 +66,18 @@
             + [] trier : en cours et terminé
             + [] voir facture (bouton) /mbola tsy atao mandeha fa poziny fotsiny
 
-+ [] facturation 
-    + [] calcul d'intervalle de date mois/jour (utiliser une fonction native java pour calculer la durée mois/jour)
-    + [] prendre une date pour voir la facture 
-        + [] vérifier si la date est équivalente à une date fin
-            + [] si non abonnement : calcule de date normale
-            + [] si abonnement : 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
++ [x] facturation
+    + [x] Dans la liste contrat du profil utilisateur (profil/index.html) mettre un bouton a cote de chaque contrat: titre voir facture (avec champ de date a cote et bouton voir a cote du petit champ), si champ vide, date aujourd'hui
+    + [x] creer une classe DateUtil dans le package utils qui calcul d'intervalle de date mois/jour (utiliser Period.between de Java)
+    + [x] prendre une date pour voir la facture 
+    + [x] vérifier si la date est équivalente à la date fin du contrat
+        + [x] non abonnement:
+            + [x] si apres la date fin du contrat: utiliser date fin (Calculer duree totale)
+            + [x] sinon ou si date_fin = null : prendre la duree (et bien verifier que apres date debut) et faire le calcul mois/jour
+        + [x] abonnement:
+            + [x] faire un calcul de la date_fin (A partir de la duree en mois)
+                + [x] Si date est au dela de date fin, utiliser date fin (donc duree en mois × tarifs mois)
+                + [x] si c'est avant date fin, on utilise trouverDerniereAnniversaire() pour trouver la date exacte d'un mois avant, pas de jours, exemple: debut 20-07-2026 et 3 mois, si date=29-09-2026 → facture du 20-09-2026
+    + [x] Faire les calculs avec la duree et les tarifs zones
+    + [x] Bien afficher proprement et clairement avec toutes les informations (client, contrat, detail facturation)
+    + [x] mettre un bouton exporter pour avoir une version PDF pro de la facture (iText 7)
