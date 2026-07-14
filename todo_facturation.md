@@ -30,17 +30,17 @@
         + [] si client : formulaire de modification
 
             + [] Comment:
-                + [] UtilisateurController : 
+                + [] ProfilController : 
                     + [] afficher la page du profil
                     + [] afficher le formulaire de changement de mot de passe 
                     + [] récupérer les données envoyées par le formulaire
                     + [] appeler le service 
 
-                + [] UtilisateurService
-                    + [] Créer les méthodes :
-                        + [] Utilisaetur getUtilisateurConnecte() : retourne l'utilisateur connecte 
-                        + [] UtilisateurInfo getProfil() : retourne les informations à afficher sur le profil
-                        + [] void changerMotDePasse() : 
+                + [x] UtilisateurService
+                    + [x] Créer les méthodes :
+                        + [x] Utilisaetur getUtilisateurConnecte() : retourne l'utilisateur connecte 
+                        + [x] UtilisateurInfo getProfil() : retourne les informations à afficher sur le profil
+                        + [x] void changerMotDePasse() : 
                             - récupère l'utilisateur connecté
                             - vérifie l'ancien mot de passe 
                             - chiffre le nouveau mot de passe 
