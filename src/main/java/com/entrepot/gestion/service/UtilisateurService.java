@@ -4,17 +4,14 @@ import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.List;
 
-<<<<<<< HEAD
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
-=======
->>>>>>> dev_facture
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+// import org.springframework.security.core.Authentication;
+// import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.entrepot.gestion.model.AuthDetails;
 import com.entrepot.gestion.model.Role;
@@ -156,7 +153,6 @@ public class UtilisateurService {
                 ancienClient.setAdresse(nouveauClient.getAdresse());
                 ancienClient.setSecteur(nouveauClient.getSecteur());
 
-<<<<<<< HEAD
                 ancienClient.getUtilisateur().setEmail(
                                 nouveauClient.getUtilisateur().getEmail());
 
@@ -216,36 +212,66 @@ public class UtilisateurService {
         }
 
         @Transactional
-        public void changerMotDePasse(
-                        String ancienMotDePasse,
-                        String nouveauMotDePasse,
-                        boolean verificationAncien) {
+public void changerMotDePasse(
+        String ancienMotDePasse,
+        String nouveauMotDePasse,
+        boolean verificationAncien) {
 
-                Utilisateur utilisateur = getUtilisateurConnecte();
+    // Récupération de l'utilisateur connecté
+    Utilisateur utilisateur = getUtilisateurConnecte();
 
-                Utilisateur utilisateurEnBase = utilisateurRepository.findById(utilisateur.getId())
-                                .orElseThrow(() -> new RuntimeException("Utilisateur introuvable"));
+    // Recharge depuis la base pour être sûr d'avoir l'état actuel
+    Utilisateur utilisateurEnBase = utilisateurRepository.findById(utilisateur.getId())
+            .orElseThrow(() -> new RuntimeException("Utilisateur introuvable"));
 
-                if (verificationAncien) {
 
-                        if (!passwordEncoder.matches(
-                                        ancienMotDePasse,
-                                        utilisateurEnBase.getMotDePasseHash())) {
+    // Vérification de l'ancien mot de passe (sauf pour ADMIN)
+    if (verificationAncien) {
 
-                                throw new BadCredentialsException(
-                                                "Ancien mot de passe incorrect");
-                        }
-                }
+        if (ancienMotDePasse == null || ancienMotDePasse.isEmpty()) {
+            throw new BadCredentialsException(
+                    "Ancien mot de passe obligatoire");
+        }
 
-                String nouveauHash = passwordEncoder.encode(nouveauMotDePasse);
+        if (!passwordEncoder.matches(
+                ancienMotDePasse,
+                utilisateurEnBase.getMotDePasseHash())) {
 
-                utilisateurEnBase.setMotDePasseHash(nouveauHash);
-
-                utilisateurRepository.saveAndFlush(utilisateurEnBase);
-=======
-    public List<Utilisateur> listeClientsUtilisateur() {
-        return utilisateurRepository.findByRoleCode("CLIENT");
+            throw new BadCredentialsException(
+                    "Ancien mot de passe incorrect");
+        }
     }
+
+
+    // Vérification du nouveau mot de passe
+    if (nouveauMotDePasse == null || nouveauMotDePasse.isEmpty()) {
+        throw new RuntimeException(
+                "Le nouveau mot de passe est obligatoire");
+    }
+
+
+    // Empêcher de remettre le même mot de passe
+    if (passwordEncoder.matches(
+            nouveauMotDePasse,
+            utilisateurEnBase.getMotDePasseHash())) {
+
+        throw new RuntimeException(
+                "Le nouveau mot de passe doit être différent de l'ancien");
+    }
+
+
+    // Encodage BCrypt du nouveau mot de passe
+    String nouveauHash = passwordEncoder.encode(nouveauMotDePasse);
+
+
+    // Mise à jour
+    utilisateurEnBase.setMotDePasseHash(nouveauHash);
+
+
+    // Sauvegarde immédiate en base
+    utilisateurRepository.saveAndFlush(utilisateurEnBase);
+}
+    
 
     public Utilisateur utilisateurConnecte() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -254,6 +280,5 @@ public class UtilisateurService {
 
         return utilisateurRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Utilisateur introuvable"));
->>>>>>> dev_facture
         }
 }
