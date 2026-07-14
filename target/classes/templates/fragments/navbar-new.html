@@ -16,22 +16,30 @@
         <div class="container-fluid">
             <!-- Logo & Brand -->
             <a class="navbar-brand d-flex align-items-center" th:href="@{/mouvements/tableau-de-bord}"
-               sec:authorize="hasRole('CLIENT')">
+                sec:authorize="hasRole('CLIENT')">
                 <div class="brand-icon me-3">
                     <i class="bi bi-box-seam-fill"></i>
                 </div>
                 <div class="brand-text">
+<<<<<<< HEAD
                     <span class="brand-title">Tech Entrepôt</span>
+=======
+                    <span class="brand-title">Tech-Entrepôt</span>
+>>>>>>> 53edad24d346966bbb17b2f7b52aa87701cdfb39
                     <span class="brand-subtitle">ERP Professionnel</span>
                 </div>
             </a>
             <a class="navbar-brand d-flex align-items-center" th:href="@{/dashboard}"
-               sec:authorize="!hasRole('CLIENT')">
+                sec:authorize="!hasRole('CLIENT')">
                 <div class="brand-icon me-3">
                     <i class="bi bi-box-seam-fill"></i>
                 </div>
                 <div class="brand-text">
+<<<<<<< HEAD
                     <span class="brand-title">Tech Entrepôt</span>
+=======
+                    <span class="brand-title">Tech-Entrepôt</span>
+>>>>>>> 53edad24d346966bbb17b2f7b52aa87701cdfb39
                     <span class="brand-subtitle">ERP Professionnel</span>
                 </div>
             </a>
@@ -65,9 +73,6 @@
                         <ul class="dropdown-menu" aria-labelledby="stockageDropdown">
                             <li><a class="dropdown-item" th:href="@{/stockage/visualisation}">
                                     <i class="bi bi-grid-3x3-gap me-2"></i>Visualisation zones
-                                </a></li>
-                            <li><a class="dropdown-item" th:href="@{/stockage/emplacements}">
-                                    <i class="bi bi-layers me-2"></i>Gestion emplacements
                                 </a></li>
                             <li><a class="dropdown-item" th:href="@{/stockage/stocks}">
                                     <i class="bi bi-box-seam me-2"></i>État des stocks

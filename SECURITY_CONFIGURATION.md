@@ -1,4 +1,4 @@
-# Configuration Spring Security - Gestion Entrepôt
+# Configuration Spring Security - Tech-Entrepôt
 
 ## Vue d'ensemble
 
