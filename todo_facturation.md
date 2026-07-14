@@ -29,6 +29,38 @@
         + [] si admin : modification direct
         + [] si client : formulaire de modification
 
+            + [] Comment:
+                + [] UtilisateurController : 
+                    + [] afficher la page du profil
+                    + [] afficher le formulaire de changement de mot de passe 
+                    + [] récupérer les données envoyées par le formulaire
+                    + [] appeler le service 
+
+                + [] UtilisateurService
+                    + [] Créer les méthodes :
+                        + [] Utilisaetur getUtilisateurConnecte() : retourne l'utilisateur connecte 
+                        + [] UtilisateurInfo getProfil() : retourne les informations à afficher sur le profil
+                        + [] void changerMotDePasse() : 
+                            - récupère l'utilisateur connecté
+                            - vérifie l'ancien mot de passe 
+                            - chiffre le nouveau mot de passe 
+                            - sauvegarde en base 
+
+                + [] UtilisateurRepository
+                    + [] findByEmail()
+
+                + [] AuthDetails
+                    + [] Utilisateur utilisateur 
+
+                + [] SecurityContextHolder 
+                    + récupérer l'id de l'utilisateur par Spring Security
+
+                + [] Vue :
+                    + [] dossier : profil
+                        + créer les pages : 
+                            + [] index.html
+                            + [] changerMotDePasse.html
+
     + [] liste contrats
         + [] trier par abonnement et normale(paiement direct)
             + [] trier : en cours et terminé
