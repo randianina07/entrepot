@@ -19,10 +19,7 @@
 /home/valisoa/Documents/entrepot/src/main/java/com/entrepot/gestion/controller/MissionController.java
 /home/valisoa/Documents/entrepot/src/main/java/com/entrepot/gestion/controller/MouvementController.java
 /home/valisoa/Documents/entrepot/src/main/java/com/entrepot/gestion/controller/MouvementViewController.java
-<<<<<<< HEAD
 /home/valisoa/Documents/entrepot/src/main/java/com/entrepot/gestion/controller/ProfilController.java
-=======
->>>>>>> dev_facture
 /home/valisoa/Documents/entrepot/src/main/java/com/entrepot/gestion/controller/StockageController.java
 /home/valisoa/Documents/entrepot/src/main/java/com/entrepot/gestion/controller/Stocks_emplacement_controller.java
 /home/valisoa/Documents/entrepot/src/main/java/com/entrepot/gestion/controller/TestController.java
@@ -37,10 +34,7 @@
 /home/valisoa/Documents/entrepot/src/main/java/com/entrepot/gestion/dto/MouvementDetailDTO.java
 /home/valisoa/Documents/entrepot/src/main/java/com/entrepot/gestion/dto/MouvementFiltreDTO.java
 /home/valisoa/Documents/entrepot/src/main/java/com/entrepot/gestion/dto/MouvementListDTO.java
-<<<<<<< HEAD
-=======
 /home/valisoa/Documents/entrepot/src/main/java/com/entrepot/gestion/model/AbonnementStockage.java
->>>>>>> dev_facture
 /home/valisoa/Documents/entrepot/src/main/java/com/entrepot/gestion/model/Allee.java
 /home/valisoa/Documents/entrepot/src/main/java/com/entrepot/gestion/model/Allees.java
 /home/valisoa/Documents/entrepot/src/main/java/com/entrepot/gestion/model/AuthDetails.java
@@ -84,10 +78,7 @@
 /home/valisoa/Documents/entrepot/src/main/java/com/entrepot/gestion/model/UtilisateurInfo.java
 /home/valisoa/Documents/entrepot/src/main/java/com/entrepot/gestion/model/Vehicule.java
 /home/valisoa/Documents/entrepot/src/main/java/com/entrepot/gestion/model/Zone.java
-<<<<<<< HEAD
-=======
 /home/valisoa/Documents/entrepot/src/main/java/com/entrepot/gestion/repository/AbonnementStockageRepository.java
->>>>>>> dev_facture
 /home/valisoa/Documents/entrepot/src/main/java/com/entrepot/gestion/repository/ChauffeurRepository.java
 /home/valisoa/Documents/entrepot/src/main/java/com/entrepot/gestion/repository/ContratRepository.java
 /home/valisoa/Documents/entrepot/src/main/java/com/entrepot/gestion/repository/DemandeRenouvellementRepository.java
@@ -127,10 +118,7 @@
 /home/valisoa/Documents/entrepot/src/main/java/com/entrepot/gestion/repository/VehiculeRepository.java
 /home/valisoa/Documents/entrepot/src/main/java/com/entrepot/gestion/repository/Zone_repository.java
 /home/valisoa/Documents/entrepot/src/main/java/com/entrepot/gestion/security/CustomUserDetailsService.java
-<<<<<<< HEAD
-=======
 /home/valisoa/Documents/entrepot/src/main/java/com/entrepot/gestion/service/AbonnementStockageService.java
->>>>>>> dev_facture
 /home/valisoa/Documents/entrepot/src/main/java/com/entrepot/gestion/service/AuthDetailsService.java
 /home/valisoa/Documents/entrepot/src/main/java/com/entrepot/gestion/service/ContratService.java
 /home/valisoa/Documents/entrepot/src/main/java/com/entrepot/gestion/service/DemandeRenouvellementService.java
