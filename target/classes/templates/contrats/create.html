@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/navbar :: head}"></head>
+<body class="storage-page">
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="container py-4">
+    <div th:replace="~{fragments/alerts :: alerts}"></div>
+    <section class="storage-hero mb-4">
+        <div class="hero-copy">
+            <span class="hero-badge"><i class="bi bi-file-earmark-plus"></i> Nouveau contrat</span>
+            <h1>Créer un contrat</h1>
+            <p>Créez un nouveau contrat de stockage pour un client.</p>
+            <div class="hero-actions">
+                <a class="btn btn-outline-primary" th:href="@{/clients}">Retour aux clients</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="storage-section">
+        <div class="storage-section-header">
+            <div>
+                <span class="chip is-accent">Formulaire</span>
+                <h2 class="mb-0 mt-2">Informations du contrat</h2>
+            </div>
+        </div>
+
+        <div class="search-form-shell">
+            <form class="row g-3" th:action="@{/contrats/create}" method="post">
+                <div class="col-12">
+                    <h5>Contrat avec :</h5>
+                </div>
+                <div class="col-md-6">
+                    <label for="utilisateurId" class="form-label">Client <span class="text-danger">*</span></label>
+                    <select class="form-select" id="utilisateurId" name="utilisateurId" required>
+                        <option value="">-- Choisir un client --</option>
+                        <option th:each="client : ${clients}" 
+                                th:value="${client.id}" 
+                                th:text="${client.email}"
+                                th:selected="${clientSelectionne != null and client.id == clientSelectionne.id}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-12 mt-3">
+                    <h5>Type de contrat <span class="text-danger">*</span></h5>
+                </div>
+                <div class="col-12">
+                    <div th:each="type : ${typesContrat}">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="typeContratId" th:value="${type.id}" required>
+                            <label class="form-check-label" th:text="${type.libelle}"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="demandeStockageId" class="form-label">Demande de stockage (ID) <span class="text-danger">*</span></label>
+                    <input type="number" class="form-control" id="demandeStockageId" name="demandeStockageId" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="typeZoneId" class="form-label">Zone (ID) <span class="text-danger">*</span></label>
+                    <input type="number" class="form-control" id="typeZoneId" name="typeZoneId">
+                </div>
+
+                <div class="col-md-4">
+                    <label for="volumeEspaceM3" class="form-label">Volume d'espace (m³) <span class="text-danger">*</span></label>
+                    <input type="number" step="0.001" class="form-control" id="volumeEspaceM3" name="volumeEspaceM3" required>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="dateDebut" class="form-label">Date début <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" id="dateDebut" name="dateDebut" required>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="dateFin" class="form-label">Date fin</label>
+                    <input type="date" class="form-control" id="dateFin" name="dateFin">
+                </div>
+
+                <div class="col-12">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="4"></textarea>
+                </div>
+
+                <div class="col-12 mt-4">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="bi bi-file-earmark-plus"></i> Créer le contrat
+                    </button>
+                    <a class="btn btn-outline-secondary" th:href="@{/clients}">
+                        <i class="bi bi-x-circle"></i> Annuler
+                    </a>
+                </div>
+            </form>
+        </div>
+    </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
