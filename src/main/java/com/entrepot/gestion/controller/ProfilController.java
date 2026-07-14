@@ -1,5 +1,8 @@
 package com.entrepot.gestion.controller;
 
+import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.entrepot.gestion.model.Utilisateur;
 import com.entrepot.gestion.model.UtilisateurInfo;
+import com.entrepot.gestion.service.ContratService;
 import com.entrepot.gestion.service.UtilisateurService;
 
 @Controller
@@ -16,22 +20,29 @@ import com.entrepot.gestion.service.UtilisateurService;
 public class ProfilController {
 
     private final UtilisateurService utilisateurService;
+    private final ContratService contratService;
 
-    public ProfilController(UtilisateurService utilisateurService) {
+    public ProfilController(UtilisateurService utilisateurService, ContratService contratService) {
         this.utilisateurService = utilisateurService;
+        this.contratService = contratService;
     }
 
     // Affichage du profil utilisateur connecté
     @GetMapping
-    public String afficherProfil(Model model) {
-        Utilisateur utilisateur = utilisateurService.getUtilisateurConnecte();
+    public String profil(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateDebut,
+            Model model) {
 
-        UtilisateurInfo info = utilisateurService.getProfil();
+        model.addAttribute("profil",
+                utilisateurService.getProfil());
 
-        model.addAttribute("utilisateur", utilisateur);
-        model.addAttribute("profil", info);
+        model.addAttribute("contrats",
+                contratService.mesContrats(dateDebut));
 
-        return "profil/index";
+        model.addAttribute("dateDebut",
+                dateDebut);
+
+        return "profil";
     }
 
     // Afficher le formulaire de changement de mot de passe

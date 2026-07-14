@@ -39,6 +39,7 @@ public class ContratService {
     private final HistoriqueRenouvellementRepository historiqueRenouvellementRepository;
     private final RenouvellementContratRepository renouvellementContratRepository;
     private final AbonnementStockageRepository abonnementStockageRepository;
+    private final UtilisateurService utilisateurService;
 
     public ContratService(
             ContratRepository contratRepository,
@@ -49,7 +50,8 @@ public class ContratService {
             StatutRenouvellementRepository statutRenouvellementRepository,
             HistoriqueRenouvellementRepository historiqueRenouvellementRepository,
             RenouvellementContratRepository renouvellementContratRepository,
-            AbonnementStockageRepository abonnementStockageRepository) {
+            AbonnementStockageRepository abonnementStockageRepository,
+            UtilisateurService utilisateurService) {
 
         this.contratRepository = contratRepository;
         this.demandeStockageRepository = demandeStockageRepository;
@@ -60,6 +62,7 @@ public class ContratService {
         this.historiqueRenouvellementRepository = historiqueRenouvellementRepository;
         this.renouvellementContratRepository = renouvellementContratRepository;
         this.abonnementStockageRepository = abonnementStockageRepository;
+        this.utilisateurService = utilisateurService;
     }
 
     public List<Contrat> findAll() {
@@ -157,5 +160,19 @@ public class ContratService {
         renouvellement.setDateFin(demande.getDateFin());
 
         renouvellementContratRepository.save(renouvellement);
+    }
+
+    public List<Contrat> mesContrats(LocalDate dateDebut) {
+
+        Utilisateur utilisateur = utilisateurService.getUtilisateurConnecte();
+
+        if (dateDebut == null) {
+            return contratRepository.findByUtilisateurIdOrderByDateDebutDesc(
+                    utilisateur.getId());
+        }
+
+        return contratRepository.findByUtilisateurIdAndDateDebut(
+                utilisateur.getId(),
+                dateDebut);
     }
 }
