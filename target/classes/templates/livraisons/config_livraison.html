@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/navbar :: head}"></head>
+<body class="storage-page">
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="container py-4">
+    <div th:replace="~{fragments/alerts :: alerts}"></div>
+    
+    <section class="storage-hero mb-4">
+        <div class="hero-copy">
+            <span class="hero-badge"><i class="bi bi-gear"></i> Configuration livraison</span>
+            <h1>Configurer la livraison</h1>
+            <p>Définissez les détails de la livraison pour le client.</p>
+            <div class="hero-actions">
+                <a class="btn btn-outline-primary" th:href="@{/livraisons/livraison}">Retour aux livraisons</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="storage-section mb-4">
+        <div class="storage-section-header">
+            <div>
+                <span class="chip is-accent">Client</span>
+                <h2 class="mb-0 mt-2">Informations client</h2>
+            </div>
+        </div>
+        <div class="storage-panel">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Client:</strong> <span th:text="${livraison.client_email}"></span></p>
+                    <p><strong>Adresse:</strong> <span th:text="${livraison.adresse_livraison}"></span></p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Poids total:</strong> <span th:text="${#numbers.formatDecimal(livraison.poids_total, 1, 2)} + ' kg'"></span></p>
+                    <p><strong>Volume total:</strong> <span th:text="${#numbers.formatDecimal(livraison.volume_total, 1, 3)} + ' m³'"></span></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="storage-section">
+        <div class="storage-section-header">
+            <div>
+                <span class="chip is-success">Formulaire</span>
+                <h2 class="mb-0 mt-2">Configuration de la livraison</h2>
+            </div>
+        </div>
+
+        <div class="search-form-shell">
+            <form class="row g-3" th:action="@{/livraisons/config_livraison}" method="post">
+                <input type="hidden" name="livraisonId" th:value="${livraison.id}">
+
+                <div class="col-md-4">
+                    <label for="datePrevue" class="form-label">Date prévue <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" id="datePrevue" name="datePrevue" required>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="heurePrevue" class="form-label">Heure prévue <span class="text-danger">*</span></label>
+                    <input type="time" class="form-control" id="heurePrevue" name="heurePrevue" required>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="tarifId" class="form-label">Tarif de livraison <span class="text-danger">*</span></label>
+                    <select class="form-select" id="tarifId" name="tarifId" required>
+                        <option value="">Choisir tarif</option>
+                        <option th:each="t : ${tarif_livraison}"
+                                th:value="${t.id}"
+                                th:text="${(t.mode_libelle != null ? t.mode_libelle : 'Tarif') + ' | Kg:' + t.prix_par_kg + ' | m3:' + t.prix_par_m3 + ' | base zone:' + livraison.zone_tarif_base}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead class="table-light">
+                            <tr>
+                                <th>Poids (kg)</th>
+                                <th>Volume (m³)</th>
+                                <th>Zone</th>
+                                <th>Commune</th>
+                                <th>Prix Poids</th>
+                                <th>Prix Volume</th>
+                                <th>Prix base</th>
+                                <th>Total</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="t : ${tarif_livraison}">
+                                <td th:text="${livraison.poids_total}"></td>
+                                <td th:text="${livraison.volume_total}"></td>
+                                <td th:text="${livraison.zone_libelle}"></td>
+                                <td th:text="${livraison.zone_commune}"></td>
+                                <td th:text="${#numbers.formatDecimal(t.prix_par_kg, 1, 2)} + ' Ar'"></td>
+                                <td th:text="${#numbers.formatDecimal(t.prix_par_m3, 1, 2)} + ' Ar'"></td>
+                                <td th:text="${#numbers.formatDecimal(livraison.zone_tarif_base, 1, 2)} + ' Ar'"></td>
+                                <td th:text="${#numbers.formatDecimal((livraison.poids_total * t.prix_par_kg) + (livraison.volume_total * t.prix_par_m3) + livraison.zone_tarif_base + t.prix_base, 1, 2)} + ' Ar'"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="col-12 mt-4">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="bi bi-check-circle"></i> Valider la livraison
+                    </button>
+                    <a class="btn btn-outline-secondary" th:href="@{/livraisons/livraison}">
+                        <i class="bi bi-x-circle"></i> Annuler
+                    </a>
+                </div>
+            </form>
+        </div>
+    </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
