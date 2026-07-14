@@ -8,7 +8,10 @@ com/entrepot/gestion/model/Colonne.class
 com/entrepot/gestion/repository/RoleRepository.class
 com/entrepot/gestion/service/HistoriqueEtatDemandeService.class
 com/entrepot/gestion/model/TarifZone.class
+<<<<<<< HEAD
 com/entrepot/gestion/repository/StatutMissionRepository.class
+=======
+>>>>>>> dev_facture
 com/entrepot/gestion/dto/LigneMouvementDTO.class
 com/entrepot/gestion/repository/ProduitRepository.class
 com/entrepot/gestion/repository/TypeZoneRepository.class
@@ -18,6 +21,8 @@ com/entrepot/gestion/service/FactureService.class
 com/entrepot/gestion/service/TypeProduitService.class
 com/entrepot/gestion/controller/DashboardController.class
 com/entrepot/gestion/model/Vehicule.class
+com/entrepot/gestion/service/Zone_service.class
+com/entrepot/gestion/model/AuthDetails.class
 com/entrepot/gestion/repository/DemandeStockageRepository.class
 com/entrepot/gestion/repository/TypeContratRepository.class
 com/entrepot/gestion/model/Zone.class
@@ -79,6 +84,7 @@ com/entrepot/gestion/model/Role.class
 com/entrepot/gestion/service/Etage_service.class
 com/entrepot/gestion/dto/AlerteStockEmplacementDTO.class
 com/entrepot/gestion/service/StatutRenouvellementService.class
+com/entrepot/gestion/service/UniteDureeService.class
 com/entrepot/gestion/model/TypeZone.class
 com/entrepot/gestion/repository/StatsClientRepository.class
 com/entrepot/gestion/model/RenouvellementContrat.class
@@ -95,6 +101,7 @@ com/entrepot/gestion/model/Contrat.class
 com/entrepot/gestion/model/StatutMission.class
 com/entrepot/gestion/config/ThymeleafConfig.class
 com/entrepot/gestion/dto/MouvementDetailDTO.class
+com/entrepot/gestion/controller/LivraisonController.class
 com/entrepot/gestion/controller/VehiculeController.class
 com/entrepot/gestion/model/FluxEntreesSorties.class
 com/entrepot/gestion/controller/DashboardStatsController.class
@@ -113,6 +120,12 @@ com/entrepot/gestion/model/TypeVehicule.class
 com/entrepot/gestion/repository/TypeVehiculeRepository.class
 com/entrepot/gestion/repository/FluxEntreesSortiesRepository.class
 com/entrepot/gestion/service/TypeZoneService.class
+com/entrepot/gestion/repository/FactureRepository.class
+com/entrepot/gestion/service/RenouvellementContratService.class
+com/entrepot/gestion/service/AuthDetailsService.class
+com/entrepot/gestion/repository/Etage_repository.class
 com/entrepot/gestion/model/Mouvement.class
+com/entrepot/gestion/repository/UniteDureeRepository.class
+com/entrepot/gestion/repository/StatutVehiculeRepository.class
 com/entrepot/gestion/repository/MouvementRepository.class
 com/entrepot/gestion/model/MissionLogistique.class

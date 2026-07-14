@@ -38,6 +38,9 @@ public class DemandeStockage {
     @Column(name = "quantite_emplacement", nullable = false)
     private Integer quantiteEmplacement;
 
+    @Column(name = "duree_mois")
+    private Integer dureeMois;
+
     public DemandeStockage() {
     }
 
@@ -103,5 +106,13 @@ public class DemandeStockage {
 
     public void setQuantiteEmplacement(Integer quantiteEmplacement) {
         this.quantiteEmplacement = quantiteEmplacement;
+    }
+
+    public Integer getDureeMois() {
+        return dureeMois;
+    }
+
+    public void setDureeMois(Integer dureeMois) {
+        this.dureeMois = dureeMois;
     }
 }

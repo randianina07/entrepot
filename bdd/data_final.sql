@@ -112,6 +112,27 @@ CREATE TRIGGER trg_appliquer_mouvement_valide
 -- 7. DONNEES DE TEST
 -- ============================================================================
 
+INSERT INTO roles (code, libelle) VALUES
+('ADMIN', 'Administrateur'),
+('GESTIONNAIRE', 'Gestionnaire entrepot'),
+('RESPONSABLE_LOGISTIQUE', 'Responsable logistique'),
+('COMPTABLE', 'Comptable'),
+('CLIENT', 'Client');
+
+INSERT INTO types_contrat (code, libelle) VALUES
+('ABONNE', 'Contrat abonnement'),
+('NON_ABONNE', 'Stockage ponctuel sans abonnement');
+
+INSERT INTO statuts_demande_stockage (code, libelle) VALUES
+('EN_ATTENTE', 'Demande en attente de traitement'),
+('ACCEPTEE', 'Demande acceptée'),
+('REFUSEE', 'Demande refusée');
+
+INSERT INTO statuts_renouvellement (code, libelle) VALUES
+('EN_ATTENTE', 'Renouvellement en attente'),
+('ACCEPTEE', 'Renouvellement accepté'),
+('REFUSEE', 'Renouvellement refusé');
+
 -- Insertion des rôles
 INSERT INTO roles (code, libelle) VALUES
     ('ADMIN', 'Administrateur'),

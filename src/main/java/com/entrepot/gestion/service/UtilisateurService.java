@@ -4,12 +4,17 @@ import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.List;
 
+<<<<<<< HEAD
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
+=======
+>>>>>>> dev_facture
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.entrepot.gestion.model.AuthDetails;
 import com.entrepot.gestion.model.Role;
@@ -151,6 +156,7 @@ public class UtilisateurService {
                 ancienClient.setAdresse(nouveauClient.getAdresse());
                 ancienClient.setSecteur(nouveauClient.getSecteur());
 
+<<<<<<< HEAD
                 ancienClient.getUtilisateur().setEmail(
                                 nouveauClient.getUtilisateur().getEmail());
 
@@ -236,5 +242,18 @@ public class UtilisateurService {
                 utilisateurEnBase.setMotDePasseHash(nouveauHash);
 
                 utilisateurRepository.saveAndFlush(utilisateurEnBase);
+=======
+    public List<Utilisateur> listeClientsUtilisateur() {
+        return utilisateurRepository.findByRoleCode("CLIENT");
+    }
+
+    public Utilisateur utilisateurConnecte() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String email = authentication.getName();
+
+        return utilisateurRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Utilisateur introuvable"));
+>>>>>>> dev_facture
         }
 }
