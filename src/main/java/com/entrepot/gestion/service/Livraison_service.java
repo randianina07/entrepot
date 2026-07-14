@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.entrepot.gestion.model.Livraison;
+import com.entrepot.gestion.model.Tarif_livraison;
 import com.entrepot.gestion.repository.Livraison_repository;
+import com.entrepot.gestion.repository.Tarif_livraison_repository;
 
 
 @Service
