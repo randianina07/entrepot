@@ -170,9 +170,9 @@ public class UtilisateurController {
                 utilisateurRepository.save(utilisateur);
             }
 
-            redirectAttributes.addFlashAttribute("success", "✅ Client modifié avec succès.");
+            redirectAttributes.addFlashAttribute("success", "Client modifié avec succès.");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "❌ Impossible de modifier le client: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "Impossible de modifier le client: " + e.getMessage());
         }
         return "redirect:/clients";
     }

@@ -117,7 +117,7 @@ public class ContratController {
             @RequestParam Long typeZoneId,
             @RequestParam Long typeContratId) {
         // indice 1 lony fa refaveo atao contexte
-        Utilisateur client = utilisateurService.findById(1L);
+        Utilisateur client = utilisateurService.utilisateurConnecte();
         TypeZone typeZone = typeZoneService.findById(typeZoneId);
         TypeContrat typeContrat = typeContratService.findById(typeContratId).orElseThrow();
 
@@ -178,7 +178,7 @@ public class ContratController {
     public String afficherDemandeRenouvellement(Model model) {
 
         // TODO : remplacer par les contrats du client connecté
-        Utilisateur client = utilisateurService.findById(1L);
+        Utilisateur client = utilisateurService.utilisateurConnecte();
         List<Contrat> contrats = contratService.findByUtilisateur(client);
 
         model.addAttribute("demande", new DemandeRenouvellement());
