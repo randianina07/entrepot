@@ -135,7 +135,7 @@
                         <li><a class="dropdown-item" th:href="@{/contrats/demandes}">
                             <i class="bi bi-clipboard-list me-2"></i>Demandes stockage
                         </a></li>
-                        <li><a class="dropdown-item" th:href="@{/contrats/nouvelle-demande}">
+                        <li><a class="dropdown-item" th:href="@{/contrats/demande}">
                             <i class="bi bi-clipboard-plus me-2"></i>Nouvelle demande
                         </a></li>
                         <li><a class="dropdown-item" th:href="@{/contrats/renouvellements}">
@@ -191,6 +191,12 @@
                         </div>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li>
+                            <a class="dropdown-item" th:href="@{/profil}">
+                                <i class="bi bi-person me-2"></i>Mon profil
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
                         <li>
                             <a class="dropdown-item" th:href="@{/logout}">
                                 <i class="bi bi-box-arrow-right me-2"></i>Déconnexion

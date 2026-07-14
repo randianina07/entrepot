@@ -12,11 +12,13 @@ import jakarta.persistence.Id;
 public class TypeZone { 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column(unique = true, length = 20, nullable = false)
-    private String code; // ETA, SEC, LRD, FRD
+    @Column(name = "code", nullable = false, unique = true, length = 20)
+    private String code;
 
+    @Column(name = "libelle", nullable = false, length = 100)
     private String libelle;
 
     // Getters et Setters

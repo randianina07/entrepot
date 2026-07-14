@@ -33,7 +33,7 @@
                         <option value="">-- Sélectionner un contrat --</option>
                         <option th:each="contrat : ${contrats}" 
                                 th:value="${contrat.id}"
-                                th:text="|Contrat #${contrat.id} - ${contrat.type_zone_libelle} (${contrat.date_debut_fmt} → ${contrat.date_fin_fmt}) - ${contrat.client_email}|">
+                                th:text="|Contrat #${contrat.id} - ${contrat.typeZone.libelle} (${contrat.dateDebut} → ${contrat.dateFin}) - ${contrat.utilisateur.email}|">
                         </option>
                     </select>
                 </div>
