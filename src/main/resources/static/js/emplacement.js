@@ -51,7 +51,9 @@
             return;
         }
 
-        if (!stock) {
+        const stocks = Array.isArray(stock) ? stock : (stock ? [stock] : []);
+
+        if (stocks.length === 0) {
             detail.innerHTML = `
                 <div class="detail-title">Emplacement vide</div>
                 <div class="detail-muted">Aucun produit n'est associe a cet emplacement.</div>
@@ -59,44 +61,60 @@
             return;
         }
 
-        const emplacement = stock.emplacement || {};
-        const produit = stock.produit || {};
+        const firstStock = stocks[0] || {};
+        const emplacement = firstStock.emplacement || {};
 
         detail.innerHTML = `
-            <div class="detail-title">${formatValue(produit.nom, 'Produit inconnu')}</div>
-            <div class="detail-muted mb-3">${formatValue(produit.code, 'Code non disponible')}</div>
+            <div class="detail-title">${formatValue(emplacement.code, 'Emplacement')}</div>
+            <div class="detail-muted mb-3">${stocks.length} produit(s) stocke(s) dans cet emplacement</div>
             <div class="storage-details">
-                <span><strong>Quantite :</strong> ${formatValue(stock.quantite, '0')}</span>
                 <span><strong>Emplacement :</strong> ${formatValue(emplacement.code, '-')}</span>
                 <span><strong>Etage :</strong> ${formatValue(emplacement.etage?.numero_etage, '-')}</span>
                 <span><strong>Colonne :</strong> ${formatValue(emplacement.colonne, '-')}</span>
-                <span><strong>Volume unitaire :</strong> ${formatValue(produit.volume_unitaire_m3, '-')} m3</span>
-                <span><strong>Description :</strong> ${formatValue(produit.description, 'Aucune description')}</span>
+            </div>
+            <div class="mt-3">
+                <div class="detail-title" style="font-size: 1rem;">Produits</div>
+                <div class="storage-details">
+                    ${stocks.map((item) => {
+                        const produit = item.produit || {};
+                        return `
+                            <div class="storage-detail-card p-3 mb-2">
+                                <div><strong>${formatValue(produit.nom, 'Produit inconnu')}</strong></div>
+                                <div class="detail-muted">Code : ${formatValue(produit.code, 'Code non disponible')}</div>
+                                <div class="detail-muted">Quantite : ${formatValue(item.quantite, '0')}</div>
+                                <div class="detail-muted">Volume unitaire : ${formatValue(produit.volumeUnitaireM3, '-')} m3</div>
+                                <div class="detail-muted">Description : ${formatValue(produit.description, 'Aucune description')}</div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
             </div>
         `;
     }
 
-    function buildSlot(stock, level, column) {
+    function buildSlot(stocks, level, column) {
         const slot = document.createElement('button');
         slot.type = 'button';
         slot.className = 'emplacement-slot';
 
-        const emplacement = stock?.emplacement || null;
-        const productName = stock?.produit?.nom;
+        const items = Array.isArray(stocks) ? stocks : (stocks ? [stocks] : []);
+        const firstStock = items[0] || null;
+        const emplacement = firstStock?.emplacement || null;
+        const productName = firstStock?.produit?.nom;
 
-        if (stock && emplacement) {
+        if (items.length > 0 && emplacement) {
             slot.classList.add('is-occupied');
             slot.innerHTML = `
                 <div class="slot-legend">
                     <span class="chip is-success">Occupe</span>
-                    <span>${formatValue(stock.quantite, '0')}</span>
+                    <span>${items.length} produit(s)</span>
                 </div>
                 <div>
                     <div class="slot-code">${formatValue(emplacement.code, 'Emplacement')}</div>
-                    <div class="detail-muted">${formatValue(productName, 'Produit inconnu')}</div>
+                    <div class="detail-muted">${formatValue(productName, 'Produit inconnu')}${items.length > 1 ? ` + ${items.length - 1} autre(s)` : ''}</div>
                 </div>
             `;
-            slot.addEventListener('click', () => renderDetail(stock));
+            slot.addEventListener('click', () => renderDetail(items));
             return slot;
         }
 
@@ -128,14 +146,17 @@
             const level = stock?.emplacement?.etage?.numero_etage;
             const column = stock?.emplacement?.colonne;
             if (level !== undefined && level !== null && column !== undefined && column !== null) {
-                lookup.set(`${level}-${column}`, stock);
+                const key = `${level}-${column}`;
+                const items = lookup.get(key) || [];
+                items.push(stock);
+                lookup.set(key, items);
             }
         });
 
         DEFAULT_LEVELS.forEach((level) => {
             DEFAULT_COLUMNS.forEach((column) => {
-                const stock = lookup.get(`${level}-${column}`) || null;
-                grid.appendChild(buildSlot(stock, level, column));
+                const stocks = lookup.get(`${level}-${column}`) || [];
+                grid.appendChild(buildSlot(stocks, level, column));
             });
         });
     }

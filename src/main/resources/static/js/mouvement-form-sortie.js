@@ -20,6 +20,11 @@
 			field.classList.remove('is-valid', 'is-invalid');
 		});
 
+		const zoneSelect = row.querySelector('.zone-select');
+		if (zoneSelect) {
+			zoneSelect.innerHTML = "<option value=''>Selectionner une zone</option>";
+		}
+
 		const stockLabel = row.querySelector('[id^="stock-disponible-"]');
 		if (stockLabel) {
 			stockLabel.textContent = 'Stock disponible: --';
@@ -131,6 +136,42 @@
 		validerQuantite(quantiteInput);
 	}
 
+	async function mettreAJourZonesProduit(element) {
+		const row = element.closest(ligneSelector);
+		if (!row) {
+			return;
+		}
+
+		const zoneSelect = row.querySelector('.zone-select');
+		if (!zoneSelect) {
+			return;
+		}
+
+		const produitId = element.value;
+		zoneSelect.innerHTML = "<option value=''>Chargement...</option>";
+
+		if (!produitId) {
+			zoneSelect.innerHTML = "<option value=''>Selectionner une zone</option>";
+			return;
+		}
+
+		try {
+			const response = await fetch(`/mouvements/zones-produit/${produitId}`);
+			if (response.ok) {
+				const zones = await response.json();
+				zoneSelect.innerHTML = "<option value=''>Selectionner une zone</option>";
+				zones.forEach((zone) => {
+					zoneSelect.innerHTML += `<option value="${zone.id}">${zone.libelle}</option>`;
+				});
+				return;
+			}
+		} catch (error) {
+			console.error('Erreur lors du chargement des zones', error);
+		}
+
+		zoneSelect.innerHTML = "<option value=''>Selectionner une zone</option>";
+	}
+
 	function validerQuantite(input) {
 		const row = input.closest(ligneSelector);
 		if (!row) {
@@ -173,7 +214,10 @@
 
 		container.addEventListener('change', (event) => {
 			const target = event.target;
-			if (target instanceof HTMLSelectElement && (target.classList.contains('produit-select') || target.classList.contains('emplacement-select'))) {
+			if (target instanceof HTMLSelectElement && target.classList.contains('produit-select')) {
+				mettreAJourZonesProduit(target);
+			}
+			if (target instanceof HTMLSelectElement && target.classList.contains('emplacement-select')) {
 				mettreAJourStockDisponible(target);
 			}
 		});
@@ -194,6 +238,7 @@
 	window.ajouterLigne = buildNewRow;
 	window.supprimerLigne = removeRow;
 	window.mettreAJourStockDisponible = mettreAJourStockDisponible;
+	window.mettreAJourZonesProduit = mettreAJourZonesProduit;
 	window.validerQuantite = validerQuantite;
 
 	document.addEventListener('DOMContentLoaded', init);

@@ -28,6 +28,10 @@ public class StockEmplacement {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "produit_id", nullable = false)
     private Produit produit;
+
+    @ManyToOne
+    @JoinColumn(name = "zone_id", referencedColumnName = "id")
+    Zone zone;
     
     @Column(nullable = false, precision = 12, scale = 3)
     private BigDecimal quantite = BigDecimal.ZERO;
@@ -35,6 +39,15 @@ public class StockEmplacement {
     public StockEmplacement() {
     }
     
+    
+        public Zone getZone() {
+            return zone;
+        }
+    
+        public void setZone(Zone zone) {
+            this.zone = zone;
+        }
+        
     public StockEmplacement(Long id, Emplacement emplacement, Produit produit, BigDecimal quantite) {
         this.id = id;
         this.emplacement = emplacement;
