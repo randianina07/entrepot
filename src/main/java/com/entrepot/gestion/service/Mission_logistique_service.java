@@ -1,5 +1,6 @@
-package entrepot.demo.service;
+package com.entrepot.gestion.service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -10,35 +11,36 @@ import java.util.Set;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import entrepot.demo.model.Chauffeurs;
-import entrepot.demo.model.Historique_vehicule;
-import entrepot.demo.model.Livraison;
-import entrepot.demo.model.Mission_logistique;
-import entrepot.demo.model.Statut_vehicule;
-import entrepot.demo.model.Statuts_mission;
-import entrepot.demo.model.Vehicule;
-import entrepot.demo.repository.Chauffeur_repository;
-import entrepot.demo.repository.Historique_vehicule_repository;
-import entrepot.demo.repository.Livraison_repository;
-import entrepot.demo.repository.Mission_logistique_repository;
-import entrepot.demo.repository.Statut_vehicule_repository;
-import entrepot.demo.repository.Statuts_mission_repository;
-import entrepot.demo.repository.Vehicule_repository;
+import com.entrepot.gestion.model.Chauffeur;
+import com.entrepot.gestion.model.Historique_vehicule;
+import com.entrepot.gestion.model.Livraison;
+import com.entrepot.gestion.model.MissionLogistique;
+import com.entrepot.gestion.model.StatutMission;
+import com.entrepot.gestion.model.StatutVehicule;
+import com.entrepot.gestion.model.Vehicule;
+import com.entrepot.gestion.repository.ChauffeurRepository;
+import com.entrepot.gestion.repository.Historique_vehicule_repository;
+import com.entrepot.gestion.repository.Livraison_repository;
+import com.entrepot.gestion.repository.MissionLogistiqueRepository;
+import com.entrepot.gestion.repository.StatutMissionRepository;
+import com.entrepot.gestion.repository.StatutVehiculeRepository;
+import com.entrepot.gestion.repository.VehiculeRepository;
+
 
 @Service
 public class Mission_logistique_service {
-    private final Mission_logistique_repository mission_vehicule_repository;
-    private final Vehicule_repository vehicule_repository;
-    private final Chauffeur_repository chauffeur_repository;
-    private final Statuts_mission_repository statuts_mission_repository;
-    private final Statut_vehicule_repository statut_vehicule_repository;
+    private final MissionLogistiqueRepository mission_vehicule_repository;
+    private final VehiculeRepository vehicule_repository;
+    private final ChauffeurRepository chauffeur_repository;
+    private final StatutMissionRepository statuts_mission_repository;
+    private final StatutVehiculeRepository statut_vehicule_repository;
     private final Livraison_repository livraison_repository;
     private final Historique_vehicule_repository historique_vehicule_repository;
 
-    public Mission_logistique_service(Mission_logistique_repository mission_vehicule_repository,
-            Vehicule_repository vehicule_repository, Chauffeur_repository chauffeur_repository,
-            Statuts_mission_repository statuts_mission_repository,
-            Statut_vehicule_repository statut_vehicule_repository,
+    public Mission_logistique_service(MissionLogistiqueRepository mission_vehicule_repository,
+            VehiculeRepository vehicule_repository, ChauffeurRepository chauffeur_repository,
+            StatutMissionRepository statuts_mission_repository,
+            StatutVehiculeRepository statut_vehicule_repository,
             Livraison_repository livraison_repository,
             Historique_vehicule_repository historique_vehicule_repository) {
         this.mission_vehicule_repository = mission_vehicule_repository;
@@ -50,38 +52,38 @@ public class Mission_logistique_service {
         this.historique_vehicule_repository = historique_vehicule_repository;
     }
 
-    public List<Mission_logistique> listMission_logistique() {
+    public List<MissionLogistique> listMission_logistique() {
         return mission_vehicule_repository.findAll();
     }
 
-    public List<Mission_logistique> missionsEnCours() {
+    public List<MissionLogistique> missionsEnCours() {
         return mission_vehicule_repository.findByStatutMissionIdIn(List.of(1, 2));
     }
 
-    public List<Mission_logistique> historiqueMissions() {
+    public List<MissionLogistique> historiqueMissions() {
         return mission_vehicule_repository.findByStatutMissionIdIn(List.of(3, 4));
     }
 
-    public Mission_logistique findById(Long missionId) {
+    public MissionLogistique findById(Long missionId) {
         return mission_vehicule_repository.findById(missionId)
                 .orElseThrow(() -> new RuntimeException("Mission non trouvee"));
     }
 
     public List<Vehicule> vehiculesDisponibles() {
         return vehicule_repository.findAll().stream()
-                .filter(v -> v.getStatut() != null && "DISPONIBLE".equals(v.getStatut().getCode()))
+                .filter(v -> v.getStatutVehicule() != null && "DISPONIBLE".equals(v.getStatutVehicule().getCode()))
                 .toList();
     }
 
-    public List<Chauffeurs> chauffeursDisponibles() {
+    public List<Chauffeur> chauffeursDisponibles() {
         Set<Long> chauffeursActifs = new HashSet<>();
-        for (Mission_logistique mission : missionsEnCours()) {
+        for (MissionLogistique mission : missionsEnCours()) {
             if (mission.getChauffeur() != null) {
                 chauffeursActifs.add(mission.getChauffeur().getId());
             }
         }
         return chauffeur_repository.findAll().stream()
-                .filter(c -> !c.isActif())
+                .filter(c -> !c.getActif())
                 .filter(c -> !chauffeursActifs.contains(c.getId()))
                 .toList();
     }
@@ -95,7 +97,7 @@ public class Mission_logistique_service {
     }
 
     @Transactional
-    public Mission_logistique creerMission(LocalDate dateDepart, LocalTime heureDepart, LocalDate dateArrivee,
+    public MissionLogistique creerMission(LocalDate dateDepart, LocalTime heureDepart, LocalDate dateArrivee,
             LocalTime heureArrivee, Long vehiculeId, Long chauffeurId, List<Long> livraisonIds) {
         if (livraisonIds == null || livraisonIds.isEmpty()) {
             throw new RuntimeException("Selectionnez au moins une livraison");
@@ -104,9 +106,9 @@ public class Mission_logistique_service {
         Vehicule vehicule = vehicule_repository.findById(vehiculeId)
                 .orElseThrow(() -> new RuntimeException("Vehicule non trouver"));
 
-        Chauffeurs chauffeurs = chauffeur_repository.findById(chauffeurId)
+        Chauffeur chauffeurs = chauffeur_repository.findById(chauffeurId)
                 .orElseThrow(() -> new RuntimeException("Chauffeur non trouver"));
-        if (chauffeurs.isActif()) {
+        if (chauffeurs.getActif()) {
             throw new RuntimeException("Le chauffeur est deja occupe");
         }
 
@@ -149,14 +151,15 @@ public class Mission_logistique_service {
             volumeCumule += livraison.getVolumeTotal() == null ? 0.0 : livraison.getVolumeTotal();
         }
 
-        if (volumeCumule > vehicule.getCapaciteVolume()) {
+        BigDecimal volumecumuleBD = BigDecimal.valueOf(volumeCumule);
+
+        if (volumecumuleBD.compareTo(vehicule.getCapaciteVolumeM3()) > 0) {
             throw new RuntimeException("Le volume total des livraisons depasse la capacite du vehicule");
         }
 
-        Statuts_mission statutPlanifiee = statuts_mission_repository.findByCode("PLANIFIEE")
-                .orElseThrow(() -> new RuntimeException("Statut PLANIFIEE non trouve"));
+        StatutMission statutPlanifiee = statuts_mission_repository.findByCode("PLANIFIEE");
 
-        Mission_logistique mission = new Mission_logistique();
+        MissionLogistique mission = new MissionLogistique();
         mission.setReferenceMission("MS-" + System.currentTimeMillis());
         mission.setDateDepartPrevue(departPrevue);
         mission.setDateArriveePrevue(arriveePrevue);
@@ -164,7 +167,7 @@ public class Mission_logistique_service {
         mission.setChauffeur(chauffeurs);
         mission.setStatutMission(statutPlanifiee);
 
-        Mission_logistique missionSauvee = mission_vehicule_repository.save(mission);
+        MissionLogistique missionSauvee = mission_vehicule_repository.save(mission);
         chauffeurs.setActif(true);
         chauffeur_repository.save(chauffeurs);
 
@@ -178,7 +181,7 @@ public class Mission_logistique_service {
 
     @Transactional
     public void commencerMission(Long missionId) {
-        Mission_logistique mission = findById(missionId);
+        MissionLogistique mission = findById(missionId);
         LocalDateTime now = LocalDateTime.now();
 
         if (mission.getDateDepartPrevue() != null && now.isAfter(mission.getDateDepartPrevue())) {
@@ -189,7 +192,7 @@ public class Mission_logistique_service {
         mission.setStatutMission(getStatutMissionByCode("EN_COURS"));
 
         Vehicule vehicule = mission.getVehicule();
-        vehicule.setStatut(getStatutVehiculeByCode("EN_MISSION"));
+        vehicule.setStatutVehicule(getStatutVehiculeByCode("EN_MISSION"));
 
         for (Livraison livraison : livraison_repository.findByMissionId(missionId)) {
             if (livraison.getDateLivraison() == null) {
@@ -203,7 +206,7 @@ public class Mission_logistique_service {
         historique.setMission(mission);
         historique.setVehicule(vehicule);
         historique.setDate_depart(now);
-        historique.setKilometrage_Depart(vehicule.getKilometrage());
+        historique.setKilometrage_Depart(vehicule.getKilometrageActuel());
         historique_vehicule_repository.save(historique);
 
         vehicule_repository.save(vehicule);
@@ -212,15 +215,15 @@ public class Mission_logistique_service {
 
     @Transactional
     public void terminerMission(Long missionId) {
-        Mission_logistique mission = findById(missionId);
+        MissionLogistique mission = findById(missionId);
         LocalDateTime now = LocalDateTime.now();
 
         mission.setDateArriveeReelle(now);
         mission.setStatutMission(getStatutMissionByCode("TERMINEE"));
 
         Vehicule vehicule = mission.getVehicule();
-        vehicule.setStatut(getStatutVehiculeByCode("DISPONIBLE"));
-        Chauffeurs chauffeur = mission.getChauffeur();
+        vehicule.setStatutVehicule(getStatutVehiculeByCode("DISPONIBLE"));
+        Chauffeur chauffeur = mission.getChauffeur();
         if (chauffeur != null) {
             chauffeur.setActif(false);
             chauffeur_repository.save(chauffeur);
@@ -234,7 +237,7 @@ public class Mission_logistique_service {
             historique.setDate_depart(mission.getDateDepartReelle());
         }
         historique.setDate_arrivee(now);
-        historique.setKilometrage_arrivee(vehicule.getKilometrage());
+        historique.setKilometrage_arrivee(vehicule.getKilometrageActuel());
         historique_vehicule_repository.save(historique);
 
         vehicule_repository.save(vehicule);
@@ -243,12 +246,12 @@ public class Mission_logistique_service {
 
     @Transactional
     public void annulerMission(Long missionId) {
-        Mission_logistique mission = findById(missionId);
+        MissionLogistique mission = findById(missionId);
         mission.setStatutMission(getStatutMissionByCode("ANNULEE"));
 
         Vehicule vehicule = mission.getVehicule();
-        vehicule.setStatut(getStatutVehiculeByCode("DISPONIBLE"));
-        Chauffeurs chauffeur = mission.getChauffeur();
+        vehicule.setStatutVehicule(getStatutVehiculeByCode("DISPONIBLE"));
+        Chauffeur chauffeur = mission.getChauffeur();
         if (chauffeur != null) {
             chauffeur.setActif(false);
             chauffeur_repository.save(chauffeur);
@@ -263,23 +266,21 @@ public class Mission_logistique_service {
         mission_vehicule_repository.save(mission);
     }
 
-    private Statuts_mission getStatutMissionByCode(String code) {
-        return statuts_mission_repository.findByCode(code)
-                .orElseThrow(() -> new RuntimeException("Statut mission " + code + " non trouve"));
+    private StatutMission getStatutMissionByCode(String code) {
+        return statuts_mission_repository.findByCode(code);
     }
 
-    private Statut_vehicule getStatutVehiculeByCode(String code) {
-        return statut_vehicule_repository.findByCode(code)
-                .orElseThrow(() -> new RuntimeException("Statut vehicule " + code + " non trouve"));
+    private StatutVehicule getStatutVehiculeByCode(String code) {
+        return statut_vehicule_repository.findByCode(code);
     }
 
-    public Mission_logistique ajouterMission(Mission_logistique mission_logistique, Long vehiculeId, Long chauffeurId,
+    public MissionLogistique ajouterMission(MissionLogistique mission_logistique, Long vehiculeId, Long chauffeurId,
             Long statutMissionId) {
         Vehicule vehicule = vehicule_repository.findById(vehiculeId)
                 .orElseThrow(() -> new RuntimeException("Vehicule non trouver"));
-        Chauffeurs chauffeurs = chauffeur_repository.findById(chauffeurId)
+        Chauffeur chauffeurs = chauffeur_repository.findById(chauffeurId)
                 .orElseThrow(() -> new RuntimeException("Chauffeur non trouver"));
-        Statuts_mission statuts_mission = statuts_mission_repository.findById(statutMissionId)
+        StatutMission statuts_mission = statuts_mission_repository.findById(statutMissionId)
                 .orElseThrow(() -> new RuntimeException("Status non trouver"));
         mission_logistique.setVehicule(vehicule);
         mission_logistique.setChauffeur(chauffeurs);

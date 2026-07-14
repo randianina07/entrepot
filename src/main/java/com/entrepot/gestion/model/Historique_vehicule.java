@@ -1,5 +1,6 @@
 package com.entrepot.gestion.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
@@ -31,8 +32,18 @@ public class Historique_vehicule {
 
     LocalDateTime date_depart;
     LocalDateTime date_arrivee;
-    Double kilometrage_Depart;
-    Double kilometrage_arrivee;
+    BigDecimal kilometrage_Depart;
+    BigDecimal kilometrage_arrivee;
+
+    
+    public void setKilometrage_arrivee(BigDecimal kilometrage_arrivee) {
+        this.kilometrage_arrivee = kilometrage_arrivee;
+    }
+
+    public void setKilometrage_Depart(BigDecimal kilometrage_Depart) {
+        this.kilometrage_Depart = kilometrage_Depart;
+    }
+
 
     @Column(name = "distance_parcourue", insertable = false, updatable = false)
     Double distance_parcourue;
@@ -77,21 +88,14 @@ public class Historique_vehicule {
         this.date_arrivee = date_arrivee;
     }
 
-    public Double getKilometrage_Depart() {
+    public BigDecimal getKilometrage_Depart() {
         return kilometrage_Depart;
     }
 
-    public void setKilometrage_Depart(Double kilometrage_Depart) {
-        this.kilometrage_Depart = kilometrage_Depart;
-    }
-
-    public Double getKilometrage_arrivee() {
+    public BigDecimal getKilometrage_arrivee() {
         return kilometrage_arrivee;
     }
 
-    public void setKilometrage_arrivee(Double kilometrage_arrivee) {
-        this.kilometrage_arrivee = kilometrage_arrivee;
-    }
 
     public Double getDistance_parcourue() {
         return distance_parcourue;

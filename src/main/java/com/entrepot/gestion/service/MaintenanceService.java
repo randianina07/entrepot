@@ -5,8 +5,10 @@ package com.entrepot.gestion.service;
 
 import org.springframework.stereotype.Service;
 
+import com.entrepot.gestion.model.Maintenance_vehicule;
 import com.entrepot.gestion.model.Type_maintenance;
 import com.entrepot.gestion.model.Vehicule;
+import com.entrepot.gestion.repository.MaintenanceRepository;
 import com.entrepot.gestion.repository.Maintenance_vehicule_repository;
 import com.entrepot.gestion.repository.TypeMaintenanceRepository;
 import com.entrepot.gestion.repository.VehiculeRepository;
@@ -18,12 +20,12 @@ import java.util.stream.Collectors;
 @Service
 public class MaintenanceService {
 
-	private final MaintenanceRepository maintenanceRepository;
+	private final Maintenance_vehicule_repository maintenanceRepository;
 	private final VehiculeRepository vehiculeRepository;
 	private final TypeMaintenanceRepository typeMaintenanceRepository;
 
 	public MaintenanceService(
-			MaintenanceRepository maintenanceRepository,
+			Maintenance_vehicule_repository maintenanceRepository,
 			VehiculeRepository vehiculeRepository,
 			TypeMaintenanceRepository typeMaintenanceRepository) {
 		this.maintenanceRepository = maintenanceRepository;
@@ -31,12 +33,12 @@ public class MaintenanceService {
 		this.typeMaintenanceRepository = typeMaintenanceRepository;
 	}
 
-	public List<Maintenance> getHistoriqueMaintenances() {
+	public List<Maintenance_vehicule> getHistoriqueMaintenances() {
 		return maintenanceRepository.findAll();
 	}
 
-	public List<Maintenance> getHistoriqueMaintenances(LocalDate dateDebutMaintenance, LocalDate dateFinMaintenance) {
-		List<Maintenance> maintenances = maintenanceRepository.findAll();
+	public List<Maintenance_vehicule> getHistoriqueMaintenances(LocalDate dateDebutMaintenance, LocalDate dateFinMaintenance) {
+		List<Maintenance_vehicule> maintenances = maintenanceRepository.findAll();
 
 		if (dateDebutMaintenance != null && dateFinMaintenance != null) {
 			maintenances = maintenances.stream()
@@ -50,16 +52,16 @@ public class MaintenanceService {
 		return maintenances;
 	}
 
-	public List<Maintenance> getHistoriqueMaintenances(
+	public List<Maintenance_vehicule> getHistoriqueMaintenances(
 			LocalDate dateDebutMaintenance,
 			LocalDate dateFinMaintenance,
 			Long typeMaintenanceId
 	) {
-		List<Maintenance> maintenances = getHistoriqueMaintenances(dateDebutMaintenance, dateFinMaintenance);
+		List<Maintenance_vehicule> maintenances = getHistoriqueMaintenances(dateDebutMaintenance, dateFinMaintenance);
 
 		if (typeMaintenanceId != null) {
 			maintenances = maintenances.stream()
-					.filter(maintenance -> typeMaintenanceId.equals(maintenance.getTypeMaintenanceId()))
+					.filter(maintenance -> typeMaintenanceId.equals(maintenance.getTypeMaintenance()))
 					.toList();
 		}
 
@@ -74,7 +76,7 @@ public class MaintenanceService {
 		return typeMaintenanceRepository.findAll();
 	}
 	
-	public Maintenance addMaintenance(Maintenance maintenance){
+	public Maintenance_vehicule addMaintenance(Maintenance_vehicule maintenance){
 		return maintenanceRepository.save(maintenance);
 	}
 

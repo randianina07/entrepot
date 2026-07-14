@@ -1,11 +1,11 @@
-package entrepot.demo.service;
+package com.entrepot.gestion.service;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import entrepot.demo.model.ModeCalculeLivraison;
-import entrepot.demo.repository.Mode_calcule_livraison_repository;
+import com.entrepot.gestion.model.ModeCalculeLivraison;
+import com.entrepot.gestion.repository.Mode_calcule_livraison_repository;
 
 @Service
 public class Mode_calcule_livraison_service {
