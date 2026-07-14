@@ -23,7 +23,7 @@ INSERT INTO type_zone (id, code, libelle, type_produit_id) VALUES
 -- =========================
 -- 3. ALLEES
 -- =========================
-INSERT INTO allees (id, code) VALUES
+INSERT INTO allee (id, libelle) VALUES
 (1, 'A1'),
 (2, 'A2');
 
@@ -47,16 +47,16 @@ INSERT INTO etage (id, libelle, numero_etage) VALUES
 -- =========================
 -- 6. EMPLACEMENT
 -- =========================
-INSERT INTO emplacement (id, code, etage_id, capacite_volume_m3, actif, charge_max, colonne) VALUES
-(1, 'E1', 1, 11.5, true, 1300, 1),
-(2, 'E2', 1, 11.0, false, 1300, 2),
-(3, 'E3', 1, 11.0, false, 1300, 3),
-(4, 'E4', 2, 11.0, true, 1300, 1),
-(5, 'E5', 2, 11.0, true, 1300, 2),
-(6, 'E6', 2, 11.0, true, 1300, 3),
-(7, 'E7', 3, 11.0, false, 1300, 1),
-(8, 'E8', 3, 11.0, true, 1300, 2),
-(9, 'E9', 3, 11.0, false, 1300, 3);
+INSERT INTO emplacement (id, code, etage_id, capacite_volume_m3, charge_max, colonne,allee_id) VALUES
+(1, 'E1', 1, 11.5, 1300, 1,1),
+(2, 'E2', 1, 11.0, 1300, 2,1),
+(3, 'E3', 1, 11.0, 1300, 3,1),
+(4, 'E4', 2, 11.0, 1300, 1,1),
+(5, 'E5', 2, 11.0, 1300, 2,1),
+(6, 'E6', 2, 11.0, 1300, 3,2),
+(7, 'E7', 3, 11.0, 1300, 1,2),
+(8, 'E8', 3, 11.0, 1300, 2,2),
+(9, 'E9', 3, 11.0, 1300, 3,2);
 
 -- =========================
 -- 7. PRODUITS

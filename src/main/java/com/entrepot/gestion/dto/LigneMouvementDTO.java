@@ -8,7 +8,16 @@ public class LigneMouvementDTO {
     private Long emplacementSourceId;
     private Long emplacementDestId;
     private BigDecimal quantite;
+    private long idZone;
     
+    public long getIdZone() {
+        return idZone;
+    }
+
+    public void setIdZone(long idZone) {
+        this.idZone = idZone;
+    }
+
     public LigneMouvementDTO() {
     }
     

@@ -19,7 +19,7 @@ public class Zone_controller {
     Zone_service zone_service;
 
     @GetMapping("/type-zone/{id}")
-    public String getTypeZone(@PathVariable Long id, Model model) {
+    public String getTypeZone(@PathVariable("id") Long id, Model model) {
 
         List<Zone> zones = zone_service.getZonesByTypeZoneId(id);
         model.addAttribute("zones", zones);

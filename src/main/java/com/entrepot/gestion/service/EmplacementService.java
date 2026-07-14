@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service;
 
 import com.entrepot.gestion.model.Emplacement;
 import com.entrepot.gestion.model.Etage;
+import com.entrepot.gestion.model.StockEmplacement;
 import com.entrepot.gestion.model.Zone;
 import com.entrepot.gestion.repository.EmplacementRepository;
 import com.entrepot.gestion.repository.Etage_repository;
+import com.entrepot.gestion.repository.StockEmplacementRepository;
 import com.entrepot.gestion.repository.Zone_repository;
 
 @Service
@@ -26,51 +28,92 @@ public class EmplacementService {
     private EmplacementRepository emplacementRepository;
 
     // Le cœur de ton MVP : l'algorithme de recherche rapide
-    public List<Emplacement> trouverPlaceRapide(Long id_zone, double tailleProduit, int quantite) {
-        // Liste d'emplacements
-        List<Emplacement> tousLesEmplacements = emplacementRepository.findAll();
-        // Liste d'étages
-        List<Etage> tousLesEtages = etageRepository.findAll();
-        // Liste d'alleees
-        // List<Allee> tousLesAllees = alleeRepository.findAll();
-        // Liste des zones
-        List<Zone> toutesLesZones = zoneRepository.findAll();
+    @Autowired
+    private StockEmplacementRepository stockRepository;
 
-        List<Emplacement> listeEmplacementsTrouves = new ArrayList<>();
-        for (Zone zone : toutesLesZones) {
-            if (zone.getId() != null && zone.getId().equals(id_zone)) {
-                Long alleeIdDeLaZone = zone.getAllees() != null ? zone.getAllees().getId() : null;
-                if (alleeIdDeLaZone == null) {
-                    continue;
-                }
+public List<Emplacement> trouverPlaceRapide(Long typeZoneId,
+                                            double volumeUnitaireProduit,
+                                            int quantite) {
 
-                for (Etage etage : tousLesEtages) {
-                    for (Emplacement emp : tousLesEmplacements) {
-                        if (listeEmplacementsTrouves.size() == quantite) {
-                            break;
-                        }
-                        if (emp.getAllee() != null && emp.getAllee().getId().equals(alleeIdDeLaZone) &&
-                            emp.getEtage() != null && emp.getEtage().getId().equals(etage.getId())) {
-                            // Règle métier : Doit être actif ET assez grand (taille < capacité)
-                            if (!emp.isActif() && emp.getCapacite_volume_m3() >= tailleProduit) {
-                                listeEmplacementsTrouves.add(emp);
-                            }
-                        }
+    List<Emplacement> resultat = new ArrayList<>();
 
-                    }
+    List<Zone> zones =
+    zoneRepository.findByTypeZoneId(typeZoneId);
 
-                    if (listeEmplacementsTrouves.size() == quantite) {
-                        break;
-                    }
-                }
+    if (zones.isEmpty()) {
+        return resultat;
+    }
+
+    
+    List<Etage> etages = etageRepository.findAll();
+    List<Emplacement> emplacements = emplacementRepository.findAll();
+    
+    for (Zone zone : zones) {
+        
+    Long idAllee = zone.getAllees().getId();
+
+    int quantiteRestante = quantite;
+
+    for (Etage etage : etages) {
+
+        for (Emplacement emp : emplacements) {
+
+            if (!emp.getAllee().getId().equals(idAllee))
+                continue;
+
+            if (!emp.getEtage().getId().equals(etage.getId()))
+                continue;
+
+            // Calcul du volume déjà occupé
+            List<StockEmplacement> stocks =
+                    stockRepository.findByEmplacement(emp);
+
+            double volumeOccupe = 0;
+
+            for (StockEmplacement stock : stocks) {
+                volumeOccupe += stock.getProduit().getVolumeUnitaireM3().doubleValue()
+                        * stock.getQuantite().doubleValue();
             }
 
+            double volumeDisponible =
+                    emp.getCapacite_volume_m3() - volumeOccupe;
+
+            if (volumeDisponible <= 0)
+                continue; 
+
+            // Nombre maximum de cartons pouvant entrer
+            int cartonsPossibles =
+                    (int) Math.floor(volumeDisponible / volumeUnitaireProduit);
+
+            if (cartonsPossibles <= 0)
+                continue;
+
+            resultat.add(emp);
+
+            if (cartonsPossibles >= quantiteRestante) {
+                quantiteRestante = 0;
+                break;
+            } else {
+                quantiteRestante -= cartonsPossibles;
+            }
         }
 
-        if (listeEmplacementsTrouves.size() < quantite) {
+        if (quantiteRestante == 0)
+            break;
+    }
+    
+        if (quantiteRestante > 0) {
             return new ArrayList<>();
         }
-        // Si la quantite demandée n'a pas assez de place
-        return listeEmplacementsTrouves; // Renvoie null si aucune place ne correspond
     }
+    
+    return resultat;
+}
+
+public Emplacement findById(Long id) {
+
+    return emplacementRepository.findById(id).orElseThrow(() -> new RuntimeException("Emplacement introuvable"));
+
+}
+
 }

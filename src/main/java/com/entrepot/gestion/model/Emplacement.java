@@ -29,17 +29,18 @@ public class Emplacement {
     @JoinColumn(name = "allee_id", referencedColumnName = "id")
     Allee allee;
 
+    double capacite_volume_m3;
+
+    double charge_max;
+
+    int colonne;
+
     public Allee getAllee() {
         return allee;
     }
     public void setAllee(Allee allee) {
         this.allee = allee;
     }
-    double capacite_volume_m3;
-    boolean actif;
-    double charge_max;
-
-    int colonne;
 
     public Long getId() {
         return id;
@@ -60,12 +61,7 @@ public class Emplacement {
     public void setCapacite_volume_m3(double capacite_volume_m3) {
         this.capacite_volume_m3 = capacite_volume_m3;
     }
-    public boolean isActif() {
-        return actif;
-    }
-    public void setActif(boolean actif) {
-        this.actif = actif;
-    }
+
     public Etage getEtage() {
         return etage;
     }
