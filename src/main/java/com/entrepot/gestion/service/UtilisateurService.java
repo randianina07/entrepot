@@ -19,8 +19,6 @@ import com.entrepot.gestion.repository.RoleRepository;
 import com.entrepot.gestion.repository.UtilisateurInfoRepository;
 import com.entrepot.gestion.repository.UtilisateurRepository;
 
-import ch.qos.logback.classic.pattern.Util;
-
 @Service
 @Transactional
 public class UtilisateurService {
@@ -197,23 +195,33 @@ public class UtilisateurService {
                 Utilisateur utilisateur = getUtilisateurConnecte();
 
                 return utilisateurInfoRepository
-                                .findByUtilisateur(utilisateur)
+                                .findByUtilisateurId(utilisateur.getId())
                                 .orElseThrow(() -> new RuntimeException("Profil introuvable"));
         }
 
-        public void changerMotDePasse(String ancienMotDePasse, String nouveauMotDePasse, boolean verificationAncien){
+        @Transactional
+        public void changerMotDePasse(
+                        String ancienMotDePasse,
+                        String nouveauMotDePasse,
+                        boolean verificationAncien) {
 
                 Utilisateur utilisateur = getUtilisateurConnecte();
 
-                if(verificationAncien) {
+                if (verificationAncien) {
 
-                        if(!passwordEncoder.matches(ancienMotDePasse, utilisateur.getMotDePasseHash()));
+                        if (!passwordEncoder.matches(
+                                        ancienMotDePasse,
+                                        utilisateur.getMotDePasseHash())) {
 
-                        throw new BadCredentialsException("Ancien mot de passe incorrect");
+                                throw new BadCredentialsException(
+                                                "Ancien mot de passe incorrect");
+                        }
                 }
 
-                utilisateur.setMotDePasseHash(passwordEncoder.encode(nouveauMotDePasse));
-                
+                String nouveauHash = passwordEncoder.encode(nouveauMotDePasse);
+
+                utilisateur.setMotDePasseHash(nouveauHash);
+
                 utilisateurRepository.save(utilisateur);
         }
 }

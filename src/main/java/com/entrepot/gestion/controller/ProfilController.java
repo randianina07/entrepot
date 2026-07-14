@@ -56,7 +56,11 @@ public class ProfilController {
 
         try {
 
+            System.out.println("CHANGEMENT MOT DE PASSE APPELE");
+
             Utilisateur utilisateur = utilisateurService.getUtilisateurConnecte();
+
+            System.out.println("Utilisateur : " + utilisateur.getEmail());
 
             boolean verifierAncien = !utilisateur.getRole().getCode().equals("ADMIN");
 

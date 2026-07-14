@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.entrepot.gestion.model.AuthDetails;
+
 import java.util.Collections;
 
 @Service
@@ -34,10 +36,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         String roleCode = utilisateur.getRole().getCode();
 
-        return User.builder()
-                .username(utilisateur.getEmail())
-                .password(utilisateur.getMotDePasseHash())
-                .authorities(Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + roleCode)))
-                .build();
+        return new AuthDetails(utilisateur);
     }
 }
