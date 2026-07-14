@@ -107,8 +107,8 @@
             <h5 class="mt-4" style="color: var(--text-primary);">Contrats d'abonnement</h5>
 
             <div class="table-responsive">
-                <table class="pro-table table">
-                    <thead>
+                <table class="table table-hover">
+                    <thead class="table-light">
                         <tr>
                             <th>ID</th>
                             <th>Type zone</th>
@@ -130,10 +130,10 @@
                             <td>
                                 <form th:action="@{/facture/contrat/{id}(id=${contrat.id})}" method="get" class="row g-1 align-items-center">
                                     <div class="col-auto">
-                                        <input type="date" class="pro-form-control form-control-sm" name="date" style="width: 140px;">
+                                        <input type="date" class="form-control form-control-sm" name="date" style="width: 140px;">
                                     </div>
                                     <div class="col-auto">
-                                        <button type="submit" class="btn btn-pro-primary btn-sm">
+                                        <button type="submit" class="btn btn-primary btn-sm">
                                             <i class="bi bi-file-earmark-text me-1"></i>Voir facture
                                         </button>
                                     </div>
@@ -150,8 +150,8 @@
             <h5 class="mt-5" style="color: var(--text-primary);">Contrats simples</h5>
 
             <div class="table-responsive">
-                <table class="pro-table table">
-                    <thead>
+                <table class="table table-hover">
+                    <thead class="table-light">
                         <tr>
                             <th>ID</th>
                             <th>Type zone</th>
@@ -173,10 +173,10 @@
                             <td>
                                 <form th:action="@{/facture/contrat/{id}(id=${contrat.id})}" method="get" class="row g-1 align-items-center">
                                     <div class="col-auto">
-                                        <input type="date" class="pro-form-control form-control-sm" name="date" style="width: 140px;">
+                                        <input type="date" class="form-control form-control-sm" name="date" style="width: 140px;">
                                     </div>
                                     <div class="col-auto">
-                                        <button type="submit" class="btn btn-pro-primary btn-sm">
+                                        <button type="submit" class="btn btn-primary btn-sm">
                                             <i class="bi bi-file-earmark-text me-1"></i>Voir facture
                                         </button>
                                     </div>

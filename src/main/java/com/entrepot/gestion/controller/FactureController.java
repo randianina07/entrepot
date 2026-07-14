@@ -48,15 +48,20 @@ public class FactureController {
     @GetMapping("/contrat/{contratId}")
     public String voirFacture(
             @PathVariable Long contratId,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) String date,
             Model model) {
 
         try {
-            FactureDTO facture = factureService.genererFacture(contratId, date);
+            LocalDate factureDate = null;
+            if (date != null && !date.trim().isEmpty()) {
+                factureDate = LocalDate.parse(date, DateTimeFormatter.ISO_DATE);
+            }
+            FactureDTO facture = factureService.genererFacture(contratId, factureDate);
             model.addAttribute("facture", facture);
         } catch (RuntimeException e) {
             model.addAttribute("error", e.getMessage());
-            return "redirect:/profil?error=" + e.getMessage();
+        } catch (Exception e) {
+            model.addAttribute("error", "Date invalide. Veuillez entrer une date au format JJ/MM/AAAA.");
         }
 
         return "facture/index";
@@ -68,9 +73,13 @@ public class FactureController {
     @GetMapping("/contrat/{contratId}/pdf")
     public ResponseEntity<byte[]> exporterPdf(
             @PathVariable Long contratId,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) String date) {
 
-        FactureDTO dto = factureService.genererFacture(contratId, date);
+        LocalDate factureDate = null;
+        if (date != null && !date.trim().isEmpty()) {
+            factureDate = LocalDate.parse(date, DateTimeFormatter.ISO_DATE);
+        }
+        FactureDTO dto = factureService.genererFacture(contratId, factureDate);
 
         try {
             byte[] pdfBytes = genererPdfFacture(dto);

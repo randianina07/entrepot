@@ -1,19 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Facture - Contrat N° <span th:text="${facture.contratId}"></span></title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/css/theme.css}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-</head>
+<head th:replace="~{fragments/navbar :: head}"></head>
 
-<body class="pro-body">
+<body class="storage-page">
 
-    <div th:replace="~{fragments/navbar-new :: navbar}"></div>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
 
     <div class="container py-4">
 
@@ -26,46 +19,64 @@
         <!-- Facture content -->
         <div th:if="${facture != null}">
 
-            <div class="pro-card pro-card-gold">
-                <div class="pro-card-header text-center">
-                    <span class="hero-badge mb-2"><i class="bi bi-file-earmark-text"></i> Facture</span>
-                    <h2 class="pro-card-title" style="font-size: 2rem;">FACTURE</h2>
-                    <p class="pro-card-subtitle">Contrat N° <span th:text="${facture.contratId}"></span></p>
-                </div>
-
-                <div class="d-flex justify-content-end mb-4">
-                    <a th:href="@{/facture/contrat/{id}/pdf(id=${facture.contratId}, date=${facture.dateFacture})}"
-                       class="btn btn-pro-primary btn-sm">
-                        <i class="bi bi-file-pdf me-1"></i> Exporter en PDF
-                    </a>
-                </div>
-
-                <!-- Informations Client -->
-                <div class="mb-4">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <i class="bi bi-person-badge" style="color: var(--gold); font-size: 1.2rem;"></i>
-                        <h5 class="mb-0" style="color: var(--gold);">Informations Client</h5>
+            <section class="storage-hero mb-4">
+                <div class="hero-copy">
+                    <span class="hero-badge"><i class="bi bi-file-earmark-text"></i> Facture</span>
+                    <h1>FACTURE</h1>
+                    <p>Contrat N° <span th:text="${facture.contratId}"></span></p>
+                    <div class="hero-actions">
+                        <a th:href="@{/facture/contrat/{id}/pdf(id=${facture.contratId}, date=${facture.dateFacture})}"
+                           class="btn btn-primary">
+                            <i class="bi bi-file-pdf"></i> Exporter en PDF
+                        </a>
+                        <a th:href="@{/profil}" class="btn btn-outline-primary">
+                            <i class="bi bi-arrow-left"></i> Retour au profil
+                        </a>
                     </div>
+                </div>
+                <div class="hero-side">
+                    <div class="mini-info-card">
+                        <span class="value" style="font-size: 1.1rem;">Total</span>
+                        <span class="label">
+                            <strong th:text="${#numbers.formatDecimal(facture.totalGeneral, 0, 'WHITESPACE', 2, 'DEFAULT')}"></strong> Ar
+                        </span>
+                    </div>
+                    <div class="mini-info-card">
+                        <span class="value" th:text="${#temporals.format(facture.dateFacture, 'dd/MM/yyyy')}"></span>
+                        <span class="label">Date facture</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Informations Client -->
+            <section class="storage-panel p-0 overflow-hidden mb-4">
+                <div class="storage-section-header px-4 pt-4">
+                    <div>
+                        <span class="chip is-accent">Client</span>
+                        <h2 class="mb-0 mt-2">Informations Client</h2>
+                    </div>
+                </div>
+                <div class="px-4 pb-4">
                     <div class="row g-3">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="mini-info-card">
                                 <span class="label">Nom complet</span>
                                 <span class="value" th:text="${facture.clientPrenom != null ? facture.clientPrenom + ' ' : ''} + ${facture.clientNom != null ? facture.clientNom : '-'}">-</span>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="mini-info-card">
                                 <span class="label">Email</span>
                                 <span class="value" th:text="${facture.clientEmail}">-</span>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="mini-info-card">
                                 <span class="label">Téléphone</span>
                                 <span class="value" th:text="${facture.clientTelephone != null ? facture.clientTelephone : '-'}">-</span>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="mini-info-card">
                                 <span class="label">Adresse</span>
                                 <span class="value" th:text="${facture.clientAdresse != null ? facture.clientAdresse : '-'}">-</span>
@@ -73,53 +84,55 @@
                         </div>
                     </div>
                 </div>
+            </section>
 
-                <hr style="border-color: var(--border-color);">
-
-                <!-- Informations Contrat -->
-                <div class="mb-4">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <i class="bi bi-file-text" style="color: var(--gold); font-size: 1.2rem;"></i>
-                        <h5 class="mb-0" style="color: var(--gold);">Informations Contrat</h5>
+            <!-- Informations Contrat -->
+            <section class="storage-panel p-0 overflow-hidden mb-4">
+                <div class="storage-section-header px-4 pt-4">
+                    <div>
+                        <span class="chip is-accent">Contrat</span>
+                        <h2 class="mb-0 mt-2">Informations Contrat</h2>
                     </div>
+                </div>
+                <div class="px-4 pb-4">
                     <div class="row g-3">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="mini-info-card">
                                 <span class="label">Type de zone</span>
                                 <span class="value" th:text="${facture.typeZone}">-</span>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="mini-info-card">
                                 <span class="label">Type de contrat</span>
                                 <span class="value" th:text="${facture.typeContrat}">-</span>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="mini-info-card">
                                 <span class="label">Volume</span>
                                 <span class="value" th:text="${facture.volumeM3 + ' m³'}">-</span>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="mini-info-card">
                                 <span class="label">Emplacements</span>
                                 <span class="value" th:text="${facture.quantiteEmplacement != null ? facture.quantiteEmplacement : '-'}">-</span>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="mini-info-card">
                                 <span class="label">Date début</span>
                                 <span class="value" th:text="${#temporals.format(facture.dateDebut, 'dd/MM/yyyy')}">-</span>
                             </div>
                         </div>
-                        <div class="col-md-4" th:if="${facture.dateFin != null}">
+                        <div class="col-md-3" th:if="${facture.dateFin != null}">
                             <div class="mini-info-card">
                                 <span class="label">Date fin</span>
                                 <span class="value" th:text="${#temporals.format(facture.dateFin, 'dd/MM/yyyy')}">-</span>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="mini-info-card">
                                 <span class="label">Date facture</span>
                                 <span class="value" th:text="${#temporals.format(facture.dateFacture, 'dd/MM/yyyy')}">-</span>
@@ -127,26 +140,28 @@
                         </div>
                     </div>
                 </div>
+            </section>
 
-                <hr style="border-color: var(--border-color);">
-
-                <!-- Détail Facturation -->
-                <div class="mb-4">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <i class="bi bi-calculator" style="color: var(--gold); font-size: 1.2rem;"></i>
-                        <h5 class="mb-0" style="color: var(--gold);">Détail Facturation</h5>
+            <!-- Détail Facturation -->
+            <section class="storage-panel p-0 overflow-hidden">
+                <div class="storage-section-header px-4 pt-4">
+                    <div>
+                        <span class="chip is-warning">Facturation</span>
+                        <h2 class="mb-0 mt-2">Détail Facturation</h2>
                     </div>
+                </div>
+                <div class="px-4 pb-4">
 
                     <div class="mb-3">
-                        <span class="chip is-accent">
+                        <span class="chip is-success">
                             <i class="bi bi-clock me-1"></i>
                             Durée : <span th:text="${facture.dureeAffichage}"></span>
                         </span>
                     </div>
 
                     <div class="table-responsive">
-                        <table class="pro-table table">
-                            <thead>
+                        <table class="table table-hover">
+                            <thead class="table-light">
                                 <tr>
                                     <th>Libellé</th>
                                     <th>Détail</th>
@@ -157,15 +172,17 @@
                                 <tr th:if="${facture.dureeMois > 0 and facture.prixM3Mois != null}">
                                     <td>Tarif mensuel</td>
                                     <td th:text="${facture.dureeMois + ' mois × ' + facture.volumeM3 + ' m³ × ' + #numbers.formatDecimal(facture.prixM3Mois, 0, 'WHITESPACE', 2, 'DEFAULT') + ' Ar/m³'}"></td>
-                                    <td class="text-end" th:text="${#numbers.formatDecimal(facture.totalMois, 0, 'WHITESPACE', 2, 'DEFAULT') + ' Ar'}"></td>
+                                    <td class="text-end fw-bold" th:text="${#numbers.formatDecimal(facture.totalMois, 0, 'WHITESPACE', 2, 'DEFAULT') + ' Ar'}"></td>
                                 </tr>
                                 <tr th:if="${facture.dureeJours > 0 and facture.prixM3Jour != null}">
                                     <td>Tarif journalier</td>
                                     <td th:text="${facture.dureeJours + ' jour(s) × ' + facture.volumeM3 + ' m³ × ' + #numbers.formatDecimal(facture.prixM3Jour, 0, 'WHITESPACE', 2, 'DEFAULT') + ' Ar/m³'}"></td>
-                                    <td class="text-end" th:text="${#numbers.formatDecimal(facture.totalJours, 0, 'WHITESPACE', 2, 'DEFAULT') + ' Ar'}"></td>
+                                    <td class="text-end fw-bold" th:text="${#numbers.formatDecimal(facture.totalJours, 0, 'WHITESPACE', 2, 'DEFAULT') + ' Ar'}"></td>
                                 </tr>
                                 <tr th:if="${(facture.dureeMois <= 0 or facture.prixM3Mois == null) and (facture.dureeJours <= 0 or facture.prixM3Jour == null)}">
-                                    <td colspan="3" class="text-center text-muted">Aucun détail de facturation disponible</td>
+                                    <td colspan="3">
+                                        <div class="empty-state">Aucun détail de facturation disponible.</div>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -173,54 +190,44 @@
 
                     <!-- Total -->
                     <div class="d-flex justify-content-end mt-4">
-                        <div class="p-3 rounded-3" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(59, 130, 246, 0.05)); border: 1px solid var(--border-gold); min-width: 280px;">
+                        <div class="p-3 rounded-2 border bg-white" style="min-width: 280px;">
                             <div class="d-flex justify-content-between align-items-center">
-                                <span style="color: var(--gold); font-weight: 600; font-size: 1rem;">TOTAL</span>
-                                <span style="color: var(--text-primary); font-weight: 700; font-size: 1.4rem;">
+                                <span class="fw-bold fs-5">TOTAL</span>
+                                <span class="fw-bold fs-4 text-primary">
                                     <span th:text="${#numbers.formatDecimal(facture.totalGeneral, 0, 'WHITESPACE', 2, 'DEFAULT')}"></span> Ar
                                 </span>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Footer -->
+                    <div class="text-center mt-4">
+                        <small class="text-muted">
+                            <i class="bi bi-calendar me-1"></i>
+                            Généré le <span th:text="${#temporals.format(facture.dateFacture, 'dd/MM/yyyy')}"></span>
+                            | Société de Gestion d'Entrepôt
+                        </small>
+                    </div>
+
                 </div>
-
-                <!-- Footer -->
-                <div class="text-center mt-4">
-                    <span class="chip" style="background: rgba(148, 163, 184, 0.1); color: var(--text-muted); font-size: 0.75rem; text-transform: none; letter-spacing: 0;">
-                        <i class="bi bi-calendar me-1"></i>
-                        Généré le <span th:text="${#temporals.format(facture.dateFacture, 'dd/MM/yyyy')}"></span>
-                        | Société de Gestion d'Entrepôt
-                    </span>
-                </div>
-
-            </div>
-
-            <!-- Retour -->
-            <div class="text-center mt-4">
-                <a th:href="@{/profil}" class="btn btn-pro-outline">
-                    <i class="bi bi-arrow-left me-2"></i> Retour au profil
-                </a>
-            </div>
+            </section>
 
         </div>
 
         <!-- Si pas de facture et pas d'erreur -->
         <div th:if="${facture == null and error == null}" class="text-center py-5">
-            <div class="pro-card" style="max-width: 500px; margin: 0 auto;">
-                <div class="py-4">
-                    <i class="bi bi-file-earmark-text" style="font-size: 3rem; color: var(--text-muted);"></i>
-                    <p class="text-muted mt-3">Aucune facture à afficher.</p>
-                    <a th:href="@{/profil}" class="btn btn-pro-outline">
-                        <i class="bi bi-arrow-left me-2"></i> Retour au profil
-                    </a>
-                </div>
+            <div class="storage-panel p-5" style="max-width: 500px; margin: 0 auto;">
+                <i class="bi bi-file-earmark-text" style="font-size: 3rem; color: var(--text-muted);"></i>
+                <p class="text-muted mt-3">Aucune facture à afficher.</p>
+                <a th:href="@{/profil}" class="btn btn-outline-primary">
+                    <i class="bi bi-arrow-left me-2"></i> Retour au profil
+                </a>
             </div>
         </div>
 
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
 
 </html>
