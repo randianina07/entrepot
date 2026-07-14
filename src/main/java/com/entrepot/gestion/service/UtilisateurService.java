@@ -4,10 +4,14 @@ import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.entrepot.gestion.model.AuthDetails;
 import com.entrepot.gestion.model.Role;
 import com.entrepot.gestion.model.Utilisateur;
 import com.entrepot.gestion.model.UtilisateurInfo;
@@ -15,150 +19,201 @@ import com.entrepot.gestion.repository.RoleRepository;
 import com.entrepot.gestion.repository.UtilisateurInfoRepository;
 import com.entrepot.gestion.repository.UtilisateurRepository;
 
+import ch.qos.logback.classic.pattern.Util;
+
 @Service
 @Transactional
 public class UtilisateurService {
 
-    private final UtilisateurRepository utilisateurRepository;
-    private final UtilisateurInfoRepository utilisateurInfoRepository;
-    private final RoleRepository roleRepository;
-    private final PasswordEncoder passwordEncoder;
+        private final UtilisateurRepository utilisateurRepository;
+        private final UtilisateurInfoRepository utilisateurInfoRepository;
+        private final RoleRepository roleRepository;
+        private final PasswordEncoder passwordEncoder;
 
-    private static final String CARACTERES = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-            + "abcdefghijklmnopqrstuvwxyz"
-            + "0123456789";
+        private static final String CARACTERES = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                        + "abcdefghijklmnopqrstuvwxyz"
+                        + "0123456789";
 
-    private static final SecureRandom RANDOM = new SecureRandom();
+        private static final SecureRandom RANDOM = new SecureRandom();
 
-    public UtilisateurService(UtilisateurRepository utilisateurRepository,
-            UtilisateurInfoRepository utilisateurInfoRepository,
-            RoleRepository roleRepository,
-            PasswordEncoder passwordEncoder) {
+        public UtilisateurService(UtilisateurRepository utilisateurRepository,
+                        UtilisateurInfoRepository utilisateurInfoRepository,
+                        RoleRepository roleRepository,
+                        PasswordEncoder passwordEncoder) {
 
-        this.utilisateurRepository = utilisateurRepository;
-        this.utilisateurInfoRepository = utilisateurInfoRepository;
-        this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
-
-    /**
-     * Crée un nouveau client.
-     *
-     * @param utilisateur     informations du compte (email)
-     * @param utilisateurInfo informations personnelles
-     * @return le mot de passe généré automatiquement
-     */
-    public String creerUtilisateur(
-            Utilisateur utilisateur,
-            UtilisateurInfo utilisateurInfo,
-            String roleCode) {
-
-        // Vérification email
-
-        if (utilisateurRepository
-                .findByEmail(utilisateur.getEmail())
-                .isPresent()) {
-
-            throw new RuntimeException(
-                    "Cet email existe déjà.");
+                this.utilisateurRepository = utilisateurRepository;
+                this.utilisateurInfoRepository = utilisateurInfoRepository;
+                this.roleRepository = roleRepository;
+                this.passwordEncoder = passwordEncoder;
         }
 
-        // Recherche du rôle choisi
+        /**
+         * Crée un nouveau client.
+         *
+         * @param utilisateur     informations du compte (email)
+         * @param utilisateurInfo informations personnelles
+         * @return le mot de passe généré automatiquement
+         */
+        public String creerUtilisateur(
+                        Utilisateur utilisateur,
+                        UtilisateurInfo utilisateurInfo,
+                        String roleCode) {
 
-        Role role = roleRepository
-                .findByCode(roleCode)
-                .orElseThrow(() -> new RuntimeException(
-                        "Rôle inexistant"));
+                // Vérification email
 
-        // Génération mot de passe
+                if (utilisateurRepository
+                                .findByEmail(utilisateur.getEmail())
+                                .isPresent()) {
 
-        String motDePasse = genererMotDePasse(10);
+                        throw new RuntimeException(
+                                        "Cet email existe déjà.");
+                }
 
-        // Configuration utilisateur
+                // Recherche du rôle choisi
 
-        utilisateur.setRole(role);
+                Role role = roleRepository
+                                .findByCode(roleCode)
+                                .orElseThrow(() -> new RuntimeException(
+                                                "Rôle inexistant"));
 
-        utilisateur.setDateCreation(
-                LocalDateTime.now());
+                // Génération mot de passe
 
-        utilisateur.setMotDePasseHash(
-                passwordEncoder.encode(motDePasse));
+                String motDePasse = genererMotDePasse(10);
 
-        // Sauvegarde compte
+                // Configuration utilisateur
 
-        utilisateur = utilisateurRepository.save(utilisateur);
+                utilisateur.setRole(role);
 
-        // Association profil
+                utilisateur.setDateCreation(
+                                LocalDateTime.now());
 
-        utilisateurInfo.setUtilisateur(utilisateur);
+                utilisateur.setMotDePasseHash(
+                                passwordEncoder.encode(motDePasse));
 
-        utilisateurInfoRepository.save(
-                utilisateurInfo);
+                // Sauvegarde compte
 
-        return motDePasse;
-    }
+                utilisateur = utilisateurRepository.save(utilisateur);
 
-    /**
-     * Génère un mot de passe aléatoire.
-     */
-    private String genererMotDePasse(int longueur) {
+                // Association profil
 
-        StringBuilder sb = new StringBuilder();
+                utilisateurInfo.setUtilisateur(utilisateur);
 
-        for (int i = 0; i < longueur; i++) {
-            sb.append(CARACTERES.charAt(RANDOM.nextInt(CARACTERES.length())));
+                utilisateurInfoRepository.save(
+                                utilisateurInfo);
+
+                return motDePasse;
         }
 
-        return sb.toString();
-    }
+        /**
+         * Génère un mot de passe aléatoire.
+         */
+        private String genererMotDePasse(int longueur) {
 
-    public List<UtilisateurInfo> listeClients() {
-        return utilisateurInfoRepository.findAll();
-    }
+                StringBuilder sb = new StringBuilder();
 
-    @Transactional
-    public void supprimerClient(Long id) {
+                for (int i = 0; i < longueur; i++) {
+                        sb.append(CARACTERES.charAt(RANDOM.nextInt(CARACTERES.length())));
+                }
 
-        UtilisateurInfo info = utilisateurInfoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Client introuvable"));
+                return sb.toString();
+        }
 
-        utilisateurInfoRepository.delete(info);
-        utilisateurInfoRepository.flush();
+        public List<UtilisateurInfo> listeClients() {
+                return utilisateurInfoRepository.findAll();
+        }
 
-        utilisateurRepository.deleteById(info.getUtilisateur().getId());
-        utilisateurRepository.flush();
-    }
+        @Transactional
+        public void supprimerClient(Long id) {
 
-    public UtilisateurInfo trouverClient(Long id) {
+                UtilisateurInfo info = utilisateurInfoRepository.findById(id)
+                                .orElseThrow(() -> new RuntimeException("Client introuvable"));
 
-        return utilisateurInfoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Client introuvable"));
-    }
+                utilisateurInfoRepository.delete(info);
+                utilisateurInfoRepository.flush();
 
-    @Transactional
-    public void modifierClient(Long id, UtilisateurInfo nouveauClient) {
+                utilisateurRepository.deleteById(info.getUtilisateur().getId());
+                utilisateurRepository.flush();
+        }
 
-        UtilisateurInfo ancienClient = utilisateurInfoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Client introuvable"));
+        public UtilisateurInfo trouverClient(Long id) {
 
-        ancienClient.setNom(nouveauClient.getNom());
-        ancienClient.setPrenom(nouveauClient.getPrenom());
-        ancienClient.setNumero(nouveauClient.getNumero());
-        ancienClient.setAdresse(nouveauClient.getAdresse());
-        ancienClient.setSecteur(nouveauClient.getSecteur());
+                return utilisateurInfoRepository.findById(id)
+                                .orElseThrow(() -> new RuntimeException("Client introuvable"));
+        }
 
-        ancienClient.getUtilisateur().setEmail(
-                nouveauClient.getUtilisateur().getEmail());
+        @Transactional
+        public void modifierClient(Long id, UtilisateurInfo nouveauClient) {
 
-        utilisateurInfoRepository.save(ancienClient);
-    }
+                UtilisateurInfo ancienClient = utilisateurInfoRepository.findById(id)
+                                .orElseThrow(() -> new RuntimeException("Client introuvable"));
 
-    public Utilisateur findById(Long id) {
-        return utilisateurRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Utilisateur introuvable"));
-    }
+                ancienClient.setNom(nouveauClient.getNom());
+                ancienClient.setPrenom(nouveauClient.getPrenom());
+                ancienClient.setNumero(nouveauClient.getNumero());
+                ancienClient.setAdresse(nouveauClient.getAdresse());
+                ancienClient.setSecteur(nouveauClient.getSecteur());
 
-    public List<Utilisateur> listeClientsUtilisateur() {
-        return utilisateurRepository.findByRoleCode("CLIENT");
-    }
+                ancienClient.getUtilisateur().setEmail(
+                                nouveauClient.getUtilisateur().getEmail());
+
+                utilisateurInfoRepository.save(ancienClient);
+        }
+
+        public Utilisateur findById(Long id) {
+                return utilisateurRepository.findById(id)
+                                .orElseThrow(() -> new RuntimeException("Utilisateur introuvable"));
+        }
+
+        public List<Utilisateur> listeClientsUtilisateur() {
+                return utilisateurRepository.findByRoleCode("CLIENT");
+        }
+
+        /**
+         * Retourne l'utilisateur actuellement connecté.
+         */
+        public Utilisateur getUtilisateurConnecte() {
+
+                Authentication authentication = SecurityContextHolder
+                                .getContext()
+                                .getAuthentication();
+
+                if (authentication == null
+                                || !authentication.isAuthenticated()
+                                || authentication.getPrincipal().equals("anonymousUser")) {
+
+                        throw new RuntimeException("Aucun utilisateur connecté");
+                }
+
+                AuthDetails details = (AuthDetails) authentication.getPrincipal();
+
+                return details.getUtilisateur();
+        }
+
+        /**
+         * Retourne le profil de l'utilisateur connecté.
+         */
+        public UtilisateurInfo getProfil() {
+
+                Utilisateur utilisateur = getUtilisateurConnecte();
+
+                return utilisateurInfoRepository
+                                .findByUtilisateur(utilisateur)
+                                .orElseThrow(() -> new RuntimeException("Profil introuvable"));
+        }
+
+        public void changerMotDePasse(String ancienMotDePasse, String nouveauMotDePasse, boolean verificationAncien){
+
+                Utilisateur utilisateur = getUtilisateurConnecte();
+
+                if(verificationAncien) {
+
+                        if(!passwordEncoder.matches(ancienMotDePasse, utilisateur.getMotDePasseHash()));
+
+                        throw new BadCredentialsException("Ancien mot de passe incorrect");
+                }
+
+                utilisateur.setMotDePasseHash(passwordEncoder.encode(nouveauMotDePasse));
+                
+                utilisateurRepository.save(utilisateur);
+        }
 }
