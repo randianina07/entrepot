@@ -6,11 +6,12 @@
 
 <main class="container py-4">
     <div th:replace="~{fragments/alerts :: alerts}"></div>
+
     <section class="storage-hero mb-4">
         <div class="hero-copy">
             <span class="hero-badge"><i class="bi bi-people"></i> Clients</span>
             <h1>Liste des clients</h1>
-            <p>Gérez les clients de l'entrepôt.</p>
+            <p>Gérez les clients de l'entrepôt. Utilisez le formulaire de recherche pour filtrer les résultats.</p>
             <div class="hero-actions">
                 <a class="btn btn-outline-primary" th:href="@{/utilisateurs/nouveau}">Nouveau client</a>
             </div>
@@ -20,14 +21,123 @@
                 <span class="value" th:text="${clients != null ? #lists.size(clients) : 0}">0</span>
                 <span class="label">Clients</span>
             </div>
+            <div class="mini-info-card" th:if="${hasSearch}">
+                <span class="value" th:text="${resultCount != null ? resultCount : 0}">0</span>
+                <span class="label">Résultat(s)</span>
+            </div>
         </div>
     </section>
 
-    <section class="storage-panel p-0 overflow-hidden">
+    <!-- Formulaire de recherche multicritère -->
+    <section class="storage-section">
+        <div class="storage-section-header">
+            <div>
+                <span class="chip is-accent"><i class="bi bi-funnel"></i> Recherche</span>
+                <h2 class="mb-0 mt-2">Recherche multicritère</h2>
+            </div>
+        </div>
+
+        <div class="search-form-shell">
+            <form class="row g-3" th:action="@{/clients}" method="get" id="searchForm">
+                <!-- TextField: Nom -->
+                <div class="col-md-4">
+                    <label for="nom" class="form-label">Nom</label>
+                    <input type="text" class="form-control" id="nom" name="nom"
+                           th:value="${nom}" placeholder="Rechercher par nom..."
+                           maxlength="100">
+                </div>
+
+                <!-- TextField: Prénom -->
+                <div class="col-md-4">
+                    <label for="prenom" class="form-label">Prénom</label>
+                    <input type="text" class="form-control" id="prenom" name="prenom"
+                           th:value="${prenom}" placeholder="Rechercher par prénom..."
+                           maxlength="100">
+                </div>
+
+                <!-- TextField: Email -->
+                <div class="col-md-4">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email"
+                           th:value="${email}" placeholder="exemple@email.com"
+                           maxlength="150">
+                </div>
+
+                <!-- Select: Secteur -->
+                <div class="col-md-4">
+                    <label for="secteur" class="form-label">Secteur</label>
+                    <select class="form-select" id="secteur" name="secteur">
+                        <option value="">Tous les secteurs</option>
+                        <option th:each="s : ${secteurs}"
+                                th:value="${s}"
+                                th:text="${s}"
+                                th:selected="${s == secteur}"></option>
+                    </select>
+                </div>
+
+                <!-- Radio: Statut -->
+                <div class="col-md-4">
+                    <label class="form-label d-block">Statut</label>
+                    <div class="d-flex gap-4 pt-1">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="statut" id="statutTous"
+                                   value=""
+                                   th:checked="${statut == null or statut == ''}">
+                            <label class="form-check-label" for="statutTous">Tous</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="statut" id="statutActif"
+                                   value="actif"
+                                   th:checked="${statut == 'actif'}">
+                            <label class="form-check-label" for="statutActif"><span style="color: #34d399;">Actif</span></label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="statut" id="statutInactif"
+                                   value="inactif"
+                                   th:checked="${statut == 'inactif'}">
+                            <label class="form-check-label" for="statutInactif"><span style="color: #f87171;">Inactif</span></label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DateField: Date début -->
+                <div class="col-md-4">
+                    <label for="dateDebutStr" class="form-label">Date inscription début</label>
+                    <input type="date" class="form-control" id="dateDebutStr" name="dateDebutStr"
+                           th:value="${dateDebutStr}">
+                </div>
+
+                <!-- DateField: Date fin -->
+                <div class="col-md-4">
+                    <label for="dateFinStr" class="form-label">Date inscription fin</label>
+                    <input type="date" class="form-control" id="dateFinStr" name="dateFinStr"
+                           th:value="${dateFinStr}">
+                </div>
+
+                <!-- Actions -->
+                <div class="col-12 d-flex gap-2 mt-3">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-search"></i> Rechercher
+                    </button>
+                    <a th:href="@{/clients}" class="btn btn-outline-secondary">
+                        <i class="bi bi-x-circle"></i> Effacer les filtres
+                    </a>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Résultats -->
+    <section class="storage-panel p-0 overflow-hidden mt-4">
         <div class="storage-section-header px-4 pt-4">
             <div>
                 <span class="chip is-success">Liste</span>
-                <h2 class="mb-0 mt-2">Tous les clients</h2>
+                <h2 class="mb-0 mt-2">
+                    Tous les clients
+                    <small class="text-muted fs-6" th:if="${hasSearch}">
+                        — <span th:text="${resultCount}"></span> résultat(s)
+                    </small>
+                </h2>
             </div>
         </div>
         <div class="px-4 pb-4">
@@ -41,32 +151,54 @@
                         <th>Adresse</th>
                         <th>Secteur</th>
                         <th>Email</th>
+                        <th>Statut</th>
+                        <th>Inscription</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:if="${clients == null or clients.isEmpty()}">
-                        <td colspan="7">
-                            <div class="empty-state">Aucun client enregistré.</div>
+                        <td colspan="9">
+                            <div class="empty-state">
+                                <i class="bi bi-inbox" style="font-size: 2rem; display: block; margin-bottom: 0.5rem;"></i>
+                                <span th:text="${hasSearch} ? 'Aucun client ne correspond à vos critères.' : 'Aucun client enregistré.'"></span>
+                            </div>
                         </td>
                     </tr>
                     <tr th:each="client : ${clients}">
-                        <td th:text="${client.nom}"></td>
-                        <td th:text="${client.prenom}"></td>
-                        <td th:text="${client.numero}"></td>
-                        <td th:text="${client.adresse}"></td>
-                        <td th:text="${client.secteur}"></td>
+                        <td th:text="${client.nom}" class="fw-semibold"></td>
+                        <td th:text="${client.prenom != null ? client.prenom : '-'}"></td>
+                        <td th:text="${client.numero != null ? client.numero : '-'}"></td>
+                        <td th:text="${client.adresse != null ? client.adresse : '-'}" style="max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></td>
+                        <td>
+                            <span th:if="${client.secteur != null and !client.secteur.isEmpty()}"
+                                  style="display:inline-block; padding:2px 10px; border-radius:12px; font-size:0.82rem; font-weight:600; background:rgba(96,165,250,0.2); color:#93bbfc; border:1px solid rgba(96,165,250,0.35);"
+                                  th:text="${client.secteur}"></span>
+                            <span th:unless="${client.secteur != null and !client.secteur.isEmpty()}" class="text-muted">—</span>
+                        </td>
                         <td th:text="${client.utilisateur.email}"></td>
                         <td>
+                            <span th:if="${client.utilisateur.actif}"
+                                  style="display:inline-block; padding:2px 10px; border-radius:12px; font-size:0.82rem; font-weight:600; background:rgba(16,185,129,0.2); color:#34d399; border:1px solid rgba(16,185,129,0.35);">Actif</span>
+                            <span th:unless="${client.utilisateur.actif}"
+                                  style="display:inline-block; padding:2px 10px; border-radius:12px; font-size:0.82rem; font-weight:600; background:rgba(239,68,68,0.2); color:#f87171; border:1px solid rgba(239,68,68,0.35);">Inactif</span>
+                        </td>
+                        <td th:text="${#temporals.format(client.utilisateur.dateCreation, 'dd/MM/yyyy')}"
+                            class="text-muted small"></td>
+                        <td>
                             <div class="btn-group">
-                                <a th:href="@{/clients/modifier/{id}(id=${client.id})}" class="btn btn-sm btn-outline-primary">
+                                <a th:href="@{/clients/modifier/{id}(id=${client.id})}"
+                                   class="btn btn-sm btn-outline-primary" title="Modifier">
                                     <i class="bi bi-pencil"></i>
                                 </a>
-                                <a th:href="@{/clients/supprimer/{id}(id=${client.id})}" class="btn btn-sm btn-outline-danger">
+                                <a th:href="@{/clients/supprimer/{id}(id=${client.id})}"
+                                   class="btn btn-sm btn-outline-danger" title="Supprimer"
+                                   onclick="return confirm('Supprimer ce client ? Cette action est irréversible.')">
                                     <i class="bi bi-trash"></i>
                                 </a>
-                                <a th:href="@{/contrats/create(clientId=${client.utilisateur.id})}" class="btn btn-sm btn-outline-success">
-                                    <i class="bi bi-file-earmark-plus"></i> Contrat
+                                <a th:href="@{/contrats/create(clientId=${client.utilisateur.id})}"
+                                   class="btn btn-sm btn-outline-success" title="Créer un contrat">
+                                    <i class="bi bi-file-earmark-plus"></i>
                                 </a>
                             </div>
                         </td>
@@ -79,5 +211,50 @@
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Validation client-side -->
+<script>
+    (function() {
+        const form = document.getElementById('searchForm');
+        const dateDebut = document.getElementById('dateDebutStr');
+        const dateFin = document.getElementById('dateFinStr');
+
+        function validerDates() {
+            if (dateDebut.value && dateFin.value && dateFin.value < dateDebut.value) {
+                dateFin.setCustomValidity('La date de fin ne peut pas être antérieure à la date de début.');
+                return false;
+            }
+            dateFin.setCustomValidity('');
+            return true;
+        }
+
+        if (dateDebut && dateFin) {
+            dateDebut.addEventListener('change', validerDates);
+            dateFin.addEventListener('change', validerDates);
+        }
+
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                if (!validerDates()) {
+                    e.preventDefault();
+                    dateFin.reportValidity();
+                    return;
+                }
+                const inputs = form.querySelectorAll('input, select');
+                inputs.forEach(function(input) {
+                    if (input.type === 'radio') return;
+                    if (input.value === '' || input.value === null) {
+                        input.disabled = true;
+                    }
+                });
+                setTimeout(function() {
+                    inputs.forEach(function(input) {
+                        input.disabled = false;
+                    });
+                }, 100);
+            });
+        }
+    })();
+</script>
 </body>
 </html>
