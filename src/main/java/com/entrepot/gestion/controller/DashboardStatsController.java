@@ -1,5 +1,23 @@
 package com.entrepot.gestion.controller;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import com.entrepot.gestion.model.MissionLogistique;
 import com.entrepot.gestion.model.StatsClient;
 import com.entrepot.gestion.model.TopProduit;
@@ -10,19 +28,6 @@ import com.entrepot.gestion.repository.MouvementRepository;
 import com.entrepot.gestion.repository.StatsClientRepository;
 import com.entrepot.gestion.repository.StockEmplacementRepository;
 import com.entrepot.gestion.repository.TopProduitRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.time.LocalDate;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 @Controller
 @RequestMapping("/dashboard")
@@ -85,15 +90,22 @@ public class DashboardStatsController {
                         .divide(new BigDecimal(missionsTerminees.size()), 0, RoundingMode.HALF_UP)
                 : BigDecimal.ZERO;
 
+        List<StatsClient> statsClients;
+        try {
+            statsClients = statsClientRepository.findAll();
+        } catch (DataAccessException ex) {
+            statsClients = List.of();
+        }
+
         // Chiffre d'affaires total (snapshots stats_clients)
-        BigDecimal chiffreAffairesTotal = statsClientRepository.findAll().stream()
-                .map(StatsClient::getChiffreAffaires)
-                .filter(java.util.Objects::nonNull)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal chiffreAffairesTotal = statsClients.stream()
+            .map(s -> s.getChiffreAffaires())
+            .filter(java.util.Objects::nonNull)
+            .reduce(BigDecimal.ZERO, (left, right) -> left.add(right));
 
         // Top produits stockes (derniers instantanes disponibles)
         List<TopProduit> top5Produits = topProduitRepository.findAll().stream()
-                .sorted(Comparator.comparing(TopProduit::getRang))
+            .sorted(Comparator.comparing((TopProduit tp) -> tp.getRang(), Comparator.nullsLast(Comparator.naturalOrder())))
                 .limit(5)
                 .toList();
 
@@ -113,7 +125,7 @@ public class DashboardStatsController {
             BigDecimal pct = cap.compareTo(BigDecimal.ZERO) > 0
                     ? occ.multiply(new BigDecimal("100")).divide(cap, 2, RoundingMode.HALF_UP)
                     : BigDecimal.ZERO;
-            occupationParEmplacement.put(emplacement.getCode(), pct);
+            occupationParEmplacement.put(Objects.toString(emplacement.getCode(), "Emplacement sans code"), pct);
         }
 
         // Flux des 7 derniers jours (entrées/sorties)
@@ -130,9 +142,9 @@ public class DashboardStatsController {
             }
             BigDecimal volume = flux.getVolumeM3() != null ? flux.getVolumeM3() : BigDecimal.ZERO;
             if ("ENTREE".equalsIgnoreCase(flux.getTypeFlux())) {
-                entreesParDate.merge(flux.getDate(), volume, BigDecimal::add);
+                entreesParDate.merge(flux.getDate(), volume, (left, right) -> left.add(right));
             } else if ("SORTIE".equalsIgnoreCase(flux.getTypeFlux())) {
-                sortiesParDate.merge(flux.getDate(), volume, BigDecimal::add);
+                sortiesParDate.merge(flux.getDate(), volume, (left, right) -> left.add(right));
             }
         }
 
@@ -146,31 +158,40 @@ public class DashboardStatsController {
         }
 
         // Données financières (CA par snapshot)
-        List<StatsClient> financeData = statsClientRepository.findAll().stream()
-                .sorted(Comparator.comparing(StatsClient::getDateFin))
+        List<StatsClient> financeData = statsClients.stream()
+                .sorted(Comparator.comparing((StatsClient s) -> s.getDateFin(), Comparator.nullsLast(Comparator.naturalOrder())))
                 .toList();
 
-        java.util.List<String> caLabels = financeData.stream()
-                .map(s -> s.getDateFin() != null
-                        ? s.getDateFin().format(java.time.format.DateTimeFormatter.ofPattern("MM/yyyy"))
-                        : "N/A")
-                .toList();
-        java.util.List<BigDecimal> caData = financeData.stream()
-                .map(s -> s.getChiffreAffaires() != null ? s.getChiffreAffaires() : BigDecimal.ZERO)
-                .toList();
+        BigDecimal chiffreAffairesTotalGlobal = financeData.stream()
+            .map(s -> s.getChiffreAffaires() != null ? s.getChiffreAffaires() : BigDecimal.ZERO)
+            .reduce(BigDecimal.ZERO, (left, right) -> left.add(right));
+        java.util.List<String> caLabels = java.util.List.of("Chiffre d'affaires total");
+        java.util.List<BigDecimal> caData = java.util.List.of(chiffreAffairesTotalGlobal);
 
-        // Top produits (camembert)
-        java.util.List<String> topProduitLabels = top5Produits.stream()
-                .map(tp -> {
+        // Top produits (vue globale par produit)
+        Map<String, BigDecimal> quantiteParProduit = topProduitRepository.findAll().stream()
+            .collect(Collectors.toMap(
+                tp -> {
                     if (tp.getProduit() != null && tp.getProduit().getNom() != null && !tp.getProduit().getNom().isBlank()) {
-                        return tp.getProduit().getNom();
+                    return tp.getProduit().getNom();
                     }
                     return "Produit #" + (tp.getProduit() != null ? tp.getProduit().getId() : "N/A");
-                })
-                .toList();
-        java.util.List<BigDecimal> topProduitData = top5Produits.stream()
-                .map(tp -> tp.getQuantiteTotale() != null ? tp.getQuantiteTotale() : BigDecimal.ZERO)
-                .toList();
+                },
+                tp -> tp.getQuantiteTotale() != null ? tp.getQuantiteTotale() : BigDecimal.ZERO,
+                        (left, right) -> left.add(right),
+                LinkedHashMap::new));
+
+        List<Map.Entry<String, BigDecimal>> topProduitsGlobaux = quantiteParProduit.entrySet().stream()
+            .sorted(Map.Entry.<String, BigDecimal>comparingByValue(Comparator.reverseOrder()))
+            .limit(5)
+            .toList();
+
+        java.util.List<String> topProduitLabels = topProduitsGlobaux.stream()
+            .map(entry -> entry.getKey())
+            .toList();
+        java.util.List<BigDecimal> topProduitData = topProduitsGlobaux.stream()
+            .map(entry -> entry.getValue())
+            .toList();
 
         long nbRetards = Math.max(0, missionsTerminees.size() - missionsAlheure);
 
@@ -190,8 +211,11 @@ public class DashboardStatsController {
         model.addAttribute("caData", caData);
         model.addAttribute("topProduitLabels", topProduitLabels);
         model.addAttribute("topProduitData", topProduitData);
-        model.addAttribute("occupationLabels", new java.util.ArrayList<>(occupationParEmplacement.keySet()));
-        model.addAttribute("occupationData", new java.util.ArrayList<>(occupationParEmplacement.values()));
+        model.addAttribute("occupationLabels", java.util.List.of("Occupé", "Disponible"));
+        model.addAttribute("occupationData", java.util.List.of(
+            volumeOccupeTotal,
+            capaciteTotale.subtract(volumeOccupeTotal).max(BigDecimal.ZERO)
+        ));
         model.addAttribute("ponctualiteLabels", java.util.List.of("À l'heure", "Retard"));
         model.addAttribute("ponctualiteData", java.util.List.of(missionsAlheure, nbRetards));
 

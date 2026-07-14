@@ -235,6 +235,24 @@ CREATE TABLE missions_logistiques (
 );
 
 -- ============================================================================
+-- 6. STATISTIQUES CLIENTS
+-- ============================================================================
+
+CREATE TABLE stats_clients (
+    id                  BIGSERIAL PRIMARY KEY,
+    date_debut          DATE NOT NULL,
+    date_fin            DATE NOT NULL,
+    volume_stocke_m3    NUMERIC(12,3),
+    duree_moyenne_jours NUMERIC(8,2),
+    nb_entrees          INT NOT NULL DEFAULT 0,
+    nb_sorties          INT NOT NULL DEFAULT 0,
+    chiffre_affaires    NUMERIC(14,2) NOT NULL DEFAULT 0,
+    client_id           BIGINT NOT NULL,
+    CONSTRAINT ck_stats_clients_dates CHECK (date_fin >= date_debut),
+    CONSTRAINT fk_stats_clients_client_id FOREIGN KEY (client_id) REFERENCES utilisateurs(id)
+);
+
+-- ============================================================================
 -- 6. STOCKS
 -- ============================================================================
 
