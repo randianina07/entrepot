@@ -33,6 +33,7 @@
 /home/itu/Fianarana/S4/PROJET/entrepot/src/main/java/com/entrepot/gestion/dto/MouvementDetailDTO.java
 /home/itu/Fianarana/S4/PROJET/entrepot/src/main/java/com/entrepot/gestion/dto/MouvementFiltreDTO.java
 /home/itu/Fianarana/S4/PROJET/entrepot/src/main/java/com/entrepot/gestion/dto/MouvementListDTO.java
+/home/itu/Fianarana/S4/PROJET/entrepot/src/main/java/com/entrepot/gestion/model/AbonnementStockage.java
 /home/itu/Fianarana/S4/PROJET/entrepot/src/main/java/com/entrepot/gestion/model/Allee.java
 /home/itu/Fianarana/S4/PROJET/entrepot/src/main/java/com/entrepot/gestion/model/Allees.java
 /home/itu/Fianarana/S4/PROJET/entrepot/src/main/java/com/entrepot/gestion/model/AuthDetails.java
@@ -76,6 +77,7 @@
 /home/itu/Fianarana/S4/PROJET/entrepot/src/main/java/com/entrepot/gestion/model/UtilisateurInfo.java
 /home/itu/Fianarana/S4/PROJET/entrepot/src/main/java/com/entrepot/gestion/model/Vehicule.java
 /home/itu/Fianarana/S4/PROJET/entrepot/src/main/java/com/entrepot/gestion/model/Zone.java
+/home/itu/Fianarana/S4/PROJET/entrepot/src/main/java/com/entrepot/gestion/repository/AbonnementStockageRepository.java
 /home/itu/Fianarana/S4/PROJET/entrepot/src/main/java/com/entrepot/gestion/repository/ChauffeurRepository.java
 /home/itu/Fianarana/S4/PROJET/entrepot/src/main/java/com/entrepot/gestion/repository/ContratRepository.java
 /home/itu/Fianarana/S4/PROJET/entrepot/src/main/java/com/entrepot/gestion/repository/DemandeRenouvellementRepository.java
@@ -115,6 +117,7 @@
 /home/itu/Fianarana/S4/PROJET/entrepot/src/main/java/com/entrepot/gestion/repository/VehiculeRepository.java
 /home/itu/Fianarana/S4/PROJET/entrepot/src/main/java/com/entrepot/gestion/repository/Zone_repository.java
 /home/itu/Fianarana/S4/PROJET/entrepot/src/main/java/com/entrepot/gestion/security/CustomUserDetailsService.java
+/home/itu/Fianarana/S4/PROJET/entrepot/src/main/java/com/entrepot/gestion/service/AbonnementStockageService.java
 /home/itu/Fianarana/S4/PROJET/entrepot/src/main/java/com/entrepot/gestion/service/AuthDetailsService.java
 /home/itu/Fianarana/S4/PROJET/entrepot/src/main/java/com/entrepot/gestion/service/ContratService.java
 /home/itu/Fianarana/S4/PROJET/entrepot/src/main/java/com/entrepot/gestion/service/DemandeRenouvellementService.java
