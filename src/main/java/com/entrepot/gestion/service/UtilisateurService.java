@@ -199,6 +199,16 @@ public class UtilisateurService {
                                 .orElseThrow(() -> new RuntimeException("Profil introuvable"));
         }
 
+        public boolean estUtilisateurAdminConnecte() {
+
+                Utilisateur utilisateur = getUtilisateurConnecte();
+
+                return utilisateurRepository.findById(utilisateur.getId())
+                                .map(u -> u.getRole() != null
+                                                && "ADMIN".equals(u.getRole().getCode()))
+                                .orElse(false);
+        }
+
         @Transactional
         public void changerMotDePasse(
                         String ancienMotDePasse,
@@ -207,11 +217,14 @@ public class UtilisateurService {
 
                 Utilisateur utilisateur = getUtilisateurConnecte();
 
+                Utilisateur utilisateurEnBase = utilisateurRepository.findById(utilisateur.getId())
+                                .orElseThrow(() -> new RuntimeException("Utilisateur introuvable"));
+
                 if (verificationAncien) {
 
                         if (!passwordEncoder.matches(
                                         ancienMotDePasse,
-                                        utilisateur.getMotDePasseHash())) {
+                                        utilisateurEnBase.getMotDePasseHash())) {
 
                                 throw new BadCredentialsException(
                                                 "Ancien mot de passe incorrect");
@@ -220,8 +233,8 @@ public class UtilisateurService {
 
                 String nouveauHash = passwordEncoder.encode(nouveauMotDePasse);
 
-                utilisateur.setMotDePasseHash(nouveauHash);
+                utilisateurEnBase.setMotDePasseHash(nouveauHash);
 
-                utilisateurRepository.save(utilisateur);
+                utilisateurRepository.saveAndFlush(utilisateurEnBase);
         }
 }

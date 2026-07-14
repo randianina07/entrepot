@@ -55,24 +55,15 @@ public class ProfilController {
         }
 
         try {
-
-            System.out.println("CHANGEMENT MOT DE PASSE APPELE");
-
-            Utilisateur utilisateur = utilisateurService.getUtilisateurConnecte();
-
-            System.out.println("Utilisateur : " + utilisateur.getEmail());
-
-            boolean verifierAncien = !utilisateur.getRole().getCode().equals("ADMIN");
+            boolean verifierAncien = !utilisateurService.estUtilisateurAdminConnecte();
 
             utilisateurService.changerMotDePasse(ancienMotDePasse, nouveauMotDePasse, verifierAncien);
 
-            model.addAttribute("message", "mot de passe modifié avec succès");
+            model.addAttribute("success", "Mot de passe modifié avec succès.");
         } catch (Exception e) {
 
-            // TODO: handle exception
-            model.addAttribute(
-                    "erreur",
-                    e.getMessage());
+            model.addAttribute("erreur", e.getMessage() != null ? e.getMessage()
+                    : "Une erreur est survenue lors de la modification du mot de passe.");
 
             return "profil/changerMotDePasse";
         }
