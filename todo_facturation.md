@@ -9,10 +9,10 @@
     + [x] créer une table abonnement_stockage : id, utilisateur_id, contrat_id, duree_mois, type_zone_id
 
 + [] modifier formulaire demande stockage 
-    + [] ajouter nouvel attribut quantiteEmplacement:
-      + [] DemandeStockage
-      + [] Contrat
-    + [] ajouter champ qte_emplacement
+    + [x] ajouter nouvel attribut quantiteEmplacement:
+      + [x] DemandeStockage
+      + [x] Contrat
+    + [x] ajouter champ qte_emplacement
     + [] rendre intéractive :
         + [] si abonné : 
             + [] champ date fin stockage supprimé

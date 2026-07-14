@@ -333,7 +333,8 @@ CREATE TABLE demandes_stockage (
 
 );
 
-
+ALTER TABLE demandes_stockage
+ADD COLUMN duree_mois INTEGER DEFAULT NULL;
 
 CREATE TABLE contrats (
 
@@ -385,6 +386,9 @@ CREATE TABLE contrats (
         REFERENCES types_contrat(id)
 
 );
+
+ALTER TABLE contrats
+ADD COLUMN duree_mois INTEGER DEFAULT NULL;
 
 -- ============================================================================
 -- 5. RENOUVELLEMENTS
