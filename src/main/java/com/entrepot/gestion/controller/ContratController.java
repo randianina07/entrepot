@@ -141,8 +141,10 @@ public class ContratController {
     @GetMapping("/demandes")
     public String listeDemandes(Model model) {
         List<DemandeStockage> demandes = demandeStockageService.findAll();
-        List<DemandeStockage> attente = demandes.stream().filter(d -> historiqueEtatDemandeService
-            .dernierStatut(d).getStatut().getCode().equals("EN_ATTENTE")).toList();
+        List<DemandeStockage> attente = demandes.stream().filter(d -> {
+            HistoriqueEtatDemande h = historiqueEtatDemandeService.dernierStatut(d);
+            return h != null && "EN_ATTENTE".equals(h.getStatut().getCode());
+        }).toList();
 
         model.addAttribute("demandes", attente);
         return "contrats/demandes";

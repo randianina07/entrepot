@@ -42,7 +42,7 @@ public class ProfilController {
         model.addAttribute("dateDebut",
                 dateDebut);
 
-        return "profil";
+        return "profil/index";
     }
 
     // Afficher le formulaire de changement de mot de passe

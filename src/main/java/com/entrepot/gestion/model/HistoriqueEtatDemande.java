@@ -17,7 +17,7 @@ public class HistoriqueEtatDemande {
     private DemandeStockage demandeStockage;
 
     @ManyToOne
-    @JoinColumn(name = "statut_id", nullable = false)
+    @JoinColumn(name = "statut_demande_id", nullable = false)
     private StatutDemandeStockage statut;
 
     @Column(name = "date_statut", nullable = false)
