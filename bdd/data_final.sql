@@ -111,6 +111,9 @@ CREATE TRIGGER trg_appliquer_mouvement_valide
 -- ============================================================================
 -- 7. DONNEES DE TEST
 -- ============================================================================
+INSERT INTO types_contrat (code, libelle) VALUES
+    ('ABONNE', 'Abonne'),
+    ('NON_ABONNE', 'Non abonne');
 
 -- Insertion des rôles
 INSERT INTO roles (code, libelle) VALUES
