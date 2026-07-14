@@ -11,7 +11,7 @@ public class HistoriqueEtatDemande {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
     @ManyToOne
     @JoinColumn(name = "demande_stockage_id", nullable = false)
     private DemandeStockage demandeStockage;

@@ -49,6 +49,9 @@ public class Contrat {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
+    @Column(name = "duree_mois")
+    private Integer dureeMois;
+
     public Contrat() {
     }
 
@@ -140,5 +143,13 @@ public class Contrat {
 
     public void setQuantiteEmplacement(Integer quantiteEmplacement) {
         this.quantiteEmplacement = quantiteEmplacement;
+    }
+
+    public Integer getDureeMois() {
+        return dureeMois;
+    }
+    
+    public void setDureeMois(Integer dureeMois) {
+        this.dureeMois = dureeMois;
     }
 }

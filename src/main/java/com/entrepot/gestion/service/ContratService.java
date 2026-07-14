@@ -9,9 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.entrepot.gestion.model.AbonnementStockage;
 import com.entrepot.gestion.model.Contrat;
 import com.entrepot.gestion.model.DemandeRenouvellement;
 import com.entrepot.gestion.model.Utilisateur;
+import com.entrepot.gestion.repository.AbonnementStockageRepository;
 import com.entrepot.gestion.repository.ContratRepository;
 import com.entrepot.gestion.repository.DemandeRenouvellementRepository;
 import com.entrepot.gestion.repository.DemandeStockageRepository;
@@ -36,6 +38,7 @@ public class ContratService {
     private final StatutRenouvellementRepository statutRenouvellementRepository;
     private final HistoriqueRenouvellementRepository historiqueRenouvellementRepository;
     private final RenouvellementContratRepository renouvellementContratRepository;
+    private final AbonnementStockageRepository abonnementStockageRepository;
 
     public ContratService(
             ContratRepository contratRepository,
@@ -45,7 +48,8 @@ public class ContratService {
             DemandeRenouvellementRepository demandeRenouvellementRepository,
             StatutRenouvellementRepository statutRenouvellementRepository,
             HistoriqueRenouvellementRepository historiqueRenouvellementRepository,
-            RenouvellementContratRepository renouvellementContratRepository) {
+            RenouvellementContratRepository renouvellementContratRepository,
+            AbonnementStockageRepository abonnementStockageRepository) {
 
         this.contratRepository = contratRepository;
         this.demandeStockageRepository = demandeStockageRepository;
@@ -55,6 +59,7 @@ public class ContratService {
         this.statutRenouvellementRepository = statutRenouvellementRepository;
         this.historiqueRenouvellementRepository = historiqueRenouvellementRepository;
         this.renouvellementContratRepository = renouvellementContratRepository;
+        this.abonnementStockageRepository = abonnementStockageRepository;
     }
 
     public List<Contrat> findAll() {
@@ -78,17 +83,10 @@ public class ContratService {
     }
 
     @Transactional
-    public void accepterDemande(Long demandeId) {
-        DemandeStockage demande = demandeStockageRepository.findById(demandeId).orElseThrow();
-        StatutDemandeStockage accepte = statutDemandeStockageService.findByCode("ACCEPTEE").orElseThrow();
-        HistoriqueEtatDemande historique = new HistoriqueEtatDemande();
+    public Contrat accepterDemande(Long demandeId) {
 
-        historique.setDemandeStockage(demande);
-        historique.setStatut(accepte);
-        historique.setDateStatut(LocalDateTime.now());
-
-        historiqueEtatDemandeService.save(historique);
-
+        DemandeStockage demande = demandeStockageRepository.findById(demandeId)
+                .orElseThrow(() -> new RuntimeException("Demande inexistante"));
         Contrat contrat = new Contrat();
 
         contrat.setDemandeStockage(demande);
@@ -96,11 +94,42 @@ public class ContratService {
         contrat.setTypeZone(demande.getTypeZone());
         contrat.setTypeContrat(demande.getTypeContrat());
         contrat.setVolumeEspaceM3(demande.getVolumeEspaceM3());
+        contrat.setQuantiteEmplacement(demande.getQuantiteEmplacement());
         contrat.setDateCreation(LocalDateTime.now());
         contrat.setDateDebut(demande.getDateDebut());
         contrat.setDateFin(demande.getDateFin());
-        contrat.setDescription("Contrat créé automatiquement suite à une demande acceptée");
-        contratRepository.save(contrat);
+        contrat.setDureeMois(null);
+
+        if ("ABONNE".equals(demande.getTypeContrat().getCode())) {
+            contrat.setDureeMois(demande.getDureeMois());
+        }
+
+        Contrat contratSauvegarde = contratRepository.save(contrat);
+
+        if ("ABONNE".equals(demande.getTypeContrat().getCode())) {
+            if (demande.getDureeMois() == null) {
+                throw new RuntimeException("La durée est obligatoire pour un abonnement");
+            }
+
+            AbonnementStockage abonnement = new AbonnementStockage();
+
+            abonnement.setUtilisateur(demande.getUtilisateur());
+            abonnement.setContrat(contratSauvegarde);
+            abonnement.setTypeZone(demande.getTypeZone());
+            abonnement.setDureeMois(demande.getDureeMois());
+            abonnementStockageRepository.save(abonnement);
+        }
+
+        StatutDemandeStockage acceptee = statutDemandeStockageService.findByCode("ACCEPTEE")
+                .orElseThrow(() -> new RuntimeException("Statut ACCEPTEE introuvable"));
+        HistoriqueEtatDemande historique = new HistoriqueEtatDemande();
+
+        historique.setDemandeStockage(demande);
+        historique.setStatut(acceptee);
+        historique.setDateStatut(LocalDateTime.now());
+
+        historiqueEtatDemandeService.save(historique);
+        return contratSauvegarde;
     }
 
     @Transactional
