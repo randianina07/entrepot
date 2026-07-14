@@ -19,6 +19,7 @@
 /home/valisoa/Documents/entrepot/src/main/java/com/entrepot/gestion/controller/MissionController.java
 /home/valisoa/Documents/entrepot/src/main/java/com/entrepot/gestion/controller/MouvementController.java
 /home/valisoa/Documents/entrepot/src/main/java/com/entrepot/gestion/controller/MouvementViewController.java
+/home/valisoa/Documents/entrepot/src/main/java/com/entrepot/gestion/controller/ProfilController.java
 /home/valisoa/Documents/entrepot/src/main/java/com/entrepot/gestion/controller/StockageController.java
 /home/valisoa/Documents/entrepot/src/main/java/com/entrepot/gestion/controller/Stocks_emplacement_controller.java
 /home/valisoa/Documents/entrepot/src/main/java/com/entrepot/gestion/controller/TestController.java

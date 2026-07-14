@@ -52,6 +52,9 @@
                 + [x] AuthDetails
                     + [x] Utilisateur utilisateur 
 
+                + [+] SecurityConfig 
+                    + [+] autoriser les utilisateurs à accéder aux routes pour le ProfilController
+
                 + [] Vue :
                     + [] dossier : profil
                         + créer les pages : 
