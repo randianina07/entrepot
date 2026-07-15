@@ -89,15 +89,17 @@
                 </div>
             </div>
             <div class="d-flex flex-wrap gap-2">
-                    <form th:if="${mouvement.statutMouvementCode == 'BROUILLON'}" 
+                    <form th:if="${mouvement.statutMouvementCode == 'BROUILLON' || mouvement.statutMouvementCode == 'EN_ATTENTE'}" 
                           th:action="@{/mouvements/{id}/valider(id=${mouvement.id})}" 
-                          method="post" style="display: inline;">
+                          method="post" style="display: inline;"
+                          onsubmit="return confirm('Êtes-vous sûr de vouloir valider ce mouvement ? Le stock sera mis à jour.');">
                         <button type="submit" class="btn btn-success">
                             <i class="bi bi-check-circle"></i> Valider le mouvement
                         </button>
                     </form>
                     
-                    <form th:action="@{/mouvements/{id}/annuler(id=${mouvement.id})}" 
+                    <form th:if="${mouvement.statutMouvementCode != 'ANNULE'}" 
+                          th:action="@{/mouvements/{id}/annuler(id=${mouvement.id})}" 
                           method="post" style="display: inline;" 
                           onsubmit="return confirm('Êtes-vous sûr de vouloir annuler ce mouvement ?');">
                         <button type="submit" class="btn btn-danger">
