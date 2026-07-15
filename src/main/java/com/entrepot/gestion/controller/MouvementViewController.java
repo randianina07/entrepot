@@ -1,5 +1,6 @@
 package com.entrepot.gestion.controller;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -24,10 +25,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.entrepot.gestion.dto.LigneMouvementDTO;
 import com.entrepot.gestion.dto.MouvementCreateDTO;
 import com.entrepot.gestion.dto.MouvementDetailDTO;
 import com.entrepot.gestion.dto.MouvementFiltreDTO;
 import com.entrepot.gestion.dto.MouvementListDTO;
+import com.entrepot.gestion.model.Emplacement;
+import com.entrepot.gestion.model.Produit;
+import com.entrepot.gestion.model.StockEmplacement;
 import com.entrepot.gestion.model.Zone;
 import com.entrepot.gestion.service.EmplacementService;
 import com.entrepot.gestion.service.MouvementService;
@@ -138,12 +143,87 @@ public class MouvementViewController {
             RedirectAttributes redirectAttributes) {
 
         try {
-            // Creer le mouvement en BROUILLON seulement (pas de mise a jour du stock)
-            // Le stock sera mis a jour uniquement lors de la validation
+
+            for (LigneMouvementDTO ligneDTO : dto.getLignes()) {
+                if ("ENTREE".equals(type)) {
+                    Emplacement emp = emplacementService.findById(ligneDTO.getEmplacementDestId());
+                    Zone zone = zone_service.findById(ligneDTO.getIdZone());
+                    Produit p = produit_service.findById(ligneDTO.getProduitId());
+                    
+                    BigDecimal volumeOccupe = BigDecimal.ZERO;
+
+                    for (StockEmplacement stk : stock_emplacement_Service.findAll()) {
+                        if (stk.getEmplacement() != null
+                            && stk.getZone() != null
+                            && stk.getEmplacement().getId().equals(emp.getId())
+                            && stk.getZone().getId().equals(zone.getId())) {
+
+                            volumeOccupe = volumeOccupe.add(
+                                stk.getQuantite().multiply(stk.getProduit().getVolumeUnitaireM3())
+                            );
+                        }
+                    }
+
+                    BigDecimal volumeNecessaire =
+                        p.getVolumeUnitaireM3().multiply(ligneDTO.getQuantite());
+
+                    BigDecimal capacite = emp.getCapaciteVolumeM3();
+
+                    if (volumeOccupe.add(volumeNecessaire).compareTo(capacite) > 0) {
+                        throw new Exception("Espace plein");
+                    }
+
+                    StockEmplacement stk = new StockEmplacement();
+                    stk.setEmplacement(emp);
+                    stk.setQuantite(ligneDTO.getQuantite());
+                    stk.setProduit(p);
+                    stk.setZone(zone);
+
+                    stock_emplacement_Service.save(stk);
+                } else if ("SORTIE".equals(type)) {
+                    Emplacement emp = emplacementService.findById(ligneDTO.getEmplacementSourceId());
+                    Zone zone = zone_service.findById(ligneDTO.getIdZone());
+                    Produit p = produit_service.findById(ligneDTO.getProduitId());
+
+                    List<StockEmplacement> stocks = stock_emplacement_Service
+                        .findByEmplacementIdAndProduitIdAndZoneId(emp.getId(), p.getId(), zone.getId());
+
+                    if (stocks.isEmpty()) {
+                        throw new Exception("Stock correspondant introuvable");
+                    }
+
+                    BigDecimal quantiteRestante = ligneDTO.getQuantite();
+                    BigDecimal stockTotal = BigDecimal.ZERO;
+
+                    for (StockEmplacement stock : stocks) {
+                        stockTotal = stockTotal.add(stock.getQuantite());
+                    }
+
+                    if (stockTotal.compareTo(quantiteRestante) < 0) {
+                        throw new Exception("Stock insuffisant pour la sortie");
+                    }
+
+                    for (StockEmplacement stock : stocks) {
+                        if (quantiteRestante.compareTo(BigDecimal.ZERO) <= 0) {
+                            break;
+                        }
+
+                        BigDecimal quantiteStock = stock.getQuantite();
+
+                        if (quantiteStock.compareTo(quantiteRestante) <= 0) {
+                            quantiteRestante = quantiteRestante.subtract(quantiteStock);
+                            stock_emplacement_Service.delete(stock);
+                        } else {
+                            stock.setQuantite(quantiteStock.subtract(quantiteRestante));
+                            stock_emplacement_Service.save(stock);
+                            quantiteRestante = BigDecimal.ZERO;
+                        }
+                    }
+                }
+            }
+
             Long mouvementId = mouvementService.creerMouvementAvecLignes(dto, type);
-            redirectAttributes.addFlashAttribute("success", 
-                "Mouvement cree en brouillon avec succès (ID: " + mouvementId + "). " +
-                "Veuillez le valider pour appliquer les changements de stock.");
+            redirectAttributes.addFlashAttribute("success", "Mouvement cree avec succès (ID: " + mouvementId + ")");
             return "redirect:/mouvements/" + mouvementId + "/detail";
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Erreur lors de la creation: " + e.getMessage());
