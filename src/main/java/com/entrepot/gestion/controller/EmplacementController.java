@@ -30,7 +30,7 @@ public class EmplacementController {
     @GetMapping("/recherche")
     public String afficherPageRecherche(Model model) {
         
-        List<TypeZone> listTypeZone = typeZoneService.getAll();
+        List<TypeZone> listTypeZone = typeZoneService.findAll();
 
         if (listTypeZone != null) {
             model.addAttribute("listeZone" , listTypeZone);
@@ -55,7 +55,7 @@ public class EmplacementController {
             model.addAttribute("resultat", placeTrouvee);
         }
 
-        List<TypeZone> listTypeZone = typeZoneService.getAll();
+        List<TypeZone> listTypeZone = typeZoneService.findAll();
 
         // Charger la liste de type de zone 
         if (listTypeZone != null) {

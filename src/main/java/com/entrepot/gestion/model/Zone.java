@@ -1,5 +1,8 @@
 package com.entrepot.gestion.model;
 
+import java.math.BigDecimal;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,17 +17,22 @@ public class Zone {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    String libelle;
-    double volume_total_m3;
-    
-    @ManyToOne 
-    @JoinColumn(name = "allees_id", referencedColumnName = "id")
-    Allees allees;
-    
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "libelle", length = 150)
+    private String libelle;
+
+    @Column(name = "volume_total_m3", precision = 12, scale = 3)
+    private BigDecimal volume_total_m3;
+
     @ManyToOne
-    @JoinColumn(name = "type_zone_id", referencedColumnName = "id")
-    Type_zone type_zone;
+    @JoinColumn(name = "allees_id")
+    private Allees allees;
+
+    @ManyToOne
+    @JoinColumn(name = "type_zone_id")
+    private Type_zone type_zone;
     
     
     public Allees getAllees() {
@@ -51,10 +59,10 @@ public class Zone {
     public void setType_zone(Type_zone type_zone) {
         this.type_zone = type_zone;
     }
-    public double getVolume_total_m3() {
+    public BigDecimal getVolume_total_m3() {
         return volume_total_m3;
     }
-    public void setVolume_total_m3(double volume_total_m3) {
+    public void setVolume_total_m3(BigDecimal volume_total_m3) {
         this.volume_total_m3 = volume_total_m3;
     }
     

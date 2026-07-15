@@ -11,4 +11,5 @@ public interface MissionLogistiqueRepository extends JpaRepository<MissionLogist
     List<MissionLogistique> findByStatutMissionCode(String code);
     List<MissionLogistique> findByChauffeurId(Long chauffeurId);
     List<MissionLogistique> findByVehiculeId(Long vehiculeId);
+    List<MissionLogistique> findByStatutMissionIdIn(List<Integer> of);
 }

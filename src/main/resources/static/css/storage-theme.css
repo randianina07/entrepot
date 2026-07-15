@@ -16,8 +16,8 @@
     --sp-card-bg: #121826;
     --sp-card-bg-hover: #161f30;
     --sp-white: #ffffff;
-    --sp-radius: 16px;
-    --sp-radius-sm: 10px;
+    --sp-radius: 12px;
+    --sp-radius-sm: 6px;
     --sp-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
     --sp-shadow-hover: 0 12px 28px rgba(0, 0, 0, 0.5);
 }

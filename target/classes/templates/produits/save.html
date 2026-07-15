@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/navbar :: head}"></head>
+<body class="storage-page">
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="container py-4">
+    <div th:replace="~{fragments/alerts :: alerts}"></div>
+
+    <section class="storage-hero mb-4">
+        <div class="hero-copy">
+            <span class="hero-badge"><i class="bi bi-box"></i> Nouveau produit</span>
+            <h1>Ajouter un produit</h1>
+            <p>Enregistrez un nouveau produit dans le catalogue de l'entrepôt.</p>
+            <div class="hero-actions">
+                <a class="btn btn-outline-primary" th:href="@{/produits/liste}">Retour à la liste</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="storage-section">
+        <div class="storage-section-header">
+            <div>
+                <span class="chip is-accent">Formulaire</span>
+                <h2 class="mb-0 mt-2">Informations du produit</h2>
+            </div>
+        </div>
+
+        <div class="search-form-shell">
+            <form class="row g-3" th:action="@{/produits/save}" th:object="${produit}" method="post">
+                <div class="col-md-6">
+                    <label for="code" class="form-label">Code <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="code" th:field="*{code}" placeholder="Ex: PROD-RIZ-001" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="nom" class="form-label">Nom <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="nom" th:field="*{nom}" placeholder="Nom du produit" required>
+                </div>
+
+                <div class="col-12">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" th:field="*{description}" rows="3" placeholder="Description du produit"></textarea>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="typeProduitId" class="form-label">Type de produit <span class="text-danger">*</span></label>
+                    <select class="form-select" id="typeProduitId" name="typeProduitId" required>
+                        <option value="">Choisir un type</option>
+                        <option th:each="t : ${typesProduit}"
+                                th:value="${t.id}"
+                                th:text="${t.libelle}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="volumeUnitaireM3" class="form-label">Volume unitaire (m³) <span class="text-danger">*</span></label>
+                    <input type="number" step="0.0001" class="form-control" id="volumeUnitaireM3" th:field="*{volumeUnitaireM3}" placeholder="Ex: 0.0500" required>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="poidsUnitaireKg" class="form-label">Poids unitaire (kg)</label>
+                    <input type="number" step="0.001" class="form-control" id="poidsUnitaireKg" th:field="*{poidsUnitaireKg}" placeholder="Ex: 25.000">
+                </div>
+
+                <div class="col-12">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="actif" name="actif" value="true" checked>
+                        <label class="form-check-label" for="actif">Produit actif</label>
+                    </div>
+                </div>
+
+                <div class="col-12 mt-4">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="bi bi-save"></i> Enregistrer
+                    </button>
+                    <a class="btn btn-outline-secondary" th:href="@{/produits/liste}">
+                        <i class="bi bi-x-circle"></i> Annuler
+                    </a>
+                </div>
+            </form>
+        </div>
+    </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

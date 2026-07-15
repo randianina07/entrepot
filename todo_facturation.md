@@ -1,0 +1,83 @@
+# TO DO FACTURATION
+
++ [x] Prérequis
+    + [x] inserer les parametres.
+        + [x] 2 données unités durée 
+        + [x] 8 données tarifs zones 
+    + [x] ajouter colonne qté emplacement dans la table demande_stockage et contrat
+
+    + [x] créer une table abonnement_stockage : id, utilisateur_id, contrat_id, duree_mois, type_zone_id
+
++ [] modifier formulaire demande stockage 
+    + [x] ajouter nouvel attribut quantiteEmplacement:
+      + [x] DemandeStockage
+      + [x] Contrat
+    + [x] ajouter champ qte_emplacement
+    + [] rendre intéractive :
+        + [] si abonné : 
+            + [] champ date fin stockage supprimé
+            + [] champ durée en mois apparait
+
+        + [] si non abonné : 
+            + [] champ date fin stockage apparait
+
++ [] modifier validation demande
+    + [] apres creation du contrat, insertion dans la table abonnement (transaction)
+
++ [] créer profil utilisateur 
+    + [] modification mot de passe 
+        + [] si admin : modification direct
+        + [] si client : formulaire de modification
+
+            + [] Comment:
+                + [x] ProfilController : 
+                    + [x] afficher la page du profil
+                    + [x] afficher le formulaire de changement de mot de passe 
+                    + [x] récupérer les données envoyées par le formulaire
+                    + [x] appeler le service 
+
+                + [x] UtilisateurService
+                    + [x] Créer les méthodes :
+                        + [x] Utilisaetur getUtilisateurConnecte() : retourne l'utilisateur connecte 
+                        + [x] UtilisateurInfo getProfil() : retourne les informations à afficher sur le profil
+                        + [x] void changerMotDePasse() : 
+                            - récupère l'utilisateur connecté
+                            - vérifie l'ancien mot de passe 
+                            - chiffre le nouveau mot de passe 
+                            - sauvegarde en base 
+
+                + [x] UtilisateurInfoRepository
+                    + [x] findByUtilisateur()
+
+                + [x] AuthDetails
+                    + [x] Utilisateur utilisateur 
+
+                + [+] SecurityConfig 
+                    + [+] autoriser les utilisateurs à accéder aux routes pour le ProfilController
+
+                + [] Vue :
+                    + [] dossier : profil
+                        + créer les pages : 
+                            + [] index.html
+                            + [] changerMotDePasse.html
+
+    + [] liste contrats
+        + [] trier par abonnement et normale(paiement direct)
+            + [] trier : en cours et terminé
+            + [] voir facture (bouton) /mbola tsy atao mandeha fa poziny fotsiny
+
++ [x] facturation
+    + [x] Dans la liste contrat du profil utilisateur (profil/index.html) mettre un bouton a cote de chaque contrat: titre voir facture (avec champ de date a cote et bouton voir a cote du petit champ), si champ vide, date aujourd'hui
+    + [x] creer une classe DateUtil dans le package utils qui calcul d'intervalle de date mois/jour (utiliser Period.between de Java)
+    + [x] prendre une date pour voir la facture 
+    + [x] vérifier si la date est équivalente à la date fin du contrat
+        + [x] non abonnement:
+            + [x] si apres la date fin du contrat: utiliser date fin (Calculer duree totale)
+            + [x] sinon ou si date_fin = null : prendre la duree (et bien verifier que apres date debut) et faire le calcul mois/jour
+        + [x] abonnement:
+            + [x] faire un calcul de la date_fin (A partir de la duree en mois)
+                + [x] Si date est au dela de date fin, utiliser date fin (donc duree en mois × tarifs mois)
+                + [x] si c'est avant date fin, on utilise trouverDerniereAnniversaire() pour trouver la date exacte d'un mois avant, pas de jours, exemple: debut 20-07-2026 et 3 mois, si date=29-09-2026 → facture du 20-09-2026
+    + [x] Faire les calculs avec la duree et les tarifs zones
+    + [x] Bien afficher proprement et clairement avec toutes les informations (client, contrat, detail facturation)
+    + [x] mettre un bouton exporter pour avoir une version PDF pro de la facture (iText 7)

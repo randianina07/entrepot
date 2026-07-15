@@ -18,7 +18,7 @@ public class AdminController {
 
     @GetMapping("/admin/produits")
     public String produits() {
-        return "redirect:/dashboard";
+        return "redirect:/produits/save";
     }
 
     @GetMapping("/admin/types-zone")
