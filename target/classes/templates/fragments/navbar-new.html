@@ -122,11 +122,38 @@
                         </ul>
                     </li>
 
+                    <!-- Contrats -->
+                    <li class="nav-item dropdown" sec:authorize="hasAnyRole('ADMIN', 'GESTIONNAIRE', 'COMPTABLE')">
+                        <button class="nav-link dropdown-toggle border-0 bg-transparent" type="button"
+                            id="contratsDropdown" data-bs-toggle="dropdown" aria-expanded="false"
+                            th:classappend="${#strings.contains(request.requestURI, '/contrats') ? 'active' : ''}">
+                            <i class="bi bi-file-earmark-text"></i>
+                            <span class="nav-text">Contrats</span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="contratsDropdown">
+                            <li><a class="dropdown-item" th:href="@{/contrats/demande}">
+                                    <i class="bi bi-clipboard-plus me-2"></i>Nouvelle demande
+                                </a></li>
+                            <li><a class="dropdown-item" th:href="@{/contrats/demandes}">
+                                    <i class="bi bi-clipboard-list me-2"></i>Demandes stockage
+                                </a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" th:href="@{/contrats/renouvellement}">
+                                    <i class="bi bi-arrow-clockwise me-2"></i>Nouveau renouvellement
+                                </a></li>
+                            <li><a class="dropdown-item" th:href="@{/contrats/renouvellements}">
+                                    <i class="bi bi-arrow-repeat me-2"></i>Renouvellements
+                                </a></li>
+                        </ul>
+                    </li>
+
                     <!-- Clients -->
                     <li class="nav-item dropdown" sec:authorize="hasAnyRole('ADMIN', 'GESTIONNAIRE', 'COMPTABLE')">
                         <button class="nav-link dropdown-toggle border-0 bg-transparent" type="button"
                             id="clientsDropdown" data-bs-toggle="dropdown" aria-expanded="false"
-                            th:classappend="${#strings.contains(request.requestURI, '/clients') or #strings.contains(request.requestURI, '/contrats') ? 'active' : ''}">
+                            th:classappend="${#strings.contains(request.requestURI, '/clients') ? 'active' : ''}">
                             <i class="bi bi-people"></i>
                             <span class="nav-text">Clients</span>
                         </button>
@@ -136,18 +163,6 @@
                                 </a></li>
                             <li><a class="dropdown-item" th:href="@{/clients/nouveau}">
                                     <i class="bi bi-person-plus me-2"></i>Nouveau client
-                                </a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" th:href="@{/contrats/demandes}">
-                                    <i class="bi bi-clipboard-list me-2"></i>Demandes stockage
-                                </a></li>
-                            <li><a class="dropdown-item" th:href="@{/contrats/demande}">
-                                    <i class="bi bi-clipboard-plus me-2"></i>Nouvelle demande
-                                </a></li>
-                            <li><a class="dropdown-item" th:href="@{/contrats/renouvellements}">
-                                    <i class="bi bi-arrow-clockwise me-2"></i>Renouvellements
                                 </a></li>
                         </ul>
                     </li>
