@@ -133,6 +133,14 @@ CREATE TABLE contrats (
     CONSTRAINT fk_demandes_stockage_type_contrat_id FOREIGN KEY (type_contrat_id) REFERENCES types_contrat(id)
 );
 
+ALTER TABLE demandes_stockage
+ADD COLUMN quantite_emplacement INTEGER NOT NULL DEFAULT 1
+CHECK (quantite_emplacement > 0);
+
+ALTER TABLE contrats
+ADD COLUMN quantite_emplacement INTEGER NOT NULL DEFAULT 1
+CHECK (quantite_emplacement > 0);
+
 CREATE TABLE statuts_renouvellement (
     id      BIGSERIAL PRIMARY KEY,
     code    VARCHAR(20) NOT NULL UNIQUE,
@@ -203,4 +211,24 @@ CREATE TABLE factures (
     date_emission   DATE NOT NULL DEFAULT CURRENT_DATE,
     date_paiement   DATE,
     CONSTRAINT fk_factures_contrat_id FOREIGN KEY (contrat_id) REFERENCES contrats(id)
+);
+
+CREATE TABLE abonnements_stockage (
+    id              BIGSERIAL PRIMARY KEY,
+    utilisateur_id  BIGINT NOT NULL,
+    contrat_id      BIGINT NOT NULL UNIQUE,
+    type_zone_id    BIGINT NOT NULL,
+    duree_mois      INTEGER NOT NULL CHECK (duree_mois > 0),
+
+    CONSTRAINT fk_abonnements_stockage_utilisateur_id
+        FOREIGN KEY (utilisateur_id)
+        REFERENCES utilisateurs(id),
+
+    CONSTRAINT fk_abonnements_stockage_contrat_id
+        FOREIGN KEY (contrat_id)
+        REFERENCES contrats(id),
+
+    CONSTRAINT fk_abonnements_stockage_type_zone_id
+        FOREIGN KEY (type_zone_id)
+        REFERENCES types_zone(id)
 );

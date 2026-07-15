@@ -12,7 +12,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
@@ -110,8 +113,63 @@ public class UtilisateurController {
     }
 
     @GetMapping("/clients")
-    public String listeClients(Model model) {
-        model.addAttribute("clients", utilisateurInfoRepository.findByUtilisateur_Role_Code("CLIENT"));
+    public String listeClients(
+            @RequestParam(required = false) String nom,
+            @RequestParam(required = false) String prenom,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String secteur,
+            @RequestParam(required = false) String statut,
+            @RequestParam(required = false) String dateDebutStr,
+            @RequestParam(required = false) String dateFinStr,
+            @RequestParam(required = false) String tri,
+            Model model) {
+
+        List<UtilisateurInfo> clients;
+
+        boolean hasSearch = nom != null && !nom.isEmpty()
+                || prenom != null && !prenom.isEmpty()
+                || email != null && !email.isEmpty()
+                || secteur != null && !secteur.isEmpty()
+                || statut != null && !statut.isEmpty()
+                || dateDebutStr != null && !dateDebutStr.isEmpty()
+                || dateFinStr != null && !dateFinStr.isEmpty();
+
+        if (hasSearch) {
+            Boolean actif = null;
+            if ("actif".equals(statut)) actif = true;
+            else if ("inactif".equals(statut)) actif = false;
+
+            LocalDateTime dateDebut = null;
+            if (dateDebutStr != null && !dateDebutStr.isEmpty()) {
+                dateDebut = LocalDate.parse(dateDebutStr, DateTimeFormatter.ISO_LOCAL_DATE).atStartOfDay();
+            }
+            LocalDateTime dateFin = null;
+            if (dateFinStr != null && !dateFinStr.isEmpty()) {
+                dateFin = LocalDate.parse(dateFinStr, DateTimeFormatter.ISO_LOCAL_DATE).atTime(LocalTime.MAX);
+            }
+
+            clients = utilisateurInfoRepository.searchClients(
+                    nom, prenom, email, secteur, actif, dateDebut, dateFin, tri);
+
+            model.addAttribute("resultCount", clients.size());
+        } else {
+            clients = utilisateurInfoRepository.findByUtilisateur_Role_Code("CLIENT");
+        }
+
+        List<String> secteurs = utilisateurInfoRepository.findDistinctSecteurs();
+
+        model.addAttribute("clients", clients);
+        model.addAttribute("secteurs", secteurs);
+        model.addAttribute("nom", nom);
+        model.addAttribute("prenom", prenom);
+        model.addAttribute("email", email);
+        model.addAttribute("secteur", secteur);
+        model.addAttribute("statut", statut);
+        model.addAttribute("dateDebutStr", dateDebutStr);
+        model.addAttribute("dateFinStr", dateFinStr);
+        model.addAttribute("tri", tri);
+        model.addAttribute("hasSearch", hasSearch);
+
         return "client/liste";
     }
 
@@ -170,9 +228,9 @@ public class UtilisateurController {
                 utilisateurRepository.save(utilisateur);
             }
 
-            redirectAttributes.addFlashAttribute("success", "✅ Client modifié avec succès.");
+            redirectAttributes.addFlashAttribute("success", "Client modifié avec succès.");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "❌ Impossible de modifier le client: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "Impossible de modifier le client: " + e.getMessage());
         }
         return "redirect:/clients";
     }

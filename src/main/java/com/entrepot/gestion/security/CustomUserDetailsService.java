@@ -3,15 +3,13 @@ package com.entrepot.gestion.security;
 import com.entrepot.gestion.model.Utilisateur;
 import com.entrepot.gestion.repository.UtilisateurRepository;
 import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
+import com.entrepot.gestion.model.AuthDetails;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -32,12 +30,8 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new DisabledException("Le compte est désactivé: " + email);
         }
 
-        String roleCode = utilisateur.getRole().getCode();
+        utilisateur.getRole().getCode();
 
-        return User.builder()
-                .username(utilisateur.getEmail())
-                .password(utilisateur.getMotDePasseHash())
-                .authorities(Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + roleCode)))
-                .build();
+        return new AuthDetails(utilisateur);
     }
 }

@@ -1,5 +1,5 @@
 /* ============================================================================
-   PROFESSIONAL THEME - GESTION ENTREPÔT
+   PROFESSIONAL THEME - Tech-Entrepôt
    Design premium pour interface professionnelle
    ============================================================================ */
 
@@ -27,12 +27,12 @@
 
     /* Backgrounds */
     --bg-primary: #0b1220;
-    --bg-secondary: #111827;
+    --bg-secondary: #1a2332;
     --bg-card: #1f2937;
-    --bg-hover: #273449;
+    --bg-hover: #2a3a4f;
 
     /* Text Colors */
-    --text-primary: #f8fafc;
+    --text-primary: #f1f5f9;
     --text-secondary: #cbd5e1;
     --text-muted: #94a3b8;
 
@@ -54,12 +54,12 @@
     --spacing-xl: 2rem;
     --spacing-2xl: 3rem;
     
-    /* Border Radius */
-    --radius-sm: 0.375rem;
-    --radius-md: 0.5rem;
-    --radius-lg: 0.75rem;
-    --radius-xl: 1rem;
-    --radius-2xl: 1.5rem;
+    /* Border Radius - reduced for mature look */
+    --radius-sm: 0.25rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+    --radius-xl: 0.75rem;
+    --radius-2xl: 1rem;
     
     /* Transitions */
     --transition-fast: 150ms ease;

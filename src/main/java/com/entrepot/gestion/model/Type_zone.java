@@ -1,5 +1,6 @@
 package com.entrepot.gestion.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,14 +15,18 @@ public class Type_zone {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
-    
-    String code;
-    String libelle;
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "code", nullable = false, unique = true, length = 20)
+    private String code;
+
+    @Column(name = "libelle", nullable = false, length = 100)
+    private String libelle;
 
     @ManyToOne
     @JoinColumn(name = "type_produit_id", referencedColumnName = "id")
-    Type_produit type_produit;
+    private Type_produit type_produit;
     
     public long getId() {
         return id;

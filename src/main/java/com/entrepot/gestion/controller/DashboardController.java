@@ -35,7 +35,7 @@ public class DashboardController {
         model.addAttribute("derniersMouvements", derniersMouvements);
 
         // Alertes stock bas
-        model.addAttribute("alertesStock", mouvementService.getEmplacementsStockBas());
+        model.addAttribute("alertesStock", mouvementService.getEmplacementssature());
 
         return "dashboard";
     }
