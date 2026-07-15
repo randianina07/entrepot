@@ -648,7 +648,7 @@ public class MouvementService {
             .collect(Collectors.toList());
     }
     
-    public List<AlerteStockEmplacementDTO> getEmplacementsStockBas() {
+    public List<AlerteStockEmplacementDTO> getEmplacementssature() {
         List<Emplacement> allEmplacements = emplacementRepository.findAll();
         return allEmplacements.stream()
             .filter(emp -> {
@@ -656,7 +656,8 @@ public class MouvementService {
                 if (volumeOccupe == null) volumeOccupe = BigDecimal.ZERO;
                 BigDecimal capacite = emp.getCapaciteVolumeM3();
                 if (capacite == null) capacite = BigDecimal.ZERO;
-                return capacite.compareTo(BigDecimal.ZERO) > 0 && volumeOccupe.compareTo(capacite.multiply(new BigDecimal("0.1"))) < 0;
+                return capacite.compareTo(BigDecimal.ZERO) > 0
+                && volumeOccupe.compareTo(capacite.multiply(new BigDecimal("0.9"))) >= 0;
             })
             .map(emp -> {
                 BigDecimal volumeOccupe = stockEmplacementRepository.sumVolumeByEmplacementId(emp.getId());

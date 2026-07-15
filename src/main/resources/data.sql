@@ -5,6 +5,19 @@
 -- ====================================================================
 
 TRUNCATE TABLE
+    factures,
+    renouvellements_contrat,
+    historique_renouvellement,
+    demandes_renouvellement,
+    abonnements_stockage,
+    contrats,
+    historique_etat_demande,
+    demandes_stockage,
+    tarifs_zone,
+    statuts_renouvellement,
+    statuts_demande_stockage,
+    unites_duree,
+    types_contrat,
     flux_entrees_sorties,
     lignes_mouvement,
     preuves_livraison,
@@ -129,6 +142,7 @@ INSERT INTO type_zone (code, libelle, type_produit_id) VALUES
     ('ELE', 'Zone Electronique', 3);
 
 INSERT INTO utilisateurs (email, mot_de_passe_hash, role_id, date_creation, actif) VALUES
+    ('admin@entrepot.com', '$2a$10$dXUCIrzukQ84x0UKkr0xZ.4QBMUoyzdM4Cva9CceR8eCnQXuvOW/6', 1, '2026-01-05 08:00:00', true),
     ('marie.rasoanaivo@entrepot.com', '$2a$10$dXUCIrzukQ84x0UKkr0xZ.4QBMUoyzdM4Cva9CceR8eCnQXuvOW/6', 2, '2026-01-10 08:30:00', true),
     ('paul.andriamahefa@entrepot.com', '$2a$10$dXUCIrzukQ84x0UKkr0xZ.4QBMUoyzdM4Cva9CceR8eCnQXuvOW/6', 2, '2026-01-12 09:00:00', true),
     ('hery.rabemananjara@entrepot.com', '$2a$10$dXUCIrzukQ84x0UKkr0xZ.4QBMUoyzdM4Cva9CceR8eCnQXuvOW/6', 3, '2026-01-15 09:15:00', true),
@@ -176,8 +190,7 @@ INSERT INTO utilisateurs_info (utilisateur_id, nom, prenom, numero, adresse, sec
     (5, 'Rakotondrabe', 'Sary', '0331234561', 'Analakely, Antananarivo', 'Commerce'),
     (6, 'Razafindrakoto', 'Nathalie', '0331234562', 'Ivandry, Antananarivo', 'Restauration'),
     (7, 'Andriantsoa', 'Jean', '0331234563', 'Tanambao, Antsirabe', 'BTP'),
-    (8, 'Rasolofo', 'Fanja', '0331234564', 'Mahavoky, Antsirabe', 'Textile'),
-    (9, 'Ravelojaona', 'Tojo', '0331234565', 'Tanambao V, Toamasina', 'Import-Export');
+    (8, 'Rasolofo', 'Fanja', '0331234564', 'Mahavoky, Antsirabe', 'Textile');
 
 INSERT INTO zone (id, libelle, volume_total_m3, allees_id, type_zone_id) VALUES
     (1, 'Zone A1 - Alimentaire Sec', 500, 1, 1),
@@ -235,7 +248,7 @@ INSERT INTO livraisons (mission_id, client_id, adresse_livraison, zone_livraison
     (1, 5, 'Analakely, Antananarivo', 1, 450.5, 3.2, '2026-07-01 10:00:00', '2026-07-01 11:50:00', 45000),
     (2, 6, 'Ivandry, Antananarivo', 2, 620.0, 4.5, '2026-07-12 09:00:00', NULL, NULL),
     (4, 7, 'Tanambao, Antsirabe', 3, 1200.0, 8.0, '2026-06-20 13:00:00', '2026-06-20 14:15:00', 460000),
-    (5, 9, 'Tanambao V, Toamasina', 4, 2500.0, 15.0, '2026-06-15 09:30:00', '2026-06-15 09:40:00', 620000),
+    (5, 8, 'Tanambao V, Toamasina', 4, 2500.0, 15.0, '2026-06-15 09:30:00', '2026-06-15 09:40:00', 620000),
     (1, 8, 'Mahavoky, Antsirabe', 3, 300.0, 2.0, '2026-07-01 10:30:00', '2026-07-01 12:00:00', 150000),
     (6, 5, 'Analakely, Antananarivo', 1, 180.0, 1.1, '2026-07-13 08:00:00', NULL, NULL);
 
@@ -245,7 +258,7 @@ INSERT INTO mouvements (code, date_mouvement, type_mouvement_id, statut_mouvemen
     ('MVT-2026-003', '2026-07-03 10:15:00', 1, 2, 7, 7, 'Reception ciment et fer'),
     ('MVT-2026-004', '2026-07-05 16:00:00', 3, 2, NULL, 7, 'Transfert electronique vers zone securisee'),
     ('MVT-2026-005', '2026-07-08 08:45:00', 2, 1, 8, 7, 'Sortie textile en preparation'),
-    ('MVT-2026-006', '2026-07-10 11:20:00', 1, 2, 9, 7, 'Reception electronique'),
+    ('MVT-2026-006', '2026-07-10 11:20:00', 1, 2, 7, 7, 'Reception electronique'),
     ('MVT-2026-007', '2026-07-11 09:00:00', 4, 2, 6, 7, 'Retour marchandise endommagee'),
     ('MVT-2026-008', '2026-07-13 13:40:00', 2, 3, 5, 7, 'Sortie annulee - erreur client');
 
@@ -256,16 +269,7 @@ INSERT INTO mouvements (code, date_mouvement, type_mouvement_id, statut_mouvemen
 INSERT INTO stocks_emplacement (emplacement_id, produit_id, zone_id, quantite) VALUES
     (1, 1, 1, 300.000),
     (2, 2, 1, 150.000),
-    (3, 3, 2, 200.000),
-    (4, 4, 3, 400.000),
-    (5, 5, 3, 250.000),
-    (6, 6, 4, 180.000),
-    (7, 7, 5, 60.000),
-    (8, 8, 5, 45.000),
-    (9, 9, 6, 220.000),
-    (10, 1, 1, 120.000),
-    (11, 4, 3, 300.000),
-    (12, 7, 5, 30.000);
+    (3, 3, 2, 200.000);
 
 INSERT INTO lignes_mouvement (mouvement_id, produit_id, emplacement_source_id, emplacement_dest_id, quantite) VALUES
     (1, 1, NULL, 1, 200.000),
@@ -321,3 +325,99 @@ INSERT INTO top_produits (date_snapshot, rang, quantite_totale, duree_moyenne_st
     ('2026-07-13', 3, 180.000, 6.20, 9),
     ('2026-07-13', 4, 150.000, 4.00, 2),
     ('2026-07-13', 5, 90.000, 3.00, 7);
+
+-- ====================================================================
+-- 7. MODULE CONTRATS / ABONNEMENTS / RENOUVELLEMENTS / FACTURATION
+-- (nouvelles entites du dossier model/ : Contrat, DemandeStockage,
+--  AbonnementStockage, DemandeRenouvellement, RenouvellementContrat,
+--  Facture, TarifZone, TypeContrat, UniteDuree, StatutDemandeStockage,
+--  StatutRenouvellement, HistoriqueEtatDemande, HistoriqueRenouvellement)
+-- NOTE: la table emplacement n'est pas touchee par cette section.
+-- ====================================================================
+
+-- 7.1 Tables de reference (sans dependance)
+INSERT INTO types_contrat (code, libelle) VALUES
+    ('STANDARD', 'Contrat standard'),
+    ('ABONNE', 'Abonnement mensuel');
+
+INSERT INTO unites_duree (code, libelle) VALUES
+    ('JOUR', 'Jour'),
+    ('MOIS', 'Mois'),
+    ('ANNEE', 'Annee');
+
+INSERT INTO statuts_demande_stockage (code, libelle) VALUES
+    ('EN_ATTENTE', 'En attente'),
+    ('ACCEPTEE', 'Acceptee'),
+    ('REFUSEE', 'Refusee');
+
+INSERT INTO statuts_renouvellement (code, libelle) VALUES
+    ('EN_ATTENTE', 'En attente'),
+    ('ACCEPTEE', 'Acceptee'),
+    ('REFUSEE', 'Refusee');
+
+-- 7.2 Tarifs de zone (type_zone existant x unite_duree JOUR/MOIS)
+-- Zones reutilisees : 1=ETA (Etagere), 2=CHF (Chambre Froide), 3=SEC (Zone Securisee), 4=ELE (Zone Electronique)
+INSERT INTO tarifs_zone (type_zone_id, unite_duree_id, prix_m3, date_debut_validite, date_fin_validite) VALUES
+    (1, 1, 300, '2025-01-01', NULL),
+    (1, 2, 8000, '2025-01-01', NULL),
+    (2, 1, 550, '2025-01-01', NULL),
+    (2, 2, 15000, '2025-01-01', NULL),
+    (3, 1, 380, '2025-01-01', NULL),
+    (3, 2, 10000, '2025-01-01', NULL),
+    (4, 1, 750, '2025-01-01', NULL),
+    (4, 2, 20000, '2025-01-01', NULL);
+
+-- 7.3 Demandes de stockage (clients 5 a 9)
+INSERT INTO demandes_stockage (utilisateur_id, type_zone_id, type_contrat_id, volume_espace_m3, date_debut, date_fin, quantite_emplacement, duree_mois) VALUES
+    (5, 1, 1, 50.000, '2026-02-01', '2026-08-01', 3, NULL),
+    (6, 2, 2, 20.000, '2026-01-15', NULL, 2, 12),
+    (7, 3, 1, 100.000, '2026-03-01', '2026-09-01', 5, NULL),
+    (8, 4, 2, 10.000, '2026-04-01', NULL, 1, 6),
+    (9, 1, 1, 30.000, '2026-07-01', '2026-10-01', 2, NULL),
+    (5, 3, 1, 15.000, '2026-06-01', '2026-07-01', 1, NULL);
+
+-- 7.4 Historique des demandes de stockage
+INSERT INTO historique_etat_demande (demande_stockage_id, statut_demande_id, date_statut) VALUES
+    (1, 1, '2026-01-25 10:00:00'),
+    (1, 2, '2026-01-28 09:00:00'),
+    (2, 1, '2026-01-10 09:00:00'),
+    (2, 2, '2026-01-13 14:00:00'),
+    (3, 1, '2026-02-20 11:00:00'),
+    (3, 2, '2026-02-24 10:00:00'),
+    (4, 1, '2026-03-25 15:00:00'),
+    (4, 2, '2026-03-28 09:30:00'),
+    (5, 1, '2026-07-05 09:00:00'),
+    (6, 1, '2026-05-28 08:30:00'),
+    (6, 3, '2026-05-30 16:00:00');
+
+-- 7.5 Contrats issus des demandes acceptees (1 a 4)
+INSERT INTO contrats (demande_stockage_id, utilisateur_id, type_zone_id, type_contrat_id, volume_espace_m3, quantite_emplacement, date_creation, date_debut, date_fin, description, duree_mois) VALUES
+    (1, 5, 1, 1, 50.000, 3, '2026-01-28 09:00:00', '2026-02-01', '2026-08-01', 'Espace sec pour stockage alimentaire', NULL),
+    (2, 6, 2, 2, 20.000, 2, '2026-01-13 14:00:00', '2026-01-15', NULL, 'Abonnement chambre froide 12 mois', 12),
+    (3, 7, 3, 1, 100.000, 5, '2026-02-24 10:00:00', '2026-03-01', '2027-03-01', 'Stockage materiaux BTP (renouvele)', NULL),
+    (4, 8, 4, 2, 10.000, 1, '2026-03-28 09:30:00', '2026-04-01', NULL, 'Abonnement zone electronique 6 mois', 6);
+
+-- 7.6 Abonnements de stockage (contrats de type ABONNE)
+INSERT INTO abonnements_stockage (utilisateur_id, contrat_id, type_zone_id, duree_mois) VALUES
+    (6, 2, 2, 12),
+    (8, 4, 4, 6);
+
+-- 7.7 Demandes de renouvellement de contrat
+INSERT INTO demandes_renouvellement (contrat_id, date_demande, date_fin) VALUES
+    (1, '2026-07-10', '2027-02-01'),
+    (3, '2026-07-05', '2027-03-01');
+
+-- 7.8 Historique des demandes de renouvellement
+INSERT INTO historique_renouvellement (demande_renouvellement_id, statut_renouvellement_id, date_statut) VALUES
+    (1, 1, '2026-07-10 10:00:00'),
+    (2, 1, '2026-07-05 09:00:00'),
+    (2, 2, '2026-07-06 11:00:00');
+
+-- 7.9 Renouvellements de contrat effectivement appliques
+INSERT INTO renouvellements_contrat (contrat_id, demande_renouvellement_id, date_renouvellement, date_fin) VALUES
+    (3, 2, '2026-07-06', '2027-03-01');
+
+-- 7.10 Factures emises
+INSERT INTO factures (contrat_id, volume_espace_m3, prix_facture, date_emission, date_paiement) VALUES
+    (1, 50.000, 400000.00, '2026-03-01', '2026-03-05'),
+    (2, 20.000, 300000.00, '2026-02-15', '2026-02-20');

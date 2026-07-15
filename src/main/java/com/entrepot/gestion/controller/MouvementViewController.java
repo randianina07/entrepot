@@ -253,7 +253,7 @@ public class MouvementViewController {
         List<MouvementListDTO> derniersMouvements = mouvementService.getDerniersMouvements(5);
         model.addAttribute("derniersMouvements", derniersMouvements);
 
-        model.addAttribute("alertesStock", mouvementService.getEmplacementsStockBas());
+        model.addAttribute("alertesStock", mouvementService.getEmplacementssature());
 
         return "dashboard";
     }
