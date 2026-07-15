@@ -14,7 +14,18 @@
 <nav class="navbar navbar-expand-lg pro-navbar" th:fragment="navbar">
     <div class="container-fluid">
         <!-- Logo & Brand -->
-        <a class="navbar-brand d-flex align-items-center" th:href="@{/dashboard}">
+        <a class="navbar-brand d-flex align-items-center" th:href="@{/mouvements/tableau-de-bord}"
+           sec:authorize="hasRole('CLIENT')">
+            <div class="brand-icon me-3">
+                <i class="bi bi-box-seam-fill"></i>
+            </div>
+            <div class="brand-text">
+                <span class="brand-title">Gestion Entrepôt</span>
+                <span class="brand-subtitle">ERP Professionnel</span>
+            </div>
+        </a>
+        <a class="navbar-brand d-flex align-items-center" th:href="@{/dashboard}"
+           sec:authorize="!hasRole('CLIENT')">
             <div class="brand-icon me-3">
                 <i class="bi bi-box-seam-fill"></i>
             </div>
@@ -33,8 +44,8 @@
         <!-- Main Nav -->
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav main-nav me-auto">
-                <!-- Dashboard -->
-                <li class="nav-item">
+                <!-- Tableau de bord (invisible pour CLIENT) -->
+                <li class="nav-item" sec:authorize="!hasRole('CLIENT')">
                     <a class="nav-link" th:href="@{/dashboard}"
                        th:classappend="${#strings.contains(request.requestURI, '/dashboard') ? 'active' : ''}">
                         <i class="bi bi-speedometer2"></i>
@@ -116,7 +127,7 @@
                     </ul>
                 </li>
                 
-                <!-- Contrats -->
+                <!-- Contrats (tout pour gestionnaire/admin/comptable) -->
                 <li class="nav-item dropdown" sec:authorize="hasAnyRole('ADMIN', 'GESTIONNAIRE', 'COMPTABLE')">
                     <button class="nav-link dropdown-toggle border-0 bg-transparent" type="button" id="contratsDropdown"
                        data-bs-toggle="dropdown" aria-expanded="false"
@@ -141,7 +152,25 @@
                     </ul>
                 </li>
                 
-                <!-- Clients -->
+                <!-- Contrats (client: seulement créer demande et renouvellement, pas les listes) -->
+                <li class="nav-item dropdown" sec:authorize="hasRole('CLIENT')">
+                    <button class="nav-link dropdown-toggle border-0 bg-transparent" type="button" id="contratsClientDropdown"
+                       data-bs-toggle="dropdown" aria-expanded="false"
+                       th:classappend="${#strings.contains(request.requestURI, '/contrats') ? 'active' : ''}">
+                        <i class="bi bi-file-earmark-text"></i>
+                        <span class="nav-text">Contrats</span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="contratsClientDropdown">
+                        <li><a class="dropdown-item" th:href="@{/contrats/demande}">
+                            <i class="bi bi-clipboard-plus me-2"></i>Nouvelle demande
+                        </a></li>
+                        <li><a class="dropdown-item" th:href="@{/contrats/renouvellement}">
+                            <i class="bi bi-arrow-clockwise me-2"></i>Nouveau renouvellement
+                        </a></li>
+                    </ul>
+                </li>
+                
+                <!-- Clients (invisible pour CLIENT) -->
                 <li class="nav-item dropdown" sec:authorize="hasAnyRole('ADMIN', 'GESTIONNAIRE', 'COMPTABLE')">
                     <button class="nav-link dropdown-toggle border-0 bg-transparent" type="button" id="clientsDropdown"
                        data-bs-toggle="dropdown" aria-expanded="false"

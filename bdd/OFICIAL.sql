@@ -661,12 +661,12 @@ INSERT INTO tarifs_zone (type_zone_id, unite_duree_id, prix_m3, date_debut_valid
 -- ============================================================================
 
 INSERT INTO utilisateurs (email, mot_de_passe_hash, role_id, actif) VALUES
-('admin@entrepot.com',       '$2a$10$7EqJtq98hPqEX7fNZaFWoOHiKqG5q6QeF1J7P2QJm2d7l5z0QvM6C', 1, TRUE),
-('gestionnaire@entrepot.com','$2a$10$7EqJtq98hPqEX7fNZaFWoOHiKqG5q6QeF1J7P2QJm2d7l5z0QvM6C', 2, TRUE),
-('client@test.com',          '$2a$10$7EqJtq98hPqEX7fNZaFWoOHiKqG5q6QeF1J7P2QJm2d7l5z0QvM6C', 5, TRUE),
-('client.alpha@gmail.com',   '$2a$10$7EqJtq98hPqEX7fNZaFWoOHiKqG5q6QeF1J7P2QJm2d7l5z0QvM6C', 5, TRUE),
-('client.beta@gmail.com',    '$2a$10$7EqJtq98hPqEX7fNZaFWoOHiKqG5q6QeF1J7P2QJm2d7l5z0QvM6C', 5, TRUE),
-('client.gamma@gmail.com',   '$2a$10$7EqJtq98hPqEX7fNZaFWoOHiKqG5q6QeF1J7P2QJm2d7l5z0QvM6C', 5, TRUE);
+('admin@entrepot.com',       '$2a$10$JGq1vOCDOwFLiXWW6X4RpO8.nOibohT.2I2V520k5pLWItKea9tHW', 1, TRUE),
+('gestionnaire@entrepot.com','$2a$10$JGq1vOCDOwFLiXWW6X4RpO8.nOibohT.2I2V520k5pLWItKea9tHW', 2, TRUE),
+('client@test.com',          '$2a$10$JGq1vOCDOwFLiXWW6X4RpO8.nOibohT.2I2V520k5pLWItKea9tHW', 5, TRUE),
+('client.alpha@gmail.com',   '$2a$10$JGq1vOCDOwFLiXWW6X4RpO8.nOibohT.2I2V520k5pLWItKea9tHW', 5, TRUE),
+('client.beta@gmail.com',    '$2a$10$JGq1vOCDOwFLiXWW6X4RpO8.nOibohT.2I2V520k5pLWItKea9tHW', 5, TRUE),
+('client.gamma@gmail.com',   '$2a$10$JGq1vOCDOwFLiXWW6X4RpO8.nOibohT.2I2V520k5pLWItKea9tHW', 5, TRUE);
 
 INSERT INTO utilisateurs_info (utilisateur_id, nom, prenom, numero, adresse, secteur) VALUES
 (1, 'Admin',     'Super',      '0340000000', 'Antananarivo',            'Administration'),
