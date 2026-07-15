@@ -646,3 +646,23 @@ INSERT INTO tarifs_zone (type_zone_id, unite_duree_id, prix_m3, date_debut_valid
 (3, 2, 20000, '2026-01-01'),
 (4, 1, 1000,  '2026-01-01'),
 (4, 2, 20000, '2026-01-01');
+
+-- ============================================================================
+-- UTILISATEURS
+-- ============================================================================
+
+INSERT INTO utilisateurs (email, mot_de_passe_hash, role_id, actif) VALUES
+('admin@entrepot.com',       '$2a$10$7EqJtq98hPqEX7fNZaFWoOHiKqG5q6QeF1J7P2QJm2d7l5z0QvM6C', 1, TRUE),
+('gestionnaire@entrepot.com','$2a$10$7EqJtq98hPqEX7fNZaFWoOHiKqG5q6QeF1J7P2QJm2d7l5z0QvM6C', 2, TRUE),
+('client@test.com',          '$2a$10$7EqJtq98hPqEX7fNZaFWoOHiKqG5q6QeF1J7P2QJm2d7l5z0QvM6C', 5, TRUE),
+('client.alpha@gmail.com',   '$2a$10$7EqJtq98hPqEX7fNZaFWoOHiKqG5q6QeF1J7P2QJm2d7l5z0QvM6C', 5, TRUE),
+('client.beta@gmail.com',    '$2a$10$7EqJtq98hPqEX7fNZaFWoOHiKqG5q6QeF1J7P2QJm2d7l5z0QvM6C', 5, TRUE),
+('client.gamma@gmail.com',   '$2a$10$7EqJtq98hPqEX7fNZaFWoOHiKqG5q6QeF1J7P2QJm2d7l5z0QvM6C', 5, TRUE);
+
+INSERT INTO utilisateurs_info (utilisateur_id, nom, prenom, numero, adresse, secteur) VALUES
+(1, 'Admin',     'Super',      '0340000000', 'Antananarivo',            'Administration'),
+(2, 'Gestionnaire','Principal','0340000001', 'Antananarivo',            'Gestion'),
+(3, 'Client',    'Test',       '0340000002', 'Antananarivo',            'Client'),
+(4, 'Rakoto',    'Alpha',      '0341000001', 'Antananarivo - Analamanga','Commerce général'),
+(5, 'Rabe',      'Beta',       '0341000002', 'Toamasina',               'Import-Export'),
+(6, 'Randria',   'Gamma',      '0341000003', 'Antsirabe',               'Agriculture');
