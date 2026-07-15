@@ -54,7 +54,7 @@
                                 </td>
                             </tr>
                             <tr th:each="demande : ${demandes}">
-                                <td th:text="${demande.utilisateur.info.nom}"></td>
+                                <td th:text="${demande.utilisateur.info != null ? demande.utilisateur.info.nom : demande.utilisateur.email}"></td>
 
                                 <td th:text="${demande.utilisateur.email}"></td>
 

@@ -52,11 +52,11 @@
                     </tr>
                     <tr th:each="demande : ${demandes}">
                         <td th:text="${demande.id}"></td>
-                        <td th:text="${demande.contrat_id}"></td>
-                        <td th:text="${demande.client_email}"></td>
-                        <td th:text="${demande.date_demande_fmt}"></td>
-                        <td th:text="${demande.ancienne_date_fin_fmt}"></td>
-                        <td th:text="${demande.nouvelle_date_fin_fmt}"></td>
+                        <td th:text="${demande.contrat != null ? demande.contrat.id : '-'}"></td>
+                        <td th:text="${demande.contrat != null ? demande.contrat.utilisateur.email : '-'}"></td>
+                        <td th:text="${demande.dateDemande != null ? #temporals.format(demande.dateDemande, 'dd/MM/yyyy') : '-'}"></td>
+                        <td th:text="${demande.contrat != null and demande.contrat.dateFin != null ? #temporals.format(demande.contrat.dateFin, 'dd/MM/yyyy') : '-'}"></td>
+                        <td th:text="${demande.dateFin != null ? #temporals.format(demande.dateFin, 'dd/MM/yyyy') : '-'}"></td>
                         <td>
                             <div class="btn-group">
                                 <a th:href="@{/contrats/renouvellement/accepter/{id}(id=${demande.id})}" class="btn btn-sm btn-success">
