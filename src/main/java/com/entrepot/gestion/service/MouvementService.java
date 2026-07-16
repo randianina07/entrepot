@@ -504,7 +504,7 @@ public class MouvementService {
     // Additional methods for MouvementViewController
     
     public List<Utilisateur> getAllClients() {
-        return utilisateurRepository.findAll();
+        return utilisateurRepository.findClientsAvecContratActif();
     }
     
     public List<TypeMouvement> getAllTypesMouvement() {
