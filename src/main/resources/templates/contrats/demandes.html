@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/navbar :: head}"></head>
+
+<body class="storage-page">
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <main class="container py-4">
+        <div th:replace="~{fragments/alerts :: alerts}"></div>
+        <section class="storage-hero mb-4">
+            <div class="hero-copy">
+                <span class="hero-badge"><i class="bi bi-clipboard-list"></i> Demandes de stockage</span>
+                <h1>Demandes en attente</h1>
+                <p>Gérez les demandes de stockage des clients.</p>
+                <div class="hero-actions">
+                    <a class="btn btn-outline-primary" th:href="@{/mouvements/tableau-de-bord}">Accueil</a>
+                </div>
+            </div>
+            <div class="hero-side">
+                <div class="mini-info-card">
+                    <span class="value" th:text="${demandes != null ? #lists.size(demandes) : 0}">0</span>
+                    <span class="label">Demandes</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="storage-panel p-0 overflow-hidden">
+            <div class="storage-section-header px-4 pt-4">
+                <div>
+                    <span class="chip is-warning">En attente</span>
+                    <h2 class="mb-0 mt-2">Demandes de stockage</h2>
+                </div>
+            </div>
+            <div class="px-4 pb-4">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Client</th>
+                                <th>Email</th>
+                                <th>Zone</th>
+                                <th>Type contrat</th>
+                                <th>Volume (m³)</th>
+                                <th>Date début</th>
+                                <th>Date fin</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:if="${demandes == null or demandes.isEmpty()}">
+                                <td colspan="8">
+                                    <div class="empty-state">Aucune demande en attente.</div>
+                                </td>
+                            </tr>
+                            <tr th:each="demande : ${demandes}">
+                                <td th:text="${demande.utilisateur.info != null ? demande.utilisateur.info.nom : demande.utilisateur.email}"></td>
+
+                                <td th:text="${demande.utilisateur.email}"></td>
+
+                                <td th:text="${demande.typeZone.libelle}"></td>
+
+                                <td th:text="${demande.typeContrat.libelle}"></td>
+
+                                <td th:text="${#numbers.formatDecimal(demande.volumeEspaceM3, 1, 2)} + ' m³'"></td>
+
+                                <td th:text="${demande.dateDebut}"></td>
+
+                                <td th:text="${demande.dateFin}"></td>
+
+                                <td>
+                                    <div class="btn-group">
+                                        <a th:href="@{/contrats/demande/accepter/{id}(id=${demande.id})}"
+                                            class="btn btn-sm btn-success">
+                                            <i class="bi bi-check-circle"></i> Accepter
+                                        </a>
+
+                                        <a th:href="@{/contrats/demande/refuser/{id}(id=${demande.id})}"
+                                            class="btn btn-sm btn-danger">
+                                            <i class="bi bi-x-circle"></i> Refuser
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
